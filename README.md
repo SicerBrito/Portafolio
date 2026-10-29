@@ -1,59 +1,101 @@
-# Portafolio
+# Sicer Brito · Portafolio
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.4.
+**🌐 [sicerbrito.dev](https://sicerbrito.dev)**
 
-## Development server
+> Llevo software de la idea a producción. Y me quedo a operarlo.
 
-To start a local development server, run:
+Portafolio de Sicer Andrés Brito Gutiérrez, Líder de Desarrollo y desarrollador
+Full Stack .NET y Angular en Bucaramanga, Colombia.
 
-```bash
-ng serve
+El código de los sistemas en los que trabajo es privado y pertenece a las
+empresas. Este sitio cuenta lo que sí se puede mostrar de cada uno: el problema
+que resuelve, cómo funciona por dentro, qué parte es mía según git, en qué estado
+está y qué le falta.
+
+## Cada proyecto es un mundo
+
+Al entrar a un proyecto, todo el sitio cambia a la paleta de su marca, y cada uno
+tiene su propia estructura, una maqueta 3D que avanza con el scroll y
+demostraciones que se pueden tocar.
+
+| Proyecto | Qué es | Mi parte |
+|---|---|---|
+| [AHDO](https://sicerbrito.dev/proyectos/ahdo/) | Plataforma SaaS B2B2C de formación, evaluación, certificación y facturación | Desarrollador principal |
+| [Conecta](https://sicerbrito.dev/proyectos/conecta/) | Canal de WhatsApp y formularios para varias empresas del grupo | Desde cero |
+| [Estudio de Video](https://sicerbrito.dev/proyectos/estudio/) | Prototipo de un motor que convierte documentos en video formativo | Desde cero |
+| [Ocupasalud](https://sicerbrito.dev/proyectos/ocupasalud/) | Sistema de IPS de salud ocupacional | Participé con integraciones |
+| [Cuality](https://sicerbrito.dev/proyectos/cuality/) | Estudios de puesto de trabajo | Fundé la base |
+| [Prevent](https://sicerbrito.dev/proyectos/prevent/) | Centro de entrenamiento en trabajo seguro en alturas | Tomé el relevo |
+| [Backbone de IA](https://sicerbrito.dev/proyectos/backbone/) | Servicio de IA del grupo, hecho por otro desarrollador | Lo endurecí y lo desplegué |
+
+## Cómo está hecho
+
+- **Angular 22**: componentes standalone, signals y detección de cambios sin zone.js.
+- **Prerenderizado (SSG)**: cada página sale como HTML estático con todo su texto,
+  así que se lee y se indexa aunque el JavaScript no llegue.
+- **three.js** para las escenas 3D y **GSAP** (ScrollTrigger y SplitText) para la
+  coreografía del scroll. Las dos librerías se cargan solo cuando hacen falta.
+- **Un tema por mundo**: `<html data-mundo="…">` redefine los tokens de color de
+  todo el sitio; cada paleta sale del código o del sitio real de su marca.
+- **Para todos**: con movimiento reducido, las escenas quedan en un cuadro fijo con
+  pasos; sin WebGL, hay un plano en SVG; funciona en celulares desde 375 px y con
+  teclado.
+- Publicado en **Cloudflare**.
+
+Lo programé con asistencia de IA, con el mismo método que uso en el trabajo:
+primero el plan escrito, después el código.
+
+## Estructura
+
+```
+src/app/
+├── inicio/       portada: retrato, mapa 3D del ecosistema, cifras, método, trayectoria
+├── mundos/<id>/  la página de cada proyecto
+├── escenas/      escenas three.js y canvas (sin Angular: crear → actualizar → destruir)
+├── contenido/    los textos y datos de cada proyecto
+├── core/         mundo activo, movimiento reducido, orientación del celular
+└── ui/           cabecera, pie y sello de autoría
+src/styles/mundos/  la paleta de cada mundo
+public/marcas/      logos de cada empresa
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Correrlo en local
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Requiere Node 24 (ver `.node-version`).
 
 ```bash
-ng generate component component-name
+npm install
+npm start          # http://localhost:4200
+npm run build      # salida estática en dist/portafolio/browser
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Sobre el contenido
 
-```bash
-ng generate --help
-```
+- Las demostraciones usan **datos ficticios** y lo dicen en pantalla.
+- Las cifras de negocio y los logos de las empresas del Grupo Empresarial Prometeo
+  se publican **con autorización** de la empresa.
+- La autoría de cada proyecto está verificada contra el historial de git y se
+  cuenta tal cual: lo que hice desde cero, lo que tomé de otro desarrollador y lo
+  que solo apoyé.
 
-## Building
+Código: todos los derechos reservados. Los logos y marcas pertenecen a sus
+respectivas empresas.
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## English
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+**[sicerbrito.dev](https://sicerbrito.dev)** · Portfolio of Sicer Brito, Development
+Lead and Full Stack .NET & Angular developer based in Colombia, open to remote work.
 
-## Running unit tests
+The code of the systems I work on is private, so this site tells each story
+instead: the problem, how it works inside, what part is mine according to git,
+and what is still missing. Every project is its own "world", with its brand
+palette, a scroll-driven 3D model and interactive demos with fictional data.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Built with Angular 22 (standalone, signals, zoneless), static prerendering,
+three.js and GSAP, with reduced-motion and no-WebGL fallbacks. Deployed on
+Cloudflare.
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Contact:** [jobdevbrito@gmail.com](mailto:jobdevbrito@gmail.com) ·
+[LinkedIn](https://linkedin.com/in/sicer-brito) · [GitHub](https://github.com/SicerBrito)
