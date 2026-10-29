@@ -1,0 +1,318 @@
+:host {
+  display: block;
+}
+
+.gerencia {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(16px, 3vw, 32px);
+  align-items: start;
+  font-family: var(--conecta-texto);
+}
+
+/* ---------- El chat ---------- */
+
+.chat {
+  display: grid;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--conecta-sombra);
+}
+
+.chat-cabeza {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line-soft);
+
+  div {
+    display: grid;
+    flex: 1;
+  }
+  strong {
+    font: 700 1rem var(--conecta-titulo);
+    color: var(--conecta-tinta);
+  }
+  span {
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+}
+
+.marca-ia,
+.marca-mcp {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+
+.marca-mcp {
+  width: 22px;
+  height: 22px;
+  fill: var(--conecta-tinta);
+}
+
+.hilo {
+  display: grid;
+  gap: 10px;
+  min-height: 300px;
+  align-content: start;
+  padding: 18px 16px;
+  background:
+    radial-gradient(var(--conecta-chat-punto) 1px, transparent 1px) 0 0 / 14px 14px,
+    var(--conecta-chat);
+}
+
+.msg {
+  max-width: 88%;
+  padding: 9px 12px;
+  border-radius: 14px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--conecta-burbuja-texto);
+  box-shadow: 0 1px 1px rgba(36, 22, 64, 0.12);
+  animation: brotar 320ms var(--ease-out) both;
+
+  &.sale {
+    justify-self: end;
+    border-top-right-radius: 4px;
+    background: var(--conecta-tinta);
+    color: #ffffff;
+  }
+  &.entra {
+    justify-self: start;
+    border-top-left-radius: 4px;
+    background: #ffffff;
+  }
+}
+
+.escribiendo {
+  display: inline-flex;
+  gap: 5px;
+  padding: 14px 16px;
+
+  i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--conecta-lila);
+    animation: latir 900ms ease-in-out infinite;
+  }
+  i:nth-of-type(2) {
+    animation-delay: 150ms;
+  }
+  i:nth-of-type(3) {
+    animation-delay: 300ms;
+  }
+}
+
+/* Las herramientas vuelan del chat al panel, una tras otra. */
+.herramientas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: var(--conecta-tinta-2);
+    color: var(--conecta-oro-claro);
+    animation: volar 520ms var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 140ms);
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: var(--conecta-oro-1);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+.sugerencias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 16px 16px;
+  border-top: 1px solid var(--line-soft);
+
+  button {
+    min-height: 44px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--conecta-tinta);
+    font: 500 0.9375rem var(--conecta-texto);
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--conecta-tinta);
+    }
+    &[aria-pressed='true'] {
+      background: var(--conecta-tinta);
+      border-color: var(--conecta-tinta);
+      color: #ffffff;
+    }
+  }
+}
+
+/* ---------- El panel que arma Claude ---------- */
+
+.tablero {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 16px;
+  padding: clamp(18px, 3vw, 28px);
+  border-radius: 24px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(220, 171, 47, 0.18), transparent 55%),
+    var(--conecta-tinta);
+  color: #ffffff;
+
+  h3 {
+    font: 700 clamp(1.25rem, 1rem + 1vw, 1.625rem) / 1.2 var(--conecta-titulo);
+    letter-spacing: -0.02em;
+  }
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    align-content: space-between;
+    gap: 10px;
+    min-height: 124px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: armar 480ms var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 110ms);
+  }
+  li:first-child {
+    grid-row: span 2;
+    background: var(--conecta-oro-1);
+    border-color: var(--conecta-oro-1);
+    color: var(--on-signal);
+
+    .valor {
+      color: var(--on-signal);
+      font-size: clamp(2.75rem, 2rem + 3vw, 4rem);
+    }
+    .etiqueta {
+      color: var(--on-signal);
+    }
+  }
+  li.mirar:not(:first-child) {
+    border-color: var(--conecta-tinta-suave);
+    border-style: dashed;
+  }
+}
+
+.valor {
+  font: 700 clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem) / 1 var(--conecta-titulo);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--conecta-oro-1);
+}
+
+.etiqueta {
+  font-size: 0.875rem;
+  color: var(--conecta-tinta-suave);
+}
+
+.esperando li {
+  min-height: 124px;
+  background: rgba(255, 255, 255, 0.05);
+  animation: respirar 1.2s ease-in-out infinite alternate;
+}
+
+.pie {
+  font-size: 0.875rem;
+  color: var(--conecta-tinta-suave);
+}
+
+@keyframes brotar {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes volar {
+  from {
+    opacity: 0;
+    transform: translate(-40px, 18px) rotate(-6deg) scale(0.85);
+  }
+}
+
+@keyframes armar {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.94);
+  }
+}
+
+@keyframes latir {
+  50% {
+    opacity: 0.3;
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes respirar {
+  to {
+    background: rgba(255, 255, 255, 0.11);
+  }
+}
+
+@media (max-width: 860px) {
+  .gerencia {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .bento {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bento li:first-child {
+    grid-row: auto;
+  }
+}
+
+/* Movimiento reducido: la respuesta y el panel aparecen enteros, sin vuelos ni esperas
+   escalonadas (el componente ya se salta la fase de herramientas). */
+@media (prefers-reduced-motion: reduce) {
+  .msg,
+  .herramientas li,
+  .bento li,
+  .escribiendo i,
+  .esperando li {
+    animation: none;
+  }
+}

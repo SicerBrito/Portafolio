@@ -1,0 +1,31 @@
+<div class="tomas">
+  <!-- ======================= Toma falsa 1: el doble requestAnimationFrame ======================= -->
+  <article class="toma" aria-labelledby="toma-1">
+    <p class="claqueta" aria-hidden="true"><span class="palos"></span><span>Toma 1</span></p>
+    <h3 id="toma-1">La foto que sale con el fotograma de antes</h3>
+    <p class="problema">{{ rAF.problema }}</p>
+
+    @defer (on viewport) {
+      <app-estudio-toma-foto />
+    } @placeholder {
+      <div class="reserva-demo uno"></div>
+    }
+
+    <p class="solucion"><strong>Cómo lo evita el motor.</strong> {{ rAF.solucion }}</p>
+  </article>
+
+  <!-- ======================= Toma falsa 2: los fotogramas en blanco ======================= -->
+  <article class="toma" aria-labelledby="toma-2">
+    <p class="claqueta" aria-hidden="true"><span class="palos"></span><span>Toma 2</span></p>
+    <h3 id="toma-2">Los fotogramas en blanco</h3>
+    <p class="problema">{{ blanco.problema }}</p>
+
+    @defer (on viewport) {
+      <app-estudio-toma-blanco />
+    } @placeholder {
+      <div class="reserva-demo dos"></div>
+    }
+
+    <p class="solucion"><strong>Cómo lo evita el motor.</strong> {{ blanco.solucion }}</p>
+  </article>
+</div>

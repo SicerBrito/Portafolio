@@ -1,0 +1,132 @@
+<div class="lab" [class.apagado]="!encendido()" [class.quieto]="!enVista()">
+  <div class="mundos">
+    <!-- AHDO -->
+    <section class="mundo mundo-ahdo" aria-labelledby="bus-ahdo">
+      <div class="planeta planeta-ahdo">
+        <img ngSrc="/marcas/ahdo/personaje-ahdo-blanco.webp" width="349" height="591" alt="" />
+      </div>
+      <h3 id="bus-ahdo">AHDO</h3>
+      <p class="motor">PostgreSQL, identificadores GUID</p>
+      <dl class="registro">
+        <div>
+          <dt>Cliente</dt>
+          <dd>{{ cliente.nombre }}</dd>
+        </div>
+        <div>
+          <dt>Id aquí</dt>
+          <dd class="mono">{{ cliente.idAhdo }}</dd>
+        </div>
+        <div>
+          <dt>Documento</dt>
+          <dd class="mono">{{ cliente.documento }}</dd>
+        </div>
+        <div>
+          <dt>Revisión</dt>
+          <dd class="mono" [class.atrasada]="revisionAhdo() < revisionOcupa()">{{ revisionAhdo() }}</dd>
+        </div>
+        <div>
+          <dt>Último cambio</dt>
+          <dd>{{ ultimoAhdo() }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- El bus -->
+    <div class="bus">
+      <p class="bus-marca">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="kafka.path" /></svg>
+        Apache Kafka
+      </p>
+      <div class="tubo" aria-hidden="true">
+        <span class="flujo"></span>
+        @for (s of enVuelo(); track s.id) {
+          <span
+            class="sobre"
+            [class.hacia-ahdo]="s.origen === 'ocupa'"
+            [class.hacia-ocupa]="s.origen === 'ahdo'"
+            [class.conflicto]="s.conflicto"
+            [style.animation-duration.ms]="duracion()"
+            >{{ s.id }}</span
+          >
+        }
+      </div>
+      <p class="candado">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 11V8a5 5 0 0 1 10 0v3M5 11h14v10H5z" />
+        </svg>
+        Cifrado y con usuario (TLS + SASL)
+      </p>
+      <!-- El nombre del interruptor no cambia: el estado lo dice aria-checked, y en pantalla, el texto. -->
+      <button type="button" class="interruptor" role="switch" [attr.aria-checked]="encendido()" (click)="alternarKafka()">
+        <span class="interruptor-riel" aria-hidden="true"><i></i></span>
+        Kafka <span aria-hidden="true">{{ encendido() ? 'encendido' : 'apagado' }}</span>
+      </button>
+    </div>
+
+    <!-- Ocupasalud 2.0 -->
+    <section class="mundo mundo-ocupa" aria-labelledby="bus-ocupa">
+      <div class="planeta planeta-ocupa">
+        <img ngSrc="/marcas/ocupasalud/isotipo-ocupasalud-2.webp" width="83" height="83" alt="" />
+      </div>
+      <h3 id="bus-ocupa">Ocupasalud 2.0</h3>
+      <p class="motor">SQL Server, identificadores enteros</p>
+      <dl class="registro">
+        <div>
+          <dt>Cliente</dt>
+          <dd>{{ cliente.nombre }}</dd>
+        </div>
+        <div>
+          <dt>Id aquí</dt>
+          <dd class="mono">{{ cliente.idOcupasalud }}</dd>
+        </div>
+        <div>
+          <dt>Documento</dt>
+          <dd class="mono">{{ cliente.documento }}</dd>
+        </div>
+        <div>
+          <dt>Revisión</dt>
+          <dd class="mono" [class.atrasada]="revisionOcupa() < revisionAhdo()">{{ revisionOcupa() }}</dd>
+        </div>
+        <div>
+          <dt>Último cambio</dt>
+          <dd>{{ ultimoOcupa() }}</dd>
+        </div>
+      </dl>
+
+      <div class="bandejas">
+        <div class="bandeja-caja">
+          <h4>Bandeja de salida</h4>
+          <ol class="sobres" aria-label="Sobres en la bandeja de salida">
+            @for (s of bandeja(); track s.id) {
+              <li class="sobre-quieto"><span class="mono">{{ s.id }}</span> {{ s.texto }}</li>
+            } @empty {
+              <li class="nada">Vacía</li>
+            }
+          </ol>
+        </div>
+        <div class="bandeja-caja">
+          <h4>En revisión</h4>
+          <ol class="sobres" aria-label="Conflictos en revisión">
+            @for (s of revision(); track s.id) {
+              <li class="sobre-quieto conflicto"><span class="mono">{{ s.id }}</span> {{ s.texto }}</li>
+            } @empty {
+              <li class="nada">Sin conflictos</li>
+            }
+          </ol>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="mandos">
+    <button type="button" class="boton" (click)="editarEnOcupasalud()">Editar el cliente en Ocupasalud 2.0</button>
+    <button type="button" class="boton boton-ahdo" [disabled]="!encendido()" (click)="cambiarEnAhdo()">
+      Cambiarlo en AHDO
+    </button>
+    <button type="button" class="boton boton-suave" [disabled]="!encendido()" (click)="documentoRepetido()">
+      Llega un documento repetido
+    </button>
+  </div>
+
+  <p class="aviso" aria-live="polite">{{ aviso() }}</p>
+</div>

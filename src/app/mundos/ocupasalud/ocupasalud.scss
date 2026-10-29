@@ -1,0 +1,681 @@
+:host {
+  display: block;
+  overflow-x: clip;
+  color: var(--ink);
+  font-family: var(--ocupasalud-fuente, var(--font-body));
+}
+
+.ocupasalud {
+  display: block;
+}
+
+h2 {
+  max-width: 20ch;
+  margin-bottom: 18px;
+  font-family: var(--ocupasalud-fuente-titulo);
+  font-size: clamp(2.1rem, 1.3rem + 3.2vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+h3 {
+  font-family: var(--ocupasalud-fuente-titulo);
+  font-weight: 600;
+}
+
+/* "A-027" no se parte en el guion. */
+.sin-corte {
+  white-space: nowrap;
+}
+
+/* ======================= Tramos: cada sección es un área de la sede ======================= */
+
+.tramo {
+  position: relative;
+  padding-block: clamp(56px, 8vw, 112px);
+}
+
+/* La línea de piso azul y verde recorre el borde izquierdo de cada área. */
+.tramo-caja {
+  position: relative;
+  padding-left: calc(max(16px, env(safe-area-inset-left, 0px)) + 24px);
+
+  @media (min-width: 900px) {
+    padding-left: calc(max(16px, env(safe-area-inset-left, 0px)) + 44px);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: max(16px, env(safe-area-inset-left, 0px));
+    top: calc(-1 * clamp(56px, 8vw, 112px));
+    bottom: calc(-1 * clamp(56px, 8vw, 112px));
+    width: 10px;
+    background:
+      linear-gradient(var(--ocupasalud-azul), var(--ocupasalud-azul)) left / 50% 100% no-repeat,
+      linear-gradient(var(--ocupasalud-verde), var(--ocupasalud-verde)) right / 50% 100% no-repeat;
+  }
+}
+
+.recorrido-tramo {
+  padding-bottom: clamp(40px, 6vw, 80px);
+
+  .tramo-caja {
+    margin-bottom: 28px;
+
+    &::before {
+      bottom: 0;
+    }
+  }
+}
+
+/* El letrero de cada área, como la señalética de una sede. */
+.senal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 7px 13px 7px 10px;
+  border-radius: 6px;
+  background: var(--ocupasalud-azul);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9375rem;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+.senal-oscura {
+  background: #ffffff;
+  color: var(--ocupasalud-marino);
+
+  svg {
+    fill: currentColor;
+    stroke: none;
+  }
+}
+
+.tramo-bajada {
+  max-width: 66ch;
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+}
+
+.historia {
+  display: grid;
+  gap: 10px;
+  max-width: 68ch;
+  margin-bottom: 20px;
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+
+  b {
+    color: var(--ink);
+  }
+}
+
+.historia-nota {
+  color: var(--ink-3);
+  font-size: 0.9375rem;
+}
+
+.instruccion {
+  max-width: 72ch;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border-left: 4px solid var(--ocupasalud-azul);
+  border-radius: 0 10px 10px 0;
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 0.9375rem;
+}
+
+.reserva {
+  min-height: 260px;
+  padding: 24px;
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  color: var(--ink-2);
+
+  p {
+    max-width: 60ch;
+  }
+}
+
+/* ======================= Directorio ======================= */
+
+.directorio {
+  background: var(--ocupasalud-noche);
+  color: #ffffff;
+
+  h2 {
+    color: #ffffff;
+  }
+}
+
+.tablero-directorio {
+  display: grid;
+  gap: 24px;
+  margin-top: 10px;
+
+  @media (min-width: 900px) {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: start;
+  }
+}
+
+.puestos {
+  display: grid;
+  gap: 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.puesto {
+  position: relative;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 14px;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--ocupasalud-noche-2);
+  border: 1px solid var(--ocupasalud-noche-linea);
+
+  h3 {
+    margin-bottom: 4px;
+    font-size: 1.25rem;
+    color: #ffffff;
+  }
+  p {
+    color: var(--ocupasalud-claro);
+    line-height: 1.5;
+  }
+}
+
+.puesto-icono {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background: var(--ocupasalud-azul);
+
+  svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+.puesto-flecha {
+  position: absolute;
+  left: 32px;
+  bottom: -25px;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--ocupasalud-verde-claro);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Un aviso impreso pegado en el tablero: blanco, con la tinta de la marca. */
+.para-quien {
+  display: grid;
+  gap: 12px;
+  padding: 22px;
+  border-radius: 16px;
+  background: #ffffff;
+  color: var(--ink-2);
+
+  h3 {
+    font-size: 1.375rem;
+    color: var(--ink);
+  }
+}
+
+.logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  margin: 4px 0;
+  padding: 12px 0;
+  border-block: 1px solid var(--line-soft);
+  list-style: none;
+
+  img {
+    display: block;
+    width: auto;
+    height: 40px;
+  }
+}
+
+.logo-bogota {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.nota {
+  color: var(--ink-3);
+  font-size: 0.9375rem;
+}
+
+.equipos {
+  margin-top: 32px;
+
+  h3 {
+    margin-bottom: 12px;
+    font-size: 1.125rem;
+    color: #ffffff;
+  }
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 12px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 12px;
+    background: var(--ocupasalud-noche-2);
+  }
+}
+
+.equipo-icono {
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--ocupasalud-marino);
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.equipo-nombre {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.equipo-papel {
+  color: var(--ocupasalud-claro);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+
+/* ======================= Del papel al dato ======================= */
+
+.papel {
+  background: var(--surface-2);
+}
+
+/* ======================= Dos mundos, un bus ======================= */
+
+.bus {
+  background:
+    radial-gradient(60% 50% at 80% 10%, rgba(0, 119, 189, 0.25), transparent 70%),
+    var(--ocupasalud-noche);
+  color: #ffffff;
+
+  h2 {
+    color: #ffffff;
+  }
+  .historia {
+    color: #ffffff;
+
+    b {
+      color: var(--ocupasalud-claro);
+    }
+  }
+  .historia-nota {
+    color: var(--ocupasalud-claro);
+  }
+  .instruccion {
+    border-left-color: var(--ocupasalud-verde);
+    background: var(--ocupasalud-noche-2);
+    color: #ffffff;
+  }
+  .reserva {
+    border-color: var(--ocupasalud-noche-linea);
+    color: var(--ocupasalud-claro);
+  }
+  :focus-visible {
+    outline-color: var(--ocupasalud-claro);
+  }
+}
+
+/* Un sello de goma: lo que todavía no es producción se dice antes que todo. */
+.piloto {
+  display: inline-block;
+  margin: -4px 0 20px;
+  padding: 6px 14px;
+  border: 2px dashed var(--ocupasalud-rojo-claro);
+  border-radius: 8px;
+  color: var(--ocupasalud-rojo-claro);
+  font-family: var(--ocupasalud-fuente-titulo);
+  font-weight: 600;
+  transform: rotate(-1.5deg);
+}
+
+/* ======================= Constancia ======================= */
+
+.certificado {
+  max-width: 880px;
+  padding: 0 clamp(18px, 3vw, 36px) clamp(22px, 3vw, 36px);
+  border: 2px solid var(--ocupasalud-marino);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: var(--ocupasalud-sombra);
+  overflow: hidden;
+}
+
+.cert-cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  margin: 0 calc(-1 * clamp(18px, 3vw, 36px)) 18px;
+  padding: 30px clamp(18px, 3vw, 36px) 16px;
+  border-bottom: 1px solid var(--line);
+  /* La franja del logo arriba: OCUPA en azul, SALUD en verde. */
+  background: var(--ocupasalud-franja) top / 100% 10px no-repeat;
+}
+
+.cert-titulo {
+  font-family: var(--ocupasalud-fuente-titulo);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+
+.cert-fecha {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+.cert-datos {
+  display: grid;
+  margin: 0;
+
+  > div {
+    display: grid;
+    gap: 4px 20px;
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--line);
+
+    @media (min-width: 700px) {
+      grid-template-columns: 170px minmax(0, 1fr);
+    }
+  }
+  dt {
+    color: var(--ink-3);
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  dd {
+    margin: 0;
+    color: var(--ink);
+  }
+}
+
+.cert-concepto dd {
+  padding-top: 2px;
+}
+
+.piezas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--surface-2);
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+.cert-subtitulo {
+  margin: 26px 0 12px;
+  font-size: 1.125rem;
+  color: var(--ink);
+}
+
+.evolucion {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    position: relative;
+    display: grid;
+    gap: 2px 18px;
+    padding: 0 0 16px 24px;
+    border-left: 3px solid var(--line);
+
+    @media (min-width: 700px) {
+      grid-template-columns: 150px minmax(0, 1fr);
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+      border-left-color: transparent;
+    }
+    &::before {
+      content: '';
+      position: absolute;
+      left: -9px;
+      top: 4px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--ocupasalud-azul);
+      box-shadow: 0 0 0 3px #ffffff;
+    }
+    &:last-child::before {
+      background: #ffffff;
+      box-shadow:
+        inset 0 0 0 3px var(--ocupasalud-verde-texto),
+        0 0 0 3px #ffffff;
+    }
+    p {
+      color: var(--ink);
+    }
+  }
+}
+
+.evo-fecha {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--ink-2);
+}
+
+.evo-donde {
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+
+  @media (min-width: 700px) {
+    grid-column: 2;
+  }
+}
+
+/* ======================= Citas pendientes ======================= */
+
+.pendientes {
+  background: var(--surface-2);
+}
+
+.citas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cita {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #ffffff;
+
+  h3 {
+    font-size: 1.25rem;
+    color: var(--ink);
+  }
+  p {
+    color: var(--ink-2);
+  }
+}
+
+.cita-estado {
+  justify-self: start;
+  padding: 2px 10px;
+  border: 1.5px solid var(--ocupasalud-rojo);
+  border-radius: 999px;
+  color: var(--ocupasalud-rojo);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* ======================= Siguiente turno: la pantalla que llama ======================= */
+
+.siguiente {
+  background: var(--ocupasalud-noche);
+
+  :focus-visible {
+    outline-color: var(--ocupasalud-claro);
+  }
+}
+
+.llamado {
+  /* El color del proyecto siguiente, aclarado: el de Cuality puro (#0060A3) da 2,3:1 sobre la noche. */
+  --siguiente-claro: color-mix(in oklab, var(--color-siguiente) 55%, #ffffff);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 24px;
+  align-items: end;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding: clamp(40px, 7vw, 96px) max(16px, env(safe-area-inset-right, 0px)) clamp(40px, 7vw, 96px)
+    max(16px, env(safe-area-inset-left, 0px));
+  color: #ffffff;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    .llamado-numero {
+      color: var(--siguiente-claro);
+      text-shadow: 0 0 28px var(--color-siguiente);
+    }
+    .llamado-flecha {
+      transform: translateX(10px);
+    }
+    .llamado-destino {
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 8px;
+    }
+  }
+}
+
+.llamado-pre {
+  grid-column: 1 / -1;
+  color: var(--ocupasalud-claro);
+  font-weight: 600;
+}
+
+.llamado-numero {
+  grid-column: 1 / -1;
+  font-family: var(--font-mono);
+  font-size: clamp(3.5rem, 1.8rem + 8vw, 9rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: 0.03em;
+  color: var(--ocupasalud-claro);
+  text-shadow: 0 0 26px rgba(159, 208, 240, 0.45);
+  transition:
+    color 260ms var(--ease-out),
+    text-shadow 260ms var(--ease-out);
+}
+
+.llamado-destino {
+  font-family: var(--ocupasalud-fuente-titulo);
+  font-size: clamp(2rem, 1.2rem + 3.4vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.llamado-resumen {
+  grid-column: 1;
+  max-width: 52ch;
+  color: #ffffff;
+}
+
+.llamado-flecha {
+  grid-column: 2;
+  grid-row: 3 / span 2;
+  width: clamp(48px, 8vw, 96px);
+  height: auto;
+  color: var(--siguiente-claro);
+  transition: transform 320ms var(--ease-out);
+}
+
+/* ======================= Movimiento reducido ======================= */
+/* La fachada y sus puertas tienen su propia regla en fachada.scss: el encapsulado de Angular no
+   deja que esta hoja las alcance. */
+
+@media (prefers-reduced-motion: reduce) {
+  .llamado-numero,
+  .llamado-flecha {
+    transition: none;
+  }
+  .llamado:hover .llamado-flecha,
+  .llamado:focus-visible .llamado-flecha {
+    transform: none;
+  }
+}

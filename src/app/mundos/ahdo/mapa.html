@@ -1,0 +1,33 @@
+<section class="mapa" aria-labelledby="mapa-titulo">
+  <div class="wrap">
+    <header class="cabeza">
+      <h2 id="mapa-titulo" class="titulo">Quién usa qué</h2>
+      <p class="intro">
+        AHDO nació vendiendo cursos. Hoy varias empresas del grupo corren sus procesos dentro de ella. Toca una
+        empresa para ver qué usa, o un módulo para saber qué hace.
+      </p>
+    </header>
+
+    @defer (on idle) {
+      <app-ahdo-red />
+    } @placeholder {
+      <ol class="previa">
+        @for (m of modulos; track m.id) {
+          <li>
+            <strong>{{ m.nombre }}.</strong> {{ m.detalle }} Sirve a {{ nombres(m) }}.
+            @if (m.piloto) {
+              <span class="insignia piloto">Piloto</span>
+            }
+            @if (m.autoria; as a) {
+              <span class="insignia">{{ etiquetaAutoria[a] }}</span>
+            }
+          </li>
+        }
+      </ol>
+    }
+
+    <p class="nota">
+      Las insignias marcan lo que git confirma como mío. Donde no hay insignia, no reclamo autoría.
+    </p>
+  </div>
+</section>

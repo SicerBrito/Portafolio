@@ -1,0 +1,85 @@
+<section
+  class="pago"
+  aria-labelledby="pago-titulo"
+  [class.con-pin]="modo() === 'pin'"
+  [class.con-pila]="modo() === 'pila'"
+  [class.con-3d]="con3d()"
+>
+  <div class="pin" #pin>
+    <header class="cabeza">
+      <p class="aviso">Simulación: arquitectura real, simplificada. Datos ficticios.</p>
+      <h2 id="pago-titulo" class="titulo">La vida de un pago</h2>
+      <p class="intro">
+        Una empresa matricula a sus trabajadores y paga en línea. Así viaja esa operación por dentro de AHDO.
+      </p>
+    </header>
+
+    <div class="caja" #caja>
+      <!-- Plano visto desde arriba: lo que se ve antes del 3D o si no hay WebGL. -->
+      <svg class="plano" viewBox="-7.4 -4.4 14.8 8.8" preserveAspectRatio="none" aria-hidden="true">
+        @for (c of conductos; track $index) {
+          <path [attr.d]="c" />
+        }
+      </svg>
+      <canvas #lienzo class="lienzo" aria-hidden="true"></canvas>
+      <div class="etiquetas" aria-hidden="true">
+        @for (n of nodos; track n.id) {
+          <span
+            class="etiqueta"
+            [attr.data-id]="n.id"
+            [attr.data-tipo]="n.tipo"
+            [class.activa]="activos().has(n.id)"
+            [style.--px]="((n.x + 7.4) / 14.8) * 100 + '%'"
+            [style.--pz]="((n.z + 4.4) / 8.8) * 100 + '%'"
+          >
+            <svg viewBox="0 0 24 24">
+              <path [attr.d]="iconos[n.icono].path" [attr.fill-rule]="iconos[n.icono].regla" />
+            </svg>
+            <span class="largo">{{ n.nombre }}</span>
+            <span class="corto">{{ n.corto }}</span>
+            @if (nota()?.nodo === n.id) {
+              <span class="nota">{{ nota()?.texto }}</span>
+            }
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="recorrido">
+      <div class="riel" aria-hidden="true"><span #riel></span></div>
+      <ol class="pasos">
+        @for (paso of pasos; track paso.titulo; let i = $index) {
+          <li class="paso" [class.activo]="i === pasoActivo()" [attr.aria-current]="i === pasoActivo() ? 'step' : null">
+            <button type="button" class="paso-boton" (click)="irA(i)">
+              <span class="paso-num" aria-hidden="true">{{ i + 1 }}</span>
+              <span class="paso-titulo">{{ paso.titulo }}</span>
+            </button>
+            <div class="paso-cuerpo">
+              <div>
+                <p>{{ paso.texto }}</p>
+                <span class="tec">{{ paso.etiqueta }}</span>
+              </div>
+            </div>
+          </li>
+        }
+      </ol>
+
+      @if (listo() && modo() === 'fijo') {
+        <div class="controles">
+          <button type="button" class="control" (click)="irA(pasoActivo() - 1)" [disabled]="pasoActivo() === 0">
+            Paso anterior
+          </button>
+          <span class="contador" aria-live="polite">Paso {{ pasoActivo() + 1 }} de {{ pasos.length }}</span>
+          <button
+            type="button"
+            class="control"
+            (click)="irA(pasoActivo() + 1)"
+            [disabled]="pasoActivo() === pasos.length - 1"
+          >
+            Paso siguiente
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</section>

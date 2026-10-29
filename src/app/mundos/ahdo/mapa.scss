@@ -1,0 +1,71 @@
+:host {
+  display: block;
+}
+
+.mapa {
+  padding-block: clamp(56px, 8vw, 112px);
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(50% 40% at 85% 20%, rgba(0, 127, 184, 0.14), transparent 70%),
+    var(--bg);
+}
+
+.wrap {
+  display: grid;
+  gap: 28px;
+}
+
+.cabeza {
+  display: grid;
+  gap: 14px;
+  max-width: 60ch;
+}
+
+.titulo {
+  font-weight: 700;
+  font-size: clamp(2.25rem, 1.2rem + 3.2vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.intro {
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.nota {
+  font-size: 0.875rem;
+  color: var(--ink-3);
+}
+
+/* Mientras llega la red: la misma lista en texto. */
+.previa {
+  margin: 0;
+  padding-left: 22px;
+  display: grid;
+  gap: 10px;
+  color: var(--ink-2);
+
+  strong {
+    color: var(--ink);
+  }
+}
+
+/* Las mismas insignias que la red, en la lista de texto. */
+.insignia {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--ahdo-borde-1);
+  color: var(--signal-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &.piloto {
+    background: transparent;
+    border: 1px dashed var(--ahdo-borde-3);
+    color: var(--ink-2);
+  }
+}

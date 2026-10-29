@@ -1,0 +1,141 @@
+<div class="constructor">
+  <div class="editor">
+    <fieldset class="marcas">
+      <legend>Empresa que pregunta</legend>
+      @for (m of marcas; track m.id) {
+        <label [class.elegida]="marca().id === m.id" [attr.data-marca]="m.id">
+          <input
+            type="radio"
+            name="marca-formulario"
+            [value]="m.id"
+            [checked]="marca().id === m.id"
+            (change)="elegirMarca(m)"
+          />
+          <i aria-hidden="true"></i>
+          {{ m.nombre }}
+        </label>
+      }
+    </fieldset>
+
+    <div class="paleta">
+      <h3>Bloques</h3>
+      <ul>
+        @for (b of bloques; track b.tipo) {
+          <li>
+            <button type="button" class="bloque" (click)="agregar(b)" [disabled]="yaEsta(b.tipo)">
+              <span class="mas" aria-hidden="true">+</span>
+              {{ b.nombre }}
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="lista">
+      <h3>Preguntas del formulario</h3>
+      <ol>
+        @for (p of preguntas(); track p.id) {
+          <li class="fila" [class.retirada]="p.retirada">
+            <div class="fila-cabeza">
+              <span class="tipo">
+                {{ p.bloque.nombre }}
+                @if (p.version > 1) {
+                  · versión {{ p.version }}
+                }
+              </span>
+              <span class="cuenta">{{ p.respuestas }} respuestas</span>
+            </div>
+            <p class="fila-texto">{{ texto(p) }}</p>
+
+            @if (p.retirada) {
+              <p class="sello-retirada">Ya no se pregunta. Conserva lo respondido.</p>
+              <div class="mini" role="img" [attr.aria-label]="'Respuestas conservadas, de ejemplo: ' + resumen(p)">
+                @for (r of respuestasEjemplo[p.bloque.tipo]; track r.etiqueta) {
+                  <span class="mini-barra">
+                    <em>{{ r.etiqueta }}</em>
+                    <b [style.width.%]="r.valor"></b>
+                  </span>
+                }
+              </div>
+              @if (!yaEsta(p.bloque.tipo)) {
+                <button type="button" class="accion" (click)="reemplazar(p)">Agregar su reemplazo al lado</button>
+              }
+            } @else if (p.respuestas > 0) {
+              <div class="acciones">
+                <span class="candado">Tiene respuestas: no se edita</span>
+                <button type="button" class="accion" (click)="retirar(p)">Retirar pregunta</button>
+              </div>
+            } @else {
+              <div class="acciones">
+                <span class="candado">Sin respuestas todavía</span>
+                <button type="button" class="accion" (click)="quitar(p)">Quitar</button>
+              </div>
+            }
+          </li>
+        }
+      </ol>
+      <button type="button" class="reiniciar" (click)="reiniciar()">Volver al formulario inicial</button>
+    </div>
+    <p class="solo-lectores" aria-live="polite">{{ anuncio() }}</p>
+  </div>
+
+  <div class="movil" role="group" aria-label="Vista previa del formulario en el celular" [attr.data-marca]="marca().id">
+    <div class="pantalla">
+      <header class="form-cabeza">
+        <span class="form-empresa">{{ marca().nombre }}</span>
+        <strong>{{ marca().formulario }}</strong>
+      </header>
+      <div class="form-cuerpo">
+        @for (p of vivas(); track p.id; let i = $index) {
+          <div class="form-pregunta" animate.enter="entra" animate.leave="sale">
+            <p class="form-texto">{{ i + 1 }}. {{ texto(p) }}</p>
+            @switch (p.bloque.tipo) {
+              @case ('escala') {
+                <div class="escala">
+                  @for (n of [1, 2, 3, 4, 5]; track n) {
+                    <span [class.marcada]="n === 5">{{ n }}</span>
+                  }
+                </div>
+              }
+              @case ('si-no') {
+                <div class="escala">
+                  <span class="marcada ancha">Sí</span>
+                  <span class="ancha">No</span>
+                </div>
+              }
+              @case ('filas') {
+                <div class="filas">
+                  @for (o of marca().filas.opciones; track o) {
+                    <div class="fila-opcion">
+                      <span>{{ o }}</span>
+                      <span class="estrellas" aria-hidden="true">★★★★☆</span>
+                    </div>
+                  }
+                  <small>Estas filas llegan con cada invitación.</small>
+                </div>
+              }
+              @case ('matriz') {
+                <div class="matriz">
+                  <span></span>
+                  <span>Claro</span>
+                  <span>Regular</span>
+                  @for (o of p.bloque.opciones ?? []; track o; let j = $index) {
+                    <span>{{ o }}</span>
+                    <i [class.marcada]="j === 0"></i>
+                    <i [class.marcada]="j === 1"></i>
+                  }
+                </div>
+              }
+              @case ('texto') {
+                <div class="caja-texto">Escribe aquí…</div>
+              }
+            }
+          </div>
+        } @empty {
+          <p class="form-vacio">Agrega un bloque para empezar.</p>
+        }
+        <span class="form-boton">Enviar respuestas</span>
+      </div>
+    </div>
+  </div>
+</div>

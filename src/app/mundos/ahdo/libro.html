@@ -1,0 +1,40 @@
+<div class="libro" role="group" aria-labelledby="libro-titulo">
+  <div class="libro-cabeza">
+    <h4 id="libro-titulo">Libro de pagos de una factura de muestra</h4>
+    <span>Total {{ total }}</span>
+  </div>
+  <ul class="abonos">
+    @for (a of abonos; track a.id) {
+      <li class="abono" [class.anulado]="anulado(a)">
+        <span class="abono-fecha">Abono del {{ a.fecha }}</span>
+        <span class="abono-valor">{{ formatear(a.valor) }}</span>
+        @if (anulado(a)) {
+          <span class="marca">Anulado, no borrado</span>
+        }
+        <button
+          type="button"
+          class="abono-boton"
+          [attr.aria-label]="(anulado(a) ? 'Deshacer la anulación del abono del ' : 'Anular el abono del ') + a.fecha"
+          (click)="alternar(a)"
+        >
+          {{ anulado(a) ? 'Deshacer' : 'Anular' }}
+        </button>
+      </li>
+    }
+  </ul>
+  <div class="barra" aria-hidden="true"><span [style.transform]="'scaleX(' + avance() + ')'"></span></div>
+  <dl class="resultado" aria-live="polite">
+    <div>
+      <dt>Saldo</dt>
+      <dd>{{ formatear(saldo()) }}</dd>
+    </div>
+    <div>
+      <dt>Estado</dt>
+      <dd [class.pagada]="saldo() === 0">{{ estado() }}</dd>
+    </div>
+  </dl>
+  <p class="pie">
+    Valores ficticios. El saldo no se guarda: se calcula con los abonos vigentes. Deshacer existe solo en
+    esta muestra.
+  </p>
+</div>

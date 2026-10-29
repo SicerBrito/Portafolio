@@ -1,0 +1,102 @@
+<section class="seccion" aria-labelledby="constancia-titulo">
+  <div class="wrap rejilla">
+    <article class="constancia">
+      <svg class="estampa" viewBox="0 0 120 120" aria-hidden="true">
+        <defs>
+          <path id="ahdo-estampa-aro" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0" />
+        </defs>
+        <circle cx="60" cy="60" r="56" />
+        <circle cx="60" cy="60" r="33" />
+        <text>
+          <textPath href="#ahdo-estampa-aro">VERIFICADO CON GIT · OCTUBRE 2026 ·</textPath>
+        </text>
+        <path class="rama" d="M50 44v32M50 58c0-8 20-4 20-14" />
+        <circle class="punto" cx="50" cy="44" r="4" />
+        <circle class="punto" cx="50" cy="76" r="4" />
+        <circle class="punto" cx="70" cy="44" r="4" />
+      </svg>
+
+      <header class="cabeza">
+        <p class="tipo">Constancia de autoría</p>
+        <h2 id="constancia-titulo">Lo que es mío en AHDO</h2>
+      </header>
+
+      <app-sello [autoria]="proyecto().autoria" [estado]="proyecto().estado" />
+
+      <p class="papel">{{ proyecto().papel }}</p>
+
+      <dl class="datos">
+        <div>
+          <dt>Periodo</dt>
+          <dd>{{ proyecto().periodo }}</dd>
+        </div>
+        <div>
+          <dt>Mi parte</dt>
+          <dd>{{ proyecto().git.resumen }}</dd>
+        </div>
+        <div>
+          <dt>Detalle</dt>
+          <dd>{{ proyecto().git.nota }}</dd>
+        </div>
+      </dl>
+
+      @if (cifraControllers(); as c) {
+        <figure class="controllers">
+          <div class="cuadros" aria-hidden="true">
+            @for (heredado of controllers; track $index) {
+              <span [class.heredado]="heredado"></span>
+            }
+          </div>
+          <figcaption>
+            <strong>{{ c.valor }}</strong> {{ c.etiqueta }}. Los cuadros vacíos son los 21 que había al llegar; los
+            llenos, los que se sumaron después, míos y de otros desarrolladores.
+            <span class="fuente">Fuente: {{ c.fuente }}</span>
+          </figcaption>
+        </figure>
+      }
+    </article>
+
+    <div class="lateral">
+      <section class="bloque" aria-labelledby="cifras-titulo">
+        <h3 id="cifras-titulo">La plataforma en números</h3>
+        <dl class="cifras">
+          @for (c of cifrasNegocio(); track c.etiqueta) {
+            <div class="cifra">
+              <dt>{{ c.etiqueta }}</dt>
+              <dd>{{ c.valor }}</dd>
+              <dd class="fuente">{{ c.fuente }}</dd>
+            </div>
+          }
+        </dl>
+      </section>
+
+      <section class="bloque falta" aria-labelledby="falta-titulo">
+        <h3 id="falta-titulo">Lo que todavía falta</h3>
+        <p>{{ proyecto().falta }}</p>
+        <svg class="piloto" viewBox="0 0 300 64" aria-hidden="true">
+          <rect x="2" y="14" width="86" height="36" rx="8" class="caja-ahdo" />
+          <text x="45" y="37" class="t">AHDO</text>
+          <path d="M96 32H204" class="cable" />
+          <text x="150" y="24" class="t chico">Kafka · piloto</text>
+          <rect x="212" y="14" width="86" height="36" rx="8" class="caja-otra" />
+          <text x="255" y="31" class="t chico">Nueva</text>
+          <text x="255" y="44" class="t chico">plataforma</text>
+        </svg>
+      </section>
+
+      <section class="bloque" aria-labelledby="stack-titulo">
+        <h3 id="stack-titulo">Con qué está hecho</h3>
+        <ul class="stack">
+          @for (t of stack(); track t.nombre) {
+            <li>
+              @if (t.icono; as ico) {
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="ico.path" [attr.fill-rule]="ico.regla" /></svg>
+              }
+              {{ t.nombre }}
+            </li>
+          }
+        </ul>
+      </section>
+    </div>
+  </div>
+</section>

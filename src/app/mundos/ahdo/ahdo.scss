@@ -1,0 +1,106 @@
+:host {
+  display: block;
+  font-family: var(--ahdo-fuente, var(--font-body));
+  overflow-x: clip;
+}
+
+.ahdo {
+  display: block;
+}
+
+/* ---------- Siguiente nave: un portal en el color de la marca que sigue ---------- */
+
+.siguiente {
+  border-top: 1px solid var(--line);
+}
+
+.siguiente-enlace {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 24px;
+  align-items: end;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding: clamp(40px, 7vw, 96px) max(16px, env(safe-area-inset-right, 0px)) clamp(40px, 7vw, 96px)
+    max(16px, env(safe-area-inset-left, 0px));
+  color: var(--ink);
+  text-decoration: none;
+  isolation: isolate;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 calc(50% - 50vw);
+    z-index: -1;
+    background: var(--color-siguiente);
+    clip-path: inset(0 0 0 100%);
+    transition: clip-path 520ms var(--ease-out);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: #140d26;
+
+    &::before {
+      clip-path: inset(0 0 0 0);
+    }
+
+    .siguiente-flecha {
+      transform: translateX(10px);
+    }
+  }
+
+  &:focus-visible {
+    outline-offset: -6px;
+    outline-color: #140d26;
+  }
+}
+
+.siguiente-pre {
+  grid-column: 1 / -1;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: inherit;
+  opacity: 0.85;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: var(--color-siguiente);
+    vertical-align: 0;
+  }
+}
+
+.siguiente-nombre {
+  font-weight: 700;
+  font-size: clamp(3rem, 1.6rem + 7vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.siguiente-resumen {
+  grid-column: 1;
+  max-width: 52ch;
+  color: inherit;
+  opacity: 0.9;
+}
+
+.siguiente-flecha {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  width: clamp(48px, 8vw, 96px);
+  height: auto;
+  transition: transform 320ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .siguiente-enlace::before,
+  .siguiente-flecha {
+    transition: none;
+  }
+}

@@ -1,0 +1,93 @@
+<div class="red" #red>
+  <svg
+    class="trazos"
+    #trazos
+    [attr.viewBox]="'0 0 ' + caja().ancho + ' ' + caja().alto"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    @for (l of lineas(); track l.clave) {
+      <path
+        [attr.d]="l.d"
+        pathLength="1"
+        [class.viva]="lineaViva(l)"
+        [class.piloto]="l.piloto"
+        [style.--lc]="l.color"
+      />
+    }
+  </svg>
+
+  <div class="empresas">
+    <div class="grupo">
+      <img ngSrc="/marcas/ahdo/logo-prometeo.webp" width="577" height="433" alt="Grupo Empresarial Prometeo" />
+    </div>
+    <ul class="lista-empresas" aria-label="Empresas">
+      @for (e of empresas; track e.id) {
+        <li>
+          <button
+            type="button"
+            class="empresa"
+            [attr.data-empresa]="e.id"
+            [style.--lc]="e.color"
+            [attr.aria-pressed]="empresaSel() === e.id"
+            [class.viva]="empresasVivas()?.has(e.id)"
+            [class.apagada]="!!empresasVivas() && !empresasVivas()?.has(e.id)"
+            (click)="alternarEmpresa(e.id)"
+          >
+            <span class="empresa-logo">
+              @if (logos[e.id]; as lg) {
+                <img [ngSrc]="lg.src" [width]="lg.ancho" [height]="lg.alto" alt="" />
+              } @else {
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path [attr.d]="iconoEmpresa.path" fill-rule="evenodd" />
+                </svg>
+              }
+            </span>
+            <span class="empresa-nombre">{{ e.nombre }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <ol class="modulos" aria-label="Módulos de AHDO">
+    @for (m of modulos; track m.id) {
+      <li
+        class="modulo"
+        [attr.data-modulo]="m.id"
+        [class.vivo]="modulosVivos()?.has(m.id)"
+        [class.apagado]="!!modulosVivos() && !modulosVivos()?.has(m.id)"
+      >
+        <button
+          type="button"
+          class="modulo-boton"
+          [attr.aria-expanded]="moduloSel() === m.id"
+          [attr.aria-controls]="'ahdo-detalle-' + m.id"
+          (click)="alternarModulo(m)"
+        >
+          <span class="modulo-nombre">{{ m.nombre }}</span>
+          <span class="insignias">
+            @if (m.piloto) {
+              <span class="insignia piloto">Piloto</span>
+            }
+            @if (m.autoria; as a) {
+              <span class="insignia">{{ etiquetaAutoria[a] }}</span>
+            }
+          </span>
+        </button>
+        <ul class="sirve" [attr.aria-label]="'Sirve a'">
+          @for (e of m.empresas; track e) {
+            <li [style.--lc]="colorEmpresa(e)">{{ nombreEmpresa(e) }}</li>
+          }
+        </ul>
+        <div class="detalle" [id]="'ahdo-detalle-' + m.id" [class.abierto]="moduloSel() === m.id">
+          <div>
+            <p>{{ m.detalle }}</p>
+          </div>
+        </div>
+      </li>
+    }
+  </ol>
+</div>
+
+<p class="solo-lectores" aria-live="polite">{{ resumen() }}</p>

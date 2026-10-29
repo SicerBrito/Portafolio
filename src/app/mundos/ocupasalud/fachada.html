@@ -1,0 +1,83 @@
+<!-- ======================= Fachada ======================= -->
+<header class="fachada">
+  <span class="esfera" aria-hidden="true" [style.transform]="esfera()"></span>
+  <div class="wrap fachada-rejilla">
+    <div class="fachada-texto">
+      <a class="volver" routerLink="/" fragment="proyectos">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
+        Volver a la planta
+      </a>
+
+      <div class="aviso-logo">
+        <img
+          ngSrc="/marcas/ocupasalud/logo-ocupasalud.webp"
+          width="493"
+          height="143"
+          alt="Ocupasalud. Profesionales en evaluación, prevención, diagnóstico y tratamiento en salud"
+          priority
+        />
+      </div>
+
+      <h1><span class="solo-lectores">Ocupasalud: </span>Un día en la IPS</h1>
+      <p class="bajada">{{ p.resumen }}</p>
+      <p class="mi-parte">{{ miParte }}</p>
+
+      <div class="placa">
+        <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+        <span class="placa-dato">{{ p.git.resumen }}</span>
+        <span class="placa-dato">{{ p.periodo }}</span>
+      </div>
+    </div>
+
+    <!-- El dispensador de turnos: el visitante entra como un paciente más. -->
+    <div class="dispensador" [class.impreso]="impreso()">
+      <div class="dispensador-cuerpo">
+        <p class="pantalla" aria-hidden="true">
+          <span>Turno actual</span>
+          <b>{{ impreso() ? turno : 'A-026' }}</b>
+        </p>
+        <button
+          type="button"
+          class="boton-turno"
+          [class.boton-seguir]="impreso()"
+          (click)="impreso() ? irAlRecorrido() : tomarTurno()"
+        >
+          {{ impreso() ? 'Seguir al paciente' : 'Tomar un turno' }}
+        </button>
+        <p class="solo-lectores" aria-live="polite">
+          {{ impreso() ? 'Salió el turno ' + turno + '. El mismo botón ahora lleva al recorrido.' : '' }}
+        </p>
+        <span class="ranura" aria-hidden="true"></span>
+      </div>
+      <div class="tiquete-caja">
+        <div class="tiquete">
+          <img
+            class="tiquete-isotipo"
+            ngSrc="/marcas/ocupasalud/isotipo-ocupasalud.webp"
+            width="83"
+            height="83"
+            alt=""
+          />
+          <p class="tiquete-titulo">Su turno</p>
+          <p class="tiquete-numero">{{ turno }}</p>
+          <p class="tiquete-motivo">Exámenes de ingreso</p>
+          <p class="tiquete-ruta">Medicina, optometría, audiometría, laboratorio y rayos X</p>
+          <p class="tiquete-nota">Paciente de ejemplo. Todos sus datos son ficticios.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Las puertas de vidrio de la sede: el scroll las abre. El letrero va por delante del vidrio
+     para que se lea con las puertas cerradas; lo grabado en el vidrio es decoración y va en CSS. -->
+<div class="puertas" #puertas>
+  <p class="puertas-texto">
+    <span class="linea-muestra" aria-hidden="true"></span>
+    Siga la línea azul y verde
+  </p>
+  <div class="hojas" aria-hidden="true">
+    <span class="hoja-vidrio hoja-izq" data-grabado="Ocupasalud"></span>
+    <span class="hoja-vidrio hoja-der" data-grabado="Bienvenido"></span>
+  </div>
+</div>

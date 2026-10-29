@@ -1,0 +1,583 @@
+:host {
+  display: block;
+}
+
+.escalada {
+  --altura: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px));
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+/* ---------- El escenario: de la tierra al cielo dorado ---------- */
+
+.escenario {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(70% 45% at 55% 100%, rgba(133, 86, 35, 0.4), transparent 70%),
+    linear-gradient(180deg, #120d08 0%, var(--bg) 60%, #1a1209 100%);
+
+  /* La regla de obra: marcas cada 24 px en el borde izquierdo, como una cinta métrica. */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 10px;
+    background: repeating-linear-gradient(180deg, var(--line) 0 1px, transparent 1px 24px);
+    pointer-events: none;
+  }
+}
+
+.cielo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 40% at 52% 0%, rgba(255, 239, 66, 0.28), transparent 70%),
+    linear-gradient(180deg, rgba(233, 176, 54, 0.3) 0%, rgba(129, 131, 41, 0.08) 45%, transparent 75%);
+  opacity: var(--altura);
+  display: none;
+}
+
+.ilustracion {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin: 12px auto;
+  transition: opacity 500ms var(--ease-out);
+
+  line {
+    stroke-linecap: round;
+  }
+  .il-suelo ellipse {
+    fill: var(--surface-2);
+  }
+  .il-tubos line {
+    stroke: #8c8275;
+    stroke-width: 6;
+  }
+  .il-tubos .il-cruz {
+    stroke-width: 3.5;
+    opacity: 0.7;
+  }
+  .il-escalera line {
+    stroke: #8c8275;
+    stroke-width: 3;
+  }
+  .il-linea {
+    stroke: var(--prevent-oro);
+    stroke-width: 4;
+  }
+  .il-ancla,
+  .il-mosqueton {
+    fill: none;
+    stroke: var(--prevent-oro);
+    stroke-width: 3.5;
+  }
+  .il-doc rect {
+    fill: var(--prevent-oro);
+  }
+  .il-doc text {
+    fill: var(--ink-2);
+    font: 600 22px var(--prevent-cifras);
+  }
+  .il-personaje,
+  .il-casco {
+    fill: var(--prevent-oro);
+  }
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 700ms var(--ease-out);
+}
+
+.escenario.activo {
+  canvas {
+    opacity: 1;
+  }
+  .ilustracion {
+    opacity: 0;
+  }
+}
+
+/* ---------- Etiquetas de los travesaños ---------- */
+
+.anclas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.ancla {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  padding: 6px 12px 6px 10px;
+  max-width: 230px;
+  border-right: 3px solid var(--line);
+  background: rgba(15, 11, 7, 0.86);
+  font-family: var(--prevent-fuente);
+  text-align: right;
+  opacity: 0;
+  transition:
+    opacity 240ms var(--ease-out),
+    border-color 240ms var(--ease-out);
+  will-change: transform;
+
+  b {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  i {
+    font-style: normal;
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+  &.visible {
+    opacity: 1;
+  }
+  &[data-estado='cargado'] {
+    border-color: var(--ink-2);
+    i {
+      color: var(--ink-2);
+    }
+  }
+  &[data-estado='valido'] {
+    border-color: var(--prevent-verde);
+    i {
+      color: var(--prevent-verde-claro);
+      font-weight: 600;
+    }
+  }
+  &.cumbre {
+    border-color: var(--prevent-amarillo);
+    b {
+      color: var(--prevent-amarillo-claro);
+    }
+  }
+}
+
+/* ---------- La matrícula de ejemplo ---------- */
+
+.matricula {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  top: 16px;
+  left: 24px;
+  width: min(340px, calc(100% - 48px));
+  padding: 14px 16px 12px;
+  background: rgba(23, 17, 10, 0.92);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--prevent-oro);
+  font-family: var(--prevent-fuente);
+}
+
+.matricula-titulo {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 8px;
+}
+
+.contadores {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 10px;
+
+  div {
+    padding: 6px 8px;
+    background: var(--surface-2);
+  }
+  dt {
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+  dd {
+    margin: 0;
+    font: 700 1.75rem/1 var(--prevent-cifras);
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  small {
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+  .validos dd {
+    color: var(--prevent-verde-claro);
+  }
+}
+
+.lista {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+  .punto {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+  }
+  li[data-estado='cargado'] {
+    color: var(--ink-2);
+    .punto {
+      background: var(--ink-2);
+    }
+  }
+  li[data-estado='valido'] {
+    color: var(--ink);
+    .punto {
+      border-color: var(--prevent-verde);
+      background: var(--prevent-verde);
+    }
+  }
+}
+
+/* ---------- El altímetro ---------- */
+
+.altimetro {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  bottom: 40px;
+  right: 18px;
+  width: 64px;
+}
+
+.regla {
+  position: absolute;
+  inset: 0 22px 0 0;
+}
+
+.marca {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--n) * 20%);
+  transform: translateY(50%);
+  font: 600 0.8125rem/1 var(--prevent-cifras);
+  font-style: normal;
+  color: var(--ink-3);
+  white-space: nowrap;
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 1px;
+    margin-left: 4px;
+    vertical-align: middle;
+    background: var(--ink-3);
+  }
+}
+
+.aguja-carril {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 8px;
+  width: 4px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.aguja {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: var(--prevent-degradado);
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+/* Abajo a la derecha del escenario, lejos de la matrícula. */
+.girar {
+  position: absolute;
+  right: 12px;
+  bottom: 24px;
+  z-index: 3;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--prevent-oro);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 0.875rem var(--prevent-fuente);
+  cursor: pointer;
+}
+
+.barra {
+  display: none;
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 14px;
+  height: 3px;
+  background: var(--line);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    background: var(--prevent-degradado);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+}
+
+/* ---------- Los pasos ---------- */
+
+.pasos {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paso {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line);
+
+  h3 {
+    font: 700 1.25rem/1.25 var(--prevent-fuente);
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  p {
+    font-family: var(--prevent-fuente);
+    font-size: 0.96875rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 60ch;
+  }
+}
+
+.paso-marca {
+  font: 700 1.5rem/1 var(--prevent-cifras);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  padding-top: 2px;
+}
+
+.paso.activo {
+  border-left-color: var(--prevent-oro);
+  .paso-marca {
+    color: var(--prevent-oro);
+  }
+}
+
+.alternativas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+
+  span {
+    padding: 4px 10px;
+    border: 1px solid var(--prevent-oro);
+    color: var(--ink);
+    font-size: 0.8125rem;
+  }
+  em {
+    font-style: normal;
+    color: var(--prevent-oro);
+    font-weight: 600;
+  }
+}
+
+/* ---------- Con JavaScript: la escena manda ---------- */
+
+.vivo {
+  .anclas,
+  .barra,
+  .cielo {
+    display: block;
+  }
+  .matricula {
+    display: block;
+  }
+  .escenario {
+    min-height: 340px;
+  }
+}
+
+/* Escritorio: la sección queda fija y el scroll sube el andamio. */
+.fijado {
+  grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
+  grid-template-rows: 1fr;
+  height: calc(100svh - var(--cabecera));
+  padding-block: 12px;
+
+  .escenario {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    height: 100%;
+  }
+  .ilustracion {
+    margin: auto;
+    max-height: 100%;
+  }
+  .altimetro {
+    display: block;
+  }
+  .pasos {
+    position: relative;
+    z-index: 2;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    height: 300px;
+    margin: 0 0 40px 24px;
+  }
+  .paso {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 280ms var(--ease-out),
+      transform 280ms var(--ease-out);
+    box-shadow: var(--prevent-sombra);
+
+    &.activo {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Móvil: el andamio queda pegado arriba y los pasos pasan por encima. */
+.pasos-movil {
+  .escenario {
+    position: sticky;
+    top: calc(var(--cabecera) + 8px);
+    z-index: 0;
+    height: min(58svh, 520px);
+  }
+  .ilustracion {
+    margin: auto;
+    max-height: 100%;
+  }
+  /* En el celular las etiquetas tapaban el andamio: la lista de la matrícula las reemplaza. */
+  .ancla:not(.cumbre) {
+    display: none;
+  }
+  /* En el celular la matrícula es una franja de contadores: la lista taparía el andamio. */
+  .matricula {
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 8px 12px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: rgba(15, 11, 7, 0.88);
+  }
+  .matricula-titulo,
+  .lista {
+    display: none;
+  }
+  .contadores {
+    margin: 0;
+    div {
+      padding: 4px 8px;
+    }
+    dd {
+      font-size: 1.375rem;
+    }
+  }
+  .pasos {
+    position: relative;
+    z-index: 1;
+    gap: 46svh;
+    padding: 4svh 0 24svh;
+  }
+}
+
+/* Movimiento reducido: un cuadro por paso y botones. */
+.reducido {
+  .escenario {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    max-height: 72svh;
+  }
+  .altimetro {
+    display: block;
+  }
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  p {
+    flex: 1 1 220px;
+    text-align: center;
+    font-family: var(--prevent-fuente);
+    color: var(--ink-2);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 600px) {
+  .reducido .matricula {
+    position: static;
+    width: auto;
+    margin: 8px;
+  }
+  .reducido .escenario {
+    aspect-ratio: auto;
+    max-height: none;
+    min-height: 560px;
+  }
+  .reducido .altimetro {
+    display: none;
+  }
+}

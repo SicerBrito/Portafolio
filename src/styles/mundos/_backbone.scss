@@ -1,0 +1,59 @@
+/* Backbone de IA (prometeo-backbone): la consola de guardia, en el modo oscuro de su propio panel.
+   Todo sale del repositorio del proyecto, sin inventar tonos:
+   - Tokens del modo oscuro del panel (Tailwind v4, paleta índigo):
+     fondo #0b0f1a, superficies #121829 y #1a2136, bordes #252d44 y #38425f, texto #e8ecf6,
+     apagado #9aa5bf, marca #8b93ff, marca hover #a3a9ff, marca suave #1e2347,
+     éxito #4ade9c / #11291f, advertencia #fbbf24 / #2b2208, peligro #ff8a8a / #331519.
+     El texto sobre el botón de marca en oscuro es #0b0f1a (.dark .btn-primary).
+   - La marca en claro: #4f46e5 y su hover #4338ca. Es el cuadrado del favicon del panel
+     (estrella blanca de 4 puntas sobre #4f46e5).
+   - El degradado del login: linear-gradient(135deg, #312e81 0%, #4f46e5 55%, #7c3aed 100%)
+     de la pantalla de entrada del panel. Su párrafo va en #e0e7ff (text-indigo-100).
+   - Tipografía: Inter 400-700; mono JetBrains Mono / Cascadia Code, que aquí
+     se sustituye por IBM Plex Mono, la mono ya cargada en el sitio.
+   - No hay sitio web público: el panel es interno y su dirección no se publica.
+   --ink-2 es la única mezcla: el punto medio entre el texto (#e8ecf6) y el apagado (#9aa5bf) del panel.
+   Contraste medido sobre --bg #0b0f1a: --ink 16,2:1 · --ink-2 11,7:1 · --ink-3 7,8:1 · --signal 7,0:1
+   · --signal-text 8,8:1 · éxito 11,1:1 · advertencia 11,5:1 · peligro 8,4:1. Sobre --surface-2 el
+   peor caso (--ink-3) da 6,5:1. Blanco sobre #4f46e5 6,3:1 y sobre #7c3aed 5,7:1. */
+:root[data-mundo='backbone'] {
+  --bg: #0b0f1a;
+  --surface: #121829;
+  --surface-2: #1a2136;
+  --line: #38425f;
+  --line-soft: #252d44;
+  --ink: #e8ecf6;
+  --ink-2: #c3cadb;
+  --ink-3: #9aa5bf;
+  --signal: #8b93ff;
+  --on-signal: #0b0f1a;
+  --signal-text: #a3a9ff;
+  --focus: #8b93ff;
+
+  /* La marca: el índigo del favicon y el recorrido del degradado del login. */
+  --backbone-indigo: #4f46e5;
+  --backbone-indigo-hover: #4338ca;
+  --backbone-noche: #312e81;
+  --backbone-violeta: #7c3aed;
+  --backbone-marca-suave: #1e2347;
+  --backbone-degradado: linear-gradient(135deg, #312e81 0%, #4f46e5 55%, #7c3aed 100%);
+  --backbone-sobre-degradado: #e0e7ff;
+
+  /* Las tres señales del panel (insignias, avisos y errores), con sus fondos suaves. */
+  --backbone-exito: #4ade9c;
+  --backbone-exito-suave: #11291f;
+  --backbone-aviso: #fbbf24;
+  --backbone-aviso-suave: #2b2208;
+  --backbone-peligro: #ff8a8a;
+  --backbone-peligro-suave: #331519;
+
+  /* Las dos plataformas que lo van a consumir, en el color de su marca (contenido/proyectos.ts). */
+  --backbone-ahdo: #8b5ffc;
+  --backbone-ocupasalud: #0077bd;
+
+  --backbone-fuente: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --backbone-mono: 'IBM Plex Mono', 'Cascadia Code', ui-monospace, Consolas, monospace;
+  --backbone-radio: 14px;
+  --backbone-sombra: 0 10px 30px -8px rgba(0, 0, 0, 0.55);
+  color-scheme: dark;
+}

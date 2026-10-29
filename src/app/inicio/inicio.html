@@ -1,0 +1,223 @@
+<section class="hero" aria-labelledby="titulo">
+  <div class="wrap hero-reticula">
+    <div class="hero-texto" data-intro>
+      <div class="antetitulo">
+        <span class="label">{{ perfil.rol }}</span>
+        <span class="label">{{ perfil.ubicacion }}</span>
+      </div>
+      <h1 id="titulo">
+        Llevo software de la <mark>idea</mark> a <mark>producción</mark>.
+        <span class="segunda">Y me quedo a operarlo.</span>
+      </h1>
+      <p class="bajada">{{ perfil.bajada }}</p>
+      <div class="acciones">
+        <a class="btn btn-primario" routerLink="/" fragment="proyectos">
+          Ver proyectos
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            aria-hidden="true"
+          >
+            <path d="M12 5v14M6 13l6 6 6-6" />
+          </svg>
+        </a>
+        <a class="btn" routerLink="/" fragment="contacto">Hablemos</a>
+      </div>
+      <p class="estado-vivo label">En producción hoy: AHDO y Conecta</p>
+    </div>
+    <app-retrato class="hero-retrato" data-intro />
+  </div>
+</section>
+
+<section class="banda" aria-label="Del plan a la operación">
+  <p class="solo-lectores">
+    Idea, plan, código, producción y operación. Trabajo con {{ nombresStack }}.
+  </p>
+  <div class="cinta cinta-grande" aria-hidden="true">
+    <div class="cinta-pista">
+      @for (vuelta of [0, 1]; track vuelta) {
+        @for (palabra of etapas; track palabra; let impar = $odd) {
+          <span class="etapa" [class.hueca]="impar">{{ palabra }}</span>
+          <span class="separador">→</span>
+        }
+      }
+    </div>
+  </div>
+  <div class="cinta cinta-stack" aria-hidden="true">
+    <div class="cinta-pista">
+      @for (vuelta of [0, 1]; track vuelta) {
+        @for (h of stack; track h.nombre) {
+          <span class="herramienta">
+            <svg viewBox="0 0 24 24"><path [attr.d]="h.path" /></svg>
+            {{ h.nombre }}
+          </span>
+        }
+      }
+    </div>
+  </div>
+</section>
+
+<section class="ecosistema" aria-labelledby="titulo-ecosistema">
+  <div class="wrap cabeza-seccion">
+    <span class="label">El ecosistema</span>
+    <h2 id="titulo-ecosistema" class="titulo-seccion">Siete sistemas, una planta</h2>
+    <p class="texto-seccion">
+      Cada nave es un sistema en el que trabajé, con sus integraciones reales. La forma dice cuánto
+      es mío y la luz dice si está vivo. Toca una nave para entrar a su mundo.
+    </p>
+  </div>
+  <app-mapa-ecosistema />
+</section>
+
+<section class="cifras" aria-labelledby="titulo-cifras">
+  <div class="wrap">
+    <h2 id="titulo-cifras" class="solo-lectores">Cifras verificables</h2>
+    <ul class="rejilla-cifras">
+      @for (c of cifras; track c.etiqueta) {
+        <li class="cifra" [style.--color-cifra]="c.color">
+          <span class="cifra-valor">
+            @if (c.desde !== undefined) {
+              <span class="cifra-desde">{{ c.desde }}</span
+              ><span class="cifra-flecha" aria-hidden="true">→</span>
+            }
+            <span [attr.data-contar]="c.valor">{{ c.valor }}</span
+            >{{ c.sufijo }}
+          </span>
+          <span class="cifra-etiqueta">{{ c.etiqueta }}</span>
+          <span class="label cifra-fuente">{{ c.fuente }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="proyectos" id="proyectos" aria-labelledby="titulo-proyectos">
+  <div class="wrap">
+    <div class="cabeza-seccion">
+      <span class="label">Proyectos</span>
+      <h2 id="titulo-proyectos" class="titulo-seccion">
+        Lo que construí y lo que ayudé a construir
+      </h2>
+      <p class="texto-seccion">
+        El código es privado y pertenece a las empresas. Lo que sí muestro es el problema, las
+        decisiones, lo que todavía falta y lo que dice git sobre mi parte.
+      </p>
+    </div>
+    <ol class="lista-proyectos">
+      @for (p of proyectos; track p.id) {
+        <li [style.--color-proyecto]="p.color">
+          <a
+            class="fila-proyecto"
+            [routerLink]="['/proyectos', p.id]"
+            [attr.data-ficha]="p.nombre"
+            [attr.data-para]="p.para"
+            [attr.data-color]="p.color"
+          >
+            <span class="barra" aria-hidden="true"></span>
+            <span class="nombre-proyecto">
+              <span class="label">{{ p.para }}</span>
+              <strong>{{ p.nombre }}</strong>
+            </span>
+            <span class="resumen-proyecto">{{ p.resumen }}</span>
+            <app-sello class="sello-fila" [autoria]="p.autoria" [estado]="p.estado" />
+            <svg
+              class="flecha"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
+        </li>
+      }
+    </ol>
+  </div>
+  <div class="ficha-flotante" aria-hidden="true">
+    <span class="ficha-nombre"></span>
+    <span class="ficha-para"></span>
+    <span class="ficha-entrar">Entrar al mundo →</span>
+  </div>
+</section>
+
+<section class="metodo" id="metodo" aria-labelledby="titulo-metodo">
+  <div class="wrap">
+    <div class="cabeza-seccion">
+      <span class="label">Cómo trabajo</span>
+      <h2 id="titulo-metodo" class="titulo-seccion">Primero el plan, después el código</h2>
+      <p class="texto-seccion">
+        Aplico Spec-Driven Development con asistencia de IA. Cada módulo grande nace de un plan
+        escrito y aprobado antes de la primera línea de código.
+      </p>
+    </div>
+    <div class="flujo-marco">
+      <span class="flujo-progreso" aria-hidden="true"></span>
+      <ol class="flujo">
+        @for (paso of metodo; track paso.titulo) {
+          <li>
+            <h3>{{ paso.titulo }}</h3>
+            <p>{{ paso.texto }}</p>
+          </li>
+        }
+      </ol>
+    </div>
+    <div class="metodo-pie">
+      <p>
+        Con la IA trabajo igual: ella propone y el plan decide. Publiqué las plantillas que uso.
+      </p>
+      <a class="btn" [href]="perfil.repoMetodo" target="_blank" rel="noopener"
+        >Plantillas en GitHub ↗</a
+      >
+    </div>
+  </div>
+</section>
+
+<section class="trayectoria" id="trayectoria" aria-labelledby="titulo-trayectoria">
+  <div class="wrap">
+    <div class="cabeza-seccion">
+      <span class="label">Trayectoria</span>
+      <h2 id="titulo-trayectoria" class="titulo-seccion">Más de dos años en producción</h2>
+    </div>
+    <ol class="linea">
+      @for (h of trayectoria; track h.titulo) {
+        <li [class.actual]="h.actual" [class.formacion]="h.tipo === 'formacion'">
+          <span class="label fecha">{{ h.fecha }}</span>
+          <div>
+            <h3>{{ h.titulo }}</h3>
+            @if (h.texto) {
+              <p>{{ h.texto }}</p>
+            }
+          </div>
+        </li>
+      }
+    </ol>
+    <p class="label nota">{{ perfil.empleador }}</p>
+  </div>
+</section>
+
+<section class="contacto" id="contacto" aria-labelledby="titulo-contacto">
+  <div class="wrap contacto-cuerpo">
+    <span class="label">Contacto</span>
+    <h2 id="titulo-contacto" class="titulo-seccion">
+      ¿Tu producto necesita a alguien que lo sostenga?
+    </h2>
+    <p class="texto-contacto">
+      Trabajo remoto desde Colombia. Escríbeme en español o en inglés; las llamadas, por ahora, en
+      español.
+    </p>
+    <div class="fila-correo">
+      <span class="correo" #correo>{{ perfil.correo }}</span>
+      <button class="btn" type="button" (click)="copiarCorreo()">Copiar correo</button>
+    </div>
+    <p class="label estado-copia" aria-live="polite">{{ estadoCopia() }}</p>
+    <div class="enlaces">
+      <a class="btn" [href]="perfil.linkedin" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a class="btn" [href]="perfil.github" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <p class="label">{{ perfil.idiomas }}</p>
+  </div>
+</section>

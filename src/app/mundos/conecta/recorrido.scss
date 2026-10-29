@@ -1,0 +1,493 @@
+:host {
+  display: block;
+}
+
+.recorrido {
+  display: grid;
+  gap: 20px;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px));
+  max-width: 1320px;
+  margin-inline: auto;
+}
+
+/* ---------- El escenario ---------- */
+
+.escenario {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  border-radius: 24px;
+  background:
+    radial-gradient(60% 55% at 45% 50%, rgba(220, 171, 47, 0.14), transparent 70%),
+    radial-gradient(40% 40% at 90% 10%, rgba(111, 94, 156, 0.08), transparent 70%),
+    var(--surface-2);
+
+  /* La trama de puntos dorados del panel, apagándose hacia los bordes. */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(var(--conecta-chat-punto) 1.2px, transparent 1.6px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(75% 70% at 50% 50%, #000, transparent 85%);
+    pointer-events: none;
+  }
+}
+
+.ilustracion {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 500ms var(--ease-out);
+
+  text {
+    font-family: var(--conecta-texto);
+    font-size: 15px;
+    font-weight: 500;
+    fill: var(--ink-2);
+    text-anchor: middle;
+  }
+  .il-fuerte {
+    font-family: var(--conecta-titulo);
+    font-weight: 700;
+    font-size: 18px;
+    fill: var(--conecta-tinta);
+  }
+  .il-suave {
+    font-size: 13px;
+    fill: var(--conecta-lila);
+  }
+  line,
+  .il-ruta,
+  .il-vuelta,
+  .il-anillo,
+  .il-valvula,
+  .il-cupo {
+    fill: none;
+  }
+  .il-rayos line {
+    stroke: var(--conecta-oro-3);
+    stroke-width: 2.5;
+  }
+  .il-ruta {
+    stroke: var(--conecta-oro-3);
+    stroke-width: 3;
+  }
+  .il-vuelta {
+    stroke: var(--conecta-lila);
+    stroke-width: 2;
+    stroke-dasharray: 6 7;
+  }
+  .il-sistema,
+  .il-celular {
+    fill: var(--conecta-tinta);
+  }
+  .il-oro {
+    fill: var(--conecta-oro-1);
+  }
+  .il-ocupasalud {
+    fill: var(--conecta-ocupasalud);
+  }
+  .il-autoaprender {
+    fill: var(--conecta-autoaprender);
+  }
+  .il-centro {
+    fill: var(--conecta-oro-1);
+  }
+  .il-anillo {
+    stroke: var(--conecta-oro-3);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 5;
+  }
+  .il-valvula {
+    stroke: var(--conecta-tinta);
+    stroke-width: 6;
+  }
+  .il-cupo {
+    stroke: var(--conecta-oro-1);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+  .il-pantalla {
+    fill: var(--conecta-chat);
+  }
+  .il-burbuja {
+    fill: #ffffff;
+  }
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+
+.escenario.activo {
+  canvas {
+    opacity: 1;
+  }
+  .ilustracion {
+    opacity: 0;
+  }
+}
+
+/* ---------- Etiquetas que siguen a la escena ---------- */
+
+.anclas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.ancla {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--conecta-sombra);
+  color: var(--conecta-tinta);
+  font-family: var(--conecta-texto);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 240ms var(--ease-out);
+  will-change: transform;
+
+  &.visible {
+    opacity: 1;
+  }
+  &.fuerte {
+    background: var(--conecta-tinta);
+    color: var(--conecta-oro-1);
+    font-family: var(--conecta-titulo);
+    font-weight: 700;
+  }
+}
+
+.punto {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  &.azul {
+    background: var(--conecta-ocupasalud);
+  }
+  &.verde {
+    background: var(--conecta-autoaprender);
+  }
+}
+
+.ancla.estados {
+  gap: 4px;
+  padding: 4px;
+  transform-origin: 50% 0;
+}
+
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: var(--ink-3);
+  font-weight: 500;
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+
+  svg {
+    width: 16px;
+    height: 11px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &.encendido {
+    color: var(--conecta-tinta);
+    background: var(--line-soft);
+  }
+  &:last-child.encendido {
+    background: var(--conecta-oro-1);
+    color: var(--on-signal);
+  }
+}
+
+/* ---------- El pedido que escribe el sistema ---------- */
+
+.terminal {
+  position: relative;
+  margin: 0 16px 16px;
+  padding: 14px 16px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--conecta-tinta);
+  color: #f6f3ec;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  box-shadow: var(--conecta-sombra);
+  transition: opacity 260ms var(--ease-out);
+}
+
+/* pre-wrap: en 375 px el pedido parte sus líneas en vez de volverse una caja con scroll. */
+.tecleado {
+  display: none;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.completo {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.barra {
+  display: none;
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 16px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--line-soft);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    background: var(--conecta-oro-3);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+}
+
+/* Abajo a la izquierda: arriba quedaba encima del pedido que se teclea. */
+.girar {
+  position: absolute;
+  left: 12px;
+  bottom: 28px;
+  z-index: 3;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--conecta-tinta);
+  color: #ffffff;
+  font: 500 0.875rem var(--conecta-texto);
+  cursor: pointer;
+}
+
+/* ---------- Los pasos ---------- */
+
+.pasos {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paso {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--conecta-sombra);
+
+  h3 {
+    font-family: var(--conecta-titulo);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--conecta-tinta);
+    margin-bottom: 6px;
+  }
+  p {
+    font-family: var(--conecta-texto);
+    color: var(--ink-2);
+    font-size: 1rem;
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+}
+
+.paso-numero {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--conecta-oro-tenue);
+  color: var(--signal-text);
+  font: 700 0.9375rem var(--conecta-titulo);
+}
+
+.paso.activo .paso-numero {
+  background: var(--signal);
+  color: var(--on-signal);
+}
+
+/* ---------- Con JavaScript: la escena manda ---------- */
+
+.vivo {
+  .anclas,
+  .barra {
+    display: block;
+  }
+  .completo {
+    display: none;
+  }
+  .tecleado {
+    display: block;
+  }
+  .terminal {
+    position: absolute;
+    z-index: 2;
+    top: 16px;
+    left: 16px;
+    margin: 0;
+    max-width: min(420px, calc(100% - 32px));
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+    }
+  }
+  .escenario {
+    min-height: 320px;
+  }
+}
+
+/* Escritorio: la sección queda fija y el scroll recorre la escena. */
+.fijado {
+  grid-template-columns: minmax(300px, 400px) 1fr;
+  grid-template-rows: 1fr;
+  height: calc(100svh - var(--cabecera));
+  padding-block: 12px;
+
+  .escenario {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    height: 100%;
+  }
+  .ilustracion {
+    margin: auto;
+    max-height: 100%;
+  }
+  .terminal {
+    top: auto;
+    left: auto;
+    right: 24px;
+    bottom: 36px;
+  }
+  .pasos {
+    position: relative;
+    z-index: 2;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    height: 300px;
+    margin: 0 0 40px 24px;
+  }
+  .paso {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 280ms var(--ease-out),
+      transform 280ms var(--ease-out);
+    box-shadow: 0 1px 2px rgba(36, 22, 64, 0.06), 0 22px 44px -24px rgba(36, 22, 64, 0.45);
+
+    &.activo {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Móvil: la escena queda pegada arriba y los pasos pasan por encima. */
+.pasos-movil {
+  .escenario {
+    position: sticky;
+    top: calc(var(--cabecera) + 8px);
+    z-index: 0;
+    height: min(50svh, 460px);
+  }
+  .ilustracion {
+    margin: auto;
+    max-height: 100%;
+  }
+  .terminal {
+    font-size: 0.6875rem;
+  }
+  .pasos {
+    position: relative;
+    z-index: 1;
+    gap: 46svh;
+    padding: 4svh 0 24svh;
+  }
+}
+
+/* Movimiento reducido: un cuadro por paso y botones. El paso activo se marca con el borde,
+   no bajando la opacidad de los demás (eso dejaba su texto por debajo de AA). */
+.reducido {
+  .escenario {
+    aspect-ratio: 16 / 10;
+    max-height: 70svh;
+  }
+  .paso.activo {
+    border-color: var(--conecta-oro-3);
+    box-shadow: inset 0 0 0 1px var(--conecta-oro-3), var(--conecta-sombra);
+  }
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  p {
+    flex: 1 1 220px;
+    text-align: center;
+    font-family: var(--conecta-texto);
+    color: var(--ink-2);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 600px) {
+  .ilustracion text {
+    font-size: 18px;
+  }
+  .ancla {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+}

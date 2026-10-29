@@ -1,0 +1,72 @@
+/* Ocupasalud: blanco de sede, azul de marca y marino. Es la marca que se ve en el logo, en el
+   sitio público de la IPS y en la fachada; no la clínica pálida de antes.
+
+   De dónde sale cada color:
+   - Logo del sistema actual (muestreado píxel a píxel): "OCUPA" #0074BC ≈ #0077BD (--ocupasalud-azul), "SALUD" #50A8B0 ≈
+     #51A8B1 (--ocupasalud-verde), el isotipo en marino #133B5C (--ocupasalud-marino) con una esfera
+     que sube de #0C5180 a #0792D4 y #38B0E0 (--ocupasalud-esfera, --ocupasalud-esfera-luz) y una
+     figura plateada de #B8B8B8 a #D8D8D8 (--ocupasalud-plata, --ocupasalud-plata-2).
+   - Sitio público de la IPS (estilos calculados en el navegador, 2026-10-28): fondo blanco, barra
+     superior y botones "Conoce más" en #0071B9 (--ocupasalud-azul-sitio), títulos y menú en #045184
+     (--ink-2), la opción activa del menú en #3D9BE9 (--ocupasalud-cielo) y los llamados a la acción
+     ("Descarga examen aquí", "Verifica tu certificado") en rojo #E00000 (--ocupasalud-rojo).
+     Tipografías del sitio: Helvetica en los textos y Poppins en los llamados. Aquí van Poppins
+     para los títulos e Inter, la grotesca más cercana a Helvetica que el sitio ya carga.
+   - Sala de rayos X: el cian #00A8EC (--ocupasalud-rayos), para separarla de los consultorios.
+   - Derivados, no de marca: --surface-2 (#0077BD al 7 % sobre blanco), las líneas, --ink-3
+     (#045184 aclarado), --ocupasalud-noche (el marino llevado más oscuro para las bandas oscuras) y
+     los tonos claros para texto sobre esas bandas.
+   Contraste AA medido (texto / fondo): #133B5C sobre blanco 11,6:1 · #045184 8,4:1 · #3E6684 6,1:1 ·
+   #006AA9 5,8:1 (5,3:1 sobre --surface-2) · blanco sobre #0077BD 4,8:1 · #E00000 5,0:1 ·
+   #237A83 5,0:1 · sobre --ocupasalud-noche: blanco 15,2:1 · #9FD0F0 9,3:1 · #8FD0D6 8,8:1 ·
+   #FF8A8A 6,7:1. El verde #51A8B1 puro (2,8:1) y la plata solo van como relleno, nunca como texto. */
+:root[data-mundo='ocupasalud'] {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #eef5fa;
+  --line: #c5d9e8;
+  --line-soft: #e3eef6;
+  --ink: #133b5c;
+  --ink-2: #045184;
+  --ink-3: #3e6684;
+  --signal: #0077bd;
+  --on-signal: #ffffff;
+  --signal-text: #006aa9;
+  --focus: #0077bd;
+
+  /* La marca, tal cual. */
+  --ocupasalud-azul: #0077bd;
+  --ocupasalud-azul-sitio: #0071b9;
+  --ocupasalud-verde: #51a8b1;
+  --ocupasalud-marino: #133b5c;
+  --ocupasalud-titulo: #045184;
+  --ocupasalud-cielo: #3d9be9;
+  --ocupasalud-esfera: #0792d4;
+  --ocupasalud-esfera-luz: #38b0e0;
+  --ocupasalud-plata: #c8c8c8;
+  --ocupasalud-plata-2: #d8d8d8;
+  --ocupasalud-rojo: #e00000;
+
+  /* El verde legible como texto sobre blanco. */
+  --ocupasalud-verde-texto: #237a83;
+
+  /* Bandas oscuras: el marino del isotipo, más hondo, y sus tintas claras. */
+  --ocupasalud-noche: #0b2740;
+  --ocupasalud-noche-2: #12385a;
+  --ocupasalud-noche-linea: rgba(159, 208, 240, 0.22);
+  --ocupasalud-claro: #9fd0f0;
+  --ocupasalud-verde-claro: #8fd0d6;
+  --ocupasalud-rojo-claro: #ff8a8a;
+
+  /* La sala de rayos X, donde llega el informe firmado. Solo relleno y borde, nunca texto. */
+  --ocupasalud-rayos: #00a8ec;
+
+  /* El logo en una línea: OCUPA en azul y SALUD en verde azulado. */
+  --ocupasalud-franja: linear-gradient(90deg, #0077bd 0 50%, #51a8b1 50% 100%);
+
+  --ocupasalud-sombra: 0 1px 2px rgba(19, 59, 92, 0.08), 0 18px 40px -24px rgba(19, 59, 92, 0.45);
+  --ocupasalud-fuente-titulo: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+  --ocupasalud-fuente: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  color-scheme: light;
+}

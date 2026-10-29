@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+
+/* ---------- Ilustraciones de línea ---------- */
+
+.ilustracion {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  padding: 16px;
+  border: 1px solid var(--ahdo-borde-1);
+  border-radius: 16px;
+  background: var(--bg);
+}
+
+.hoja {
+  fill: var(--ahdo-papel);
+}
+
+.casilla {
+  fill: none;
+  stroke: var(--ahdo-morado-oscuro);
+  stroke-width: 1.5;
+}
+
+.renglon {
+  stroke: #b8b4cc;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.flecha,
+.enlace,
+.tic {
+  fill: none;
+  stroke: var(--ahdo-lila);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.enlace {
+  stroke: var(--ahdo-morado);
+  stroke-dasharray: 4 5;
+}
+
+.tic {
+  stroke: var(--ahdo-verde-texto);
+  stroke-width: 3.5;
+}
+
+.fila {
+  fill: var(--surface-2);
+  stroke: var(--ahdo-borde-3);
+}
+
+.nodo {
+  fill: var(--ahdo-morado);
+}
+
+.sello {
+  fill: none;
+  stroke: var(--ahdo-verde-texto);
+  stroke-width: 2.5;
+}
+
+.doc path {
+  fill: var(--ahdo-papel);
+}
+
+.fila-texto {
+  fill: var(--ink);
+  font-family: var(--ahdo-fuente);
+  font-size: 13px;
+  font-weight: 600;
+
+  &.centro {
+    text-anchor: middle;
+    fill: var(--ink-2);
+  }
+}
+
+/* Los trazos se dibujan al entrar en pantalla, solo si hay animación. */
+:host(.animar) .trazo {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1100ms var(--ease-out);
+}
+
+:host(.animar.visto) .trazo {
+  stroke-dashoffset: 0;
+}
+
+:host(.animar.visto) .flecha {
+  transition-delay: 300ms;
+}
+
+:host(.animar.visto) .tic {
+  transition-delay: 800ms;
+}
+

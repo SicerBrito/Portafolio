@@ -1,0 +1,33 @@
+@if (cual() === 'psicometria') {
+  <!-- Del papel a filas de configuración: la prueba es un dato. -->
+  <svg class="ilustracion" viewBox="0 0 320 160" aria-hidden="true">
+    <rect class="hoja" x="14" y="14" width="98" height="132" rx="4" />
+    @for (y of renglones; track y) {
+      <rect class="casilla" x="26" [attr.y]="y - 6" width="10" height="10" rx="2" />
+      <path class="renglon trazo" [attr.d]="'M44 ' + y + 'H100'" pathLength="1" />
+    }
+    <path class="flecha trazo" d="M122 80H168M160 72l8 8-8 8" pathLength="1" />
+    @for (fila of filas; track fila.texto; let i = $index) {
+      <rect class="fila" x="180" [attr.y]="20 + i * 42" width="126" height="30" rx="6" />
+      <circle class="nodo" cx="194" [attr.cy]="35 + i * 42" r="5" />
+      <text class="fila-texto" x="208" [attr.y]="40 + i * 42">{{ fila.texto }}</text>
+    }
+    <path class="enlace" d="M194 40V119" />
+  </svg>
+} @else {
+  <!-- Borrador en la plataforma, un solo envío, factura aceptada. -->
+  <svg class="ilustracion" viewBox="0 0 320 160" aria-hidden="true">
+    <g class="doc" transform="translate(22 40) scale(3)">
+      <path [attr.d]="icoFactura.path" fill-rule="evenodd" />
+    </g>
+    <text class="fila-texto centro" x="58" y="132">Borrador</text>
+    <path class="flecha trazo" d="M104 76H142M134 68l8 8-8 8" pathLength="1" />
+    <rect class="fila" x="150" y="54" width="62" height="44" rx="8" />
+    <text class="fila-texto centro" x="181" y="81">Siigo</text>
+    <text class="fila-texto centro" x="181" y="132">Un solo envío</text>
+    <path class="flecha trazo" d="M220 76H258M250 68l8 8-8 8" pathLength="1" />
+    <circle class="sello" cx="286" cy="76" r="22" />
+    <path class="tic trazo" d="M275 76l8 8 14-15" pathLength="1" />
+    <text class="fila-texto centro" x="286" y="132">DIAN</text>
+  </svg>
+}

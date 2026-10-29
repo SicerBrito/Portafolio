@@ -1,0 +1,496 @@
+:host {
+  display: block;
+  font-family: var(--ocupasalud-fuente);
+  color: #ffffff;
+  /* El morado de AHDO, su marca, para su lado del bus. Solo relleno: el texto va en blanco. */
+  --morado-ahdo: #8b5ffc;
+  --lila-ahdo: #c9c2ff;
+}
+
+.lab {
+  display: grid;
+  gap: 18px;
+}
+
+.mundos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+
+  @media (min-width: 820px) {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.8fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* ---------- Los dos mundos ---------- */
+
+.mundo {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 18px;
+  background: var(--ocupasalud-noche-2);
+  border: 1px solid var(--ocupasalud-noche-linea);
+
+  h3 {
+    margin: 0;
+    font-family: var(--ocupasalud-fuente-titulo);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+}
+
+.planeta {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+}
+
+.planeta-ahdo {
+  background: radial-gradient(circle at 35% 30%, #aaaaff, var(--morado-ahdo) 55%, #301f56);
+  box-shadow: 0 0 0 6px rgba(139, 95, 252, 0.18);
+
+  /* El personaje de AHDO, en blanco: cabe en el planeta y se reconoce. */
+  img {
+    width: auto;
+    height: 50px;
+  }
+}
+
+.planeta-ocupa {
+  background: radial-gradient(circle at 35% 30%, #ffffff, #e6eef4 70%);
+  box-shadow: 0 0 0 6px rgba(0, 119, 189, 0.25);
+
+  img {
+    width: 54px;
+    height: 54px;
+  }
+}
+
+.motor {
+  color: var(--ocupasalud-claro);
+  font-size: 0.875rem;
+}
+
+.registro {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--ocupasalud-noche);
+
+  div {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--ocupasalud-noche-linea);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+  dt {
+    color: var(--ocupasalud-claro);
+    font-size: 0.8125rem;
+  }
+  dd {
+    margin: 0;
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+  }
+  .atrasada {
+    color: var(--ocupasalud-rojo-claro);
+    font-weight: 600;
+
+    &::after {
+      content: ' (atrasada)';
+      font-family: var(--ocupasalud-fuente);
+      font-weight: 500;
+    }
+  }
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* ---------- El bus ---------- */
+
+.bus {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 12px;
+  padding: 8px 0;
+
+  @media (min-width: 820px) {
+    align-self: center;
+  }
+}
+
+.bus-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #231f20;
+  font-weight: 600;
+  font-size: 0.875rem;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: #231f20;
+  }
+}
+
+/* El tubo: horizontal en escritorio (AHDO a la izquierda), vertical en el celular (AHDO arriba). */
+.tubo {
+  position: relative;
+  width: 64px;
+  height: 160px;
+  border-radius: 32px;
+  background: var(--ocupasalud-noche);
+  border: 2px solid var(--ocupasalud-noche-linea);
+  overflow: hidden;
+
+  @media (min-width: 820px) {
+    width: 100%;
+    height: 64px;
+  }
+}
+
+.flujo {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--ocupasalud-claro) 1.6px, transparent 2.2px);
+  background-size: 16px 16px;
+  opacity: 0.55;
+  animation: flujo-vertical 1.4s linear infinite;
+
+  @media (min-width: 820px) {
+    animation-name: flujo-horizontal;
+  }
+}
+
+@keyframes flujo-vertical {
+  to {
+    background-position: 0 -32px;
+  }
+}
+
+@keyframes flujo-horizontal {
+  to {
+    background-position: -32px 0;
+  }
+}
+
+.apagado .flujo {
+  animation-play-state: paused;
+  opacity: 0.15;
+}
+
+/* Fuera de pantalla el flujo no corre: no hay bucle que nadie esté viendo. */
+.quieto .flujo {
+  animation-play-state: paused;
+}
+
+.sobre {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 28px;
+  margin: -14px 0 0 -20px;
+  border-radius: 4px;
+  background: #ffffff;
+  color: var(--ocupasalud-marino);
+  font: 600 0.75rem var(--font-mono);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  /* La solapa del sobre. */
+  background-image: linear-gradient(160deg, transparent 49%, var(--line) 50%, transparent 53%),
+    linear-gradient(20deg, transparent 49%, var(--line) 50%, transparent 53%);
+  animation-timing-function: var(--ease-in-out);
+  animation-fill-mode: both;
+
+  &.conflicto {
+    color: #ffffff;
+    background-color: var(--ocupasalud-rojo);
+    background-image: none;
+  }
+}
+
+/* Celular: Ocupasalud 2.0 abajo, AHDO arriba. */
+.sobre {
+  left: 50%;
+}
+.hacia-ahdo {
+  animation-name: subir;
+}
+.hacia-ocupa {
+  animation-name: bajar;
+}
+
+@keyframes subir {
+  from {
+    top: 100%;
+  }
+  to {
+    top: 0%;
+  }
+}
+
+@keyframes bajar {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+@media (min-width: 820px) {
+  .sobre {
+    top: 50%;
+    left: auto;
+  }
+  .hacia-ahdo {
+    animation-name: a-la-izquierda;
+  }
+  .hacia-ocupa {
+    animation-name: a-la-derecha;
+  }
+}
+
+@keyframes a-la-izquierda {
+  from {
+    left: 100%;
+  }
+  to {
+    left: 0%;
+  }
+}
+
+@keyframes a-la-derecha {
+  from {
+    left: 0%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+.candado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ocupasalud-claro);
+  font-size: 0.8125rem;
+  text-align: center;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+}
+
+/* El interruptor que apaga Kafka. */
+.interruptor {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 16px 8px 10px;
+  border: 2px solid var(--ocupasalud-claro);
+  border-radius: 999px;
+  background: transparent;
+  color: #ffffff;
+  font: 600 0.9375rem var(--ocupasalud-fuente-titulo);
+  cursor: pointer;
+}
+
+.interruptor-riel {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: var(--ocupasalud-azul);
+  transition: background-color 200ms var(--ease-out);
+
+  i {
+    position: absolute;
+    top: 3px;
+    left: 23px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    transition: left 200ms var(--ease-out);
+  }
+}
+
+.apagado .interruptor {
+  border-color: var(--ocupasalud-rojo-claro);
+}
+
+.apagado .interruptor-riel {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--ocupasalud-rojo-claro);
+
+  i {
+    left: 3px;
+    background: var(--ocupasalud-rojo-claro);
+  }
+}
+
+/* ---------- Las bandejas de Ocupasalud 2.0 ---------- */
+
+.bandejas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.bandeja-caja {
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px dashed var(--ocupasalud-noche-linea);
+
+  h4 {
+    margin: 0 0 8px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ocupasalud-claro);
+  }
+}
+
+.sobres {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 168px;
+  overflow-y: auto;
+}
+
+.sobre-quieto {
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--ocupasalud-marino);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+
+  .mono {
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  &.conflicto {
+    background: var(--ocupasalud-rojo);
+    color: #ffffff;
+  }
+}
+
+.apagado .bandeja-caja:first-child {
+  border-color: var(--ocupasalud-rojo-claro);
+}
+
+.nada {
+  color: var(--ocupasalud-claro);
+  font-size: 0.8125rem;
+}
+
+/* ---------- Mandos ---------- */
+
+.mandos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 2px solid var(--ocupasalud-azul);
+  border-radius: 10px;
+  background: var(--ocupasalud-azul);
+  color: #ffffff;
+  font: 600 0.9375rem var(--ocupasalud-fuente-titulo);
+  cursor: pointer;
+  transition: background-color 160ms var(--ease-out);
+
+  &:hover {
+    background: var(--ocupasalud-titulo);
+  }
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.boton-ahdo {
+  border-color: var(--morado-ahdo);
+  background: transparent;
+  color: #ffffff;
+
+  &:hover {
+    background: rgba(139, 95, 252, 0.25);
+  }
+}
+
+.boton-suave {
+  border-color: var(--ocupasalud-claro);
+  background: transparent;
+
+  &:hover {
+    background: rgba(159, 208, 240, 0.12);
+  }
+}
+
+.aviso {
+  min-height: 3em;
+  padding: 10px 14px;
+  border-left: 4px solid var(--ocupasalud-verde);
+  border-radius: 0 10px 10px 0;
+  background: var(--ocupasalud-noche-2);
+  color: #ffffff;
+  font-size: 0.9375rem;
+}
+
+.apagado .aviso {
+  border-left-color: var(--ocupasalud-rojo-claro);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flujo {
+    animation: none;
+  }
+  .sobre {
+    animation: none;
+  }
+  .interruptor-riel,
+  .interruptor-riel i {
+    transition: none;
+  }
+}
+
+:focus-visible {
+  outline-color: var(--ocupasalud-claro);
+}

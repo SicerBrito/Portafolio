@@ -1,0 +1,135 @@
+<div class="guion">
+  <p class="aviso-plano">
+    <i aria-hidden="true"></i>
+    Arquitectura diseñada: la caché por escena todavía no está construida. Esta demostración simula
+    el plan en tu navegador, con datos ficticios.
+  </p>
+
+  <div class="rejilla">
+    <div class="json">
+      <p class="llave" aria-hidden="true">
+        {{ '{' }} <span class="clave">"versionPlantilla"</span>:
+        <span class="valor">"{{ version() }}"</span>, <span class="clave">"escenas"</span>: [
+      </p>
+      <ol class="escenas" aria-label="Escenas del guion de ejemplo">
+        @for (e of escenas(); track e.id) {
+          <li class="escena" [class]="'estado-' + estados()[e.id]">
+            <div class="escena-cabeza">
+              <span class="escena-id">{{ e.id }}</span>
+              <span class="escena-tipo">{{ e.tipo }} · {{ e.duracionSeg }} s</span>
+              <span class="hash">
+                <span class="solo-lectores">Hash</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  @if (estados()[e.id] === 'cache' || estados()[e.id] === 'nuevo') {
+                    <path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" />
+                  } @else {
+                    <path d="M4.5 7V5a3.5 3.5 0 0 1 6.8-1.2" />
+                  }
+                  <rect x="3" y="7" width="10" height="7" rx="1.5" />
+                </svg>
+                {{ hashes()[e.id] }}
+              </span>
+            </div>
+            <label class="solo-lectores" [for]="'guion-' + e.id"
+              >Texto de la escena {{ e.id }}</label
+            >
+            <input
+              class="escena-texto"
+              type="text"
+              maxlength="42"
+              autocomplete="off"
+              spellcheck="false"
+              [id]="'guion-' + e.id"
+              [value]="e.texto"
+              (input)="editar(e.id, $event)"
+            />
+          </li>
+        }
+      </ol>
+      <p class="llave" aria-hidden="true">] {{ '}' }}</p>
+    </div>
+
+    <div class="salida">
+      <h3>Los fragmentos del video</h3>
+      <p class="salida-texto">
+        Cada escena es su propio fragmento MP4, guardado por su hash. FFmpeg los une al final.
+      </p>
+      <ol class="cinta" aria-label="Fragmentos del video y su estado">
+        @for (e of escenas(); track e.id) {
+          <li
+            class="fragmento"
+            [class]="'estado-' + estados()[e.id]"
+            [style.flex-grow]="e.duracionSeg"
+          >
+            <span class="fragmento-id">{{ e.id }}</span>
+            <span class="fragmento-estado">
+              @switch (estados()[e.id]) {
+                @case ('cache') {
+                  En caché
+                }
+                @case ('cambio') {
+                  Por renderizar
+                }
+                @case ('renderizando') {
+                  Renderizando
+                }
+                @case ('nuevo') {
+                  Nuevo
+                }
+              }
+            </span>
+            <i class="relleno" aria-hidden="true"></i>
+          </li>
+        }
+      </ol>
+      <p class="medida">{{ escenas().length }} fragmentos · {{ total }} s de video</p>
+
+      <div class="acciones">
+        <button
+          type="button"
+          class="btn btn-primario"
+          [disabled]="!pendientes().length || ocupado()"
+          (click)="renderizar()"
+        >
+          Renderizar lo que cambió
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [attr.aria-pressed]="plantillaNueva()"
+          [disabled]="ocupado()"
+          (click)="cambiarPlantilla()"
+        >
+          {{ plantillaNueva() ? 'Volver a la plantilla ' : 'Cambiar la plantilla a '
+          }}{{ plantillaNueva() ? '1.3.0' : '1.4.0' }}
+        </button>
+        <button type="button" class="enlace" (click)="restablecer()">Restablecer</button>
+      </div>
+
+      <p class="resultado" aria-live="polite">
+        @if (ocupado()) {
+          Renderizando solo lo que cambió…
+        } @else if (ultimo(); as u) {
+          @if (u.plantilla) {
+            Listo: cambió la plantilla y se renderizaron las {{ u.escenas }} escenas. Un cambio en
+            la plantilla afecta a todos los videos.
+          } @else {
+            Listo: se
+            {{
+              u.escenas === 1 ? 'renderizó 1 escena' : 'renderizaron ' + u.escenas + ' escenas'
+            }}
+            ({{ u.segundos }} s de {{ total }} s). Las demás quedaron idénticas, byte por byte.
+          }
+        } @else if (plantillaNueva() && pendientes().length === escenas().length) {
+          Cambió la plantilla: el hash de todas las escenas cambió. Se renderizan las
+          {{ escenas().length }}.
+        } @else if (pendientes().length) {
+          Cambiaron {{ pendientes().length }} de {{ escenas().length }} escenas: se renderizan
+          {{ segundosPendientes() }} s de {{ total }} s. Las demás se reusan.
+        } @else {
+          Todo está en caché. Edita el texto de una escena y mira su hash.
+        }
+      </p>
+    </div>
+  </div>
+</div>

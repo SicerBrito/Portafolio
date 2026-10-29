@@ -1,0 +1,141 @@
+<div class="escalada" #raiz>
+  <div class="escenario" [class.activo]="activo3d()">
+    <!-- Dibujo propio: se ve sin JavaScript, sin WebGL y mientras carga la escena. -->
+    <svg
+      class="ilustracion"
+      viewBox="0 0 420 560"
+      role="img"
+      aria-label="Dibujo de un andamio de cuatro cuerpos. Cada travesaño es un documento del curso: cédula, seguridad social o ARL, concepto médico y certificado del nivel anterior. Una línea de vida dorada sube por el costado y el personaje de Prevent llega a la cima."
+    >
+      <g class="il-suelo">
+        <ellipse cx="210" cy="520" rx="190" ry="22" />
+      </g>
+      <g class="il-tubos">
+        <line x1="120" y1="520" x2="120" y2="70" />
+        <line x1="300" y1="520" x2="300" y2="70" />
+        @for (n of [0, 1, 2, 3, 4]; track n) {
+          <line x1="120" [attr.y1]="520 - n * 104" x2="300" [attr.y2]="520 - n * 104" />
+        }
+        <line x1="120" y1="70" x2="300" y2="70" />
+        <line class="il-cruz" x1="120" y1="520" x2="300" y2="416" />
+        <line class="il-cruz" x1="300" y1="416" x2="120" y2="312" />
+        <line class="il-cruz" x1="120" y1="312" x2="300" y2="208" />
+        <line class="il-cruz" x1="300" y1="208" x2="120" y2="104" />
+      </g>
+      <g class="il-escalera">
+        <line x1="146" y1="520" x2="146" y2="96" />
+        <line x1="178" y1="520" x2="178" y2="96" />
+        @for (n of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track n) {
+          <line x1="146" [attr.y1]="500 - n * 32" x2="178" [attr.y2]="500 - n * 32" />
+        }
+      </g>
+      <line class="il-linea" x1="330" y1="56" x2="330" y2="520" />
+      <circle class="il-ancla" cx="330" cy="56" r="7" />
+      @for (r of requisitos; track r.nombre; let i = $index) {
+        <g class="il-doc">
+          <rect x="222" [attr.y]="520 - (i + 1) * 104 + 30" width="40" height="52" rx="4" />
+          <circle class="il-mosqueton" cx="318" [attr.cy]="520 - (i + 1) * 104 + 46" r="7" />
+          <text x="104" [attr.y]="520 - (i + 1) * 104 + 62" text-anchor="end">{{ i + 1 }}</text>
+        </g>
+      }
+      <path
+        class="il-personaje"
+        d="M150 66 C 158 48, 168 36, 176 22 C 172 40, 174 52, 182 60 C 192 52, 204 46, 214 46 C 204 54, 196 64, 188 76 C 186 88, 184 96, 178 104 C 176 92, 170 82, 160 76 Z"
+      />
+      <circle class="il-casco" cx="194" cy="30" r="9" />
+    </svg>
+
+    <canvas #lienzo aria-hidden="true"></canvas>
+
+    <div class="cielo" aria-hidden="true"></div>
+
+    <div class="anclas" aria-hidden="true">
+      @for (r of requisitos; track r.nombre; let i = $index) {
+        <span class="ancla" [attr.data-ancla]="'nivel' + i" [attr.data-estado]="estados()[i]">
+          <b>{{ r.nombre }}</b>
+          <i>{{ etiquetas[estados()[i]] }}</i>
+        </span>
+      }
+      <span class="ancla cumbre" data-ancla="cumbre"><b>Listo para certificarse</b><i>Datos ficticios</i></span>
+    </div>
+
+    <!-- La matrícula de ejemplo: los mismos contadores que muestra la plataforma. -->
+    <div class="matricula" aria-hidden="true">
+      <p class="matricula-titulo">Matrícula de ejemplo · {{ curso }}</p>
+      <dl class="contadores">
+        <div>
+          <dt>Cargados</dt>
+          <dd>{{ cuenta().cargados }}<small>/{{ cuenta().total }}</small></dd>
+        </div>
+        <div class="validos">
+          <dt>Válidos</dt>
+          <dd>{{ cuenta().validos }}<small>/{{ cuenta().total }}</small></dd>
+        </div>
+        <div>
+          <dt>Pendientes</dt>
+          <dd>{{ cuenta().pendientes }}<small>/{{ cuenta().total }}</small></dd>
+        </div>
+      </dl>
+      <ol class="lista">
+        @for (r of requisitos; track r.nombre; let i = $index) {
+          <li [attr.data-estado]="estados()[i]">
+            <span class="punto"></span>
+            <span class="nombre">{{ r.nombre }}</span>
+          </li>
+        }
+      </ol>
+    </div>
+
+    <div class="altimetro" aria-hidden="true">
+      <span class="regla">
+        <i class="marca" style="--n: 0">Suelo</i>
+        @for (n of [1, 2, 3, 4]; track n) {
+          <i class="marca" [style.--n]="n">{{ n }}</i>
+        }
+        <i class="marca" style="--n: 5">Cima</i>
+      </span>
+      <span class="aguja-carril"><b #aguja class="aguja"></b></span>
+    </div>
+
+    @if (orientacion.giroscopio() === 'pedir' && !reducido()) {
+      <button type="button" class="girar" (click)="activarGiroscopio()">Balancear el andamio con tu teléfono</button>
+    }
+    <span class="barra" aria-hidden="true"><i #barra></i></span>
+  </div>
+
+  <ol class="pasos">
+    @for (paso of pasos; track paso.titulo; let i = $index) {
+      <li class="paso" [class.activo]="i === pasoActivo()">
+        <span class="paso-marca" aria-hidden="true">{{ i === 0 ? 'Suelo' : i === pasos.length - 1 ? 'Cima' : i }}</span>
+        <div>
+          <h3>{{ paso.titulo }}</h3>
+          <p>{{ paso.texto }}</p>
+          @if (alternativas[i]; as alt) {
+            <p class="alternativas">
+              <span>{{ alt[0] }}</span>
+              <em>o</em>
+              <span>{{ alt[1] }}</span>
+            </p>
+          }
+        </div>
+      </li>
+    }
+  </ol>
+
+  @if (modo() === 'reducido') {
+    <div class="controles">
+      <button type="button" class="btn" (click)="irAPaso(pasoActivo() - 1)" [disabled]="pasoActivo() === 0">
+        Bajar un travesaño
+      </button>
+      <p aria-live="polite">Paso {{ pasoActivo() + 1 }} de {{ pasos.length }}: {{ pasos[pasoActivo()].titulo }}</p>
+      <button
+        type="button"
+        class="btn btn-primario"
+        (click)="irAPaso(pasoActivo() + 1)"
+        [disabled]="pasoActivo() === pasos.length - 1"
+      >
+        Subir un travesaño
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,449 @@
+/* La fachada de la sede y sus puertas de vidrio: la entrada al mundo Ocupasalud. */
+:host {
+  display: block;
+}
+
+/* ======================= Fachada ======================= */
+
+.fachada {
+  position: relative;
+  /* clip y no hidden: con hidden, el foco del botón desplazaba la fachada de lado. */
+  overflow: clip;
+  padding-block: clamp(20px, 3vw, 40px) clamp(48px, 7vw, 96px);
+  color: #ffffff;
+  /* El muro azul de la sede, con las juntas de sus paneles. */
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px) 0 0 / 96px 100%,
+    linear-gradient(180deg, var(--ocupasalud-azul-sitio), var(--ocupasalud-azul) 70%);
+
+  :focus-visible {
+    outline-color: #ffffff;
+  }
+}
+
+/* La esfera del isotipo, enorme, detrás del dispensador. */
+.esfera {
+  position: absolute;
+  z-index: 0;
+  right: -90px;
+  bottom: -110px;
+  width: 300px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 34% 30%,
+    #ffffff 0 1.5%,
+    var(--ocupasalud-esfera-luz) 14%,
+    var(--ocupasalud-esfera) 42%,
+    #0c5180 74%,
+    var(--ocupasalud-marino) 100%
+  );
+  box-shadow:
+    0 0 0 18px rgba(255, 255, 255, 0.06),
+    0 0 0 40px rgba(255, 255, 255, 0.04),
+    0 40px 80px -20px rgba(4, 30, 52, 0.7);
+  transition: transform 400ms var(--ease-out);
+  will-change: transform;
+
+  @media (min-width: 900px) {
+    right: max(-120px, calc((100% - var(--wrap)) / 2 - 140px));
+    top: 50%;
+    bottom: auto;
+    width: clamp(420px, 40vw, 600px);
+    margin-top: calc(clamp(420px, 40vw, 600px) / -2);
+  }
+}
+
+.fachada-rejilla {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 36px;
+
+  @media (min-width: 900px) {
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+    align-items: center;
+    gap: 48px;
+  }
+}
+
+.volver {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-bottom: 14px;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+/* El aviso luminoso de la fachada: el logo sobre blanco, como en el sitio de la IPS. */
+.aviso-logo {
+  display: inline-block;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 22px 44px -22px rgba(4, 30, 52, 0.75);
+
+  img {
+    display: block;
+    width: clamp(200px, 24vw, 300px);
+    height: auto;
+  }
+}
+
+h1 {
+  margin: 26px 0 16px;
+  font-family: var(--ocupasalud-fuente-titulo);
+  font-size: clamp(3rem, 1.2rem + 6.6vw, 7.25rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+}
+
+.bajada {
+  max-width: 44ch;
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.mi-parte {
+  position: relative;
+  max-width: 46ch;
+  margin-top: 16px;
+  padding-left: 18px;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  color: #ffffff;
+
+  /* Las dos líneas de piso, en pequeño. */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 3px;
+    bottom: 3px;
+    width: 8px;
+    border-radius: 4px;
+    background:
+      linear-gradient(#ffffff, #ffffff) left / 50% 100% no-repeat,
+      linear-gradient(var(--ocupasalud-verde-claro), var(--ocupasalud-verde-claro)) right / 50% 100% no-repeat;
+  }
+}
+
+.placa {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 26px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.placa-dato {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+}
+
+/* ---------- El dispensador de turnos ---------- */
+
+.dispensador {
+  display: grid;
+  justify-self: center;
+  width: min(300px, 100%);
+}
+
+.dispensador-cuerpo {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 14px;
+  padding: 18px 18px 22px;
+  border-radius: 28px 28px 14px 14px;
+  background: var(--ocupasalud-marino);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.12),
+    0 30px 50px -24px rgba(4, 30, 52, 0.85);
+}
+
+.pantalla {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--ocupasalud-noche);
+  box-shadow: inset 0 0 0 1px var(--ocupasalud-noche-linea);
+
+  span {
+    color: var(--ocupasalud-claro);
+    font-size: 0.8125rem;
+  }
+  b {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: var(--ocupasalud-claro);
+    text-shadow: 0 0 14px rgba(159, 208, 240, 0.6);
+  }
+}
+
+/* El botón rojo: el mismo rojo de los llamados del sitio de la IPS. */
+.boton-turno {
+  min-height: 56px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ocupasalud-rojo);
+  color: #ffffff;
+  font: 600 1.0625rem var(--ocupasalud-fuente-titulo);
+  cursor: pointer;
+  box-shadow: 0 6px 0 #8f0000;
+  transition:
+    transform 120ms var(--ease-out),
+    box-shadow 120ms var(--ease-out),
+    background-color 200ms var(--ease-out);
+
+  &:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #8f0000;
+  }
+}
+
+.boton-seguir {
+  background: #ffffff;
+  color: var(--ink);
+  box-shadow: 0 6px 0 #9fb3c4;
+
+  &:active {
+    box-shadow: 0 2px 0 #9fb3c4;
+  }
+}
+
+.ranura {
+  display: block;
+  height: 10px;
+  margin: 2px 22px 0;
+  border-radius: 5px;
+  background: #04121f;
+}
+
+.tiquete-caja {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin: -16px 30px 0;
+  transition: grid-template-rows 900ms var(--ease-out);
+
+  > .tiquete {
+    min-height: 0;
+  }
+}
+
+.impreso .tiquete-caja {
+  grid-template-rows: 1fr;
+}
+
+.tiquete {
+  overflow: hidden;
+  padding: 0 16px;
+  border-radius: 0 0 6px 6px;
+  background: #ffffff;
+  color: var(--ink);
+  text-align: center;
+  transform: translateY(-40%);
+  transition:
+    transform 900ms var(--ease-out),
+    padding 900ms var(--ease-out);
+  /* El borde de abajo, cortado en dientes como un tiquete de papel. */
+  mask: radial-gradient(circle at 8px 100%, transparent 6px, #000 6.5px) 0 0 / 16px 100% repeat-x;
+  box-shadow: 0 16px 24px -16px rgba(4, 30, 52, 0.6);
+}
+
+.impreso .tiquete {
+  padding: 30px 16px 22px;
+  transform: none;
+}
+
+.tiquete-isotipo {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 4px;
+}
+
+.tiquete-titulo {
+  color: var(--ink-2);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.tiquete-numero {
+  font-family: var(--font-mono);
+  font-size: 3rem;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+}
+
+.tiquete-motivo {
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.tiquete-ruta {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.tiquete-nota {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  color: var(--ink-3);
+  font-size: 0.75rem;
+}
+
+/* ======================= Las puertas de vidrio ======================= */
+
+.puertas {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: clamp(160px, 22vw, 240px);
+  overflow: clip;
+  background:
+    linear-gradient(180deg, rgba(0, 119, 189, 0.12), transparent 40%),
+    linear-gradient(var(--surface-2), #ffffff);
+  border-bottom: 1px solid var(--line);
+
+  /* La línea de piso arranca aquí y baja hacia el directorio. */
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 12px;
+    height: 34%;
+    margin-left: -6px;
+    background:
+      linear-gradient(var(--ocupasalud-azul), var(--ocupasalud-azul)) left / 50% 100% no-repeat,
+      linear-gradient(var(--ocupasalud-verde), var(--ocupasalud-verde)) right / 50% 100% no-repeat;
+  }
+}
+
+/* El letrero va por delante del vidrio: detrás de la hoja medio blanca bajaba a menos de 3:1. */
+.puertas-texto {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  max-width: calc(100% - 32px);
+  padding: 8px 18px;
+  margin-bottom: 44px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px -14px rgba(19, 59, 92, 0.55);
+  font-family: var(--ocupasalud-fuente-titulo);
+  font-size: clamp(1.25rem, 1rem + 1.4vw, 2rem);
+  font-weight: 600;
+  color: var(--ink);
+  text-align: center;
+}
+
+.linea-muestra {
+  flex: none;
+  width: 56px;
+  height: 12px;
+  border-radius: 6px;
+  background:
+    linear-gradient(var(--ocupasalud-azul), var(--ocupasalud-azul)) top / 100% 50% no-repeat,
+    linear-gradient(var(--ocupasalud-verde), var(--ocupasalud-verde)) bottom / 100% 50% no-repeat;
+}
+
+.hojas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  pointer-events: none;
+}
+
+.hoja-vidrio {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 6px solid var(--ocupasalud-plata);
+  background: linear-gradient(110deg, rgba(255, 255, 255, 0.5), rgba(214, 233, 245, 0.32) 60%, rgba(255, 255, 255, 0.5));
+
+  /* Lo grabado en el vidrio: pura decoración, por eso sale de CSS y no del texto de la página. */
+  &::before {
+    content: attr(data-grabado);
+    font-family: var(--ocupasalud-fuente-titulo);
+    font-weight: 600;
+    font-size: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+    color: rgba(19, 59, 92, 0.28);
+    letter-spacing: 0.02em;
+  }
+
+  /* La barra para empujar. */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 30%;
+    bottom: 30%;
+    width: 8px;
+    border-radius: 4px;
+    background: var(--ocupasalud-plata);
+  }
+}
+
+.hoja-izq {
+  border-right-width: 3px;
+  transform: translateX(-8%);
+
+  &::after {
+    right: 14px;
+  }
+}
+
+.hoja-der {
+  border-left-width: 3px;
+  transform: translateX(8%);
+
+  &::after {
+    left: 14px;
+  }
+}
+
+/* Movimiento reducido: sin scroll que las abra, las puertas quedan abiertas y no tapan nada. */
+@media (prefers-reduced-motion: reduce) {
+  .hoja-izq {
+    transform: translateX(-72%);
+  }
+  .hoja-der {
+    transform: translateX(72%);
+  }
+}

@@ -1,0 +1,476 @@
+:host {
+  display: block;
+}
+
+.recorrido {
+  display: grid;
+  gap: 20px;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- La maqueta, sobre un plano de arquitecto ---------- */
+
+.escenario {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background:
+    linear-gradient(rgba(0, 119, 189, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, rgba(0, 119, 189, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+    radial-gradient(70% 60% at 55% 55%, #ffffff, transparent 75%),
+    var(--surface-2);
+}
+
+.plano {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 12px;
+  transition: opacity 500ms var(--ease-out);
+
+  text {
+    font-family: var(--ocupasalud-fuente);
+    font-size: 15px;
+    font-weight: 600;
+    fill: var(--ink);
+    text-anchor: middle;
+  }
+  .pl-losa {
+    fill: #ffffff;
+    stroke: var(--ocupasalud-marino);
+    stroke-width: 3;
+  }
+  .pl-sala {
+    stroke: var(--line);
+    stroke-width: 1.5;
+  }
+  .pl-azul {
+    fill: rgba(0, 119, 189, 0.08);
+  }
+  .pl-verde {
+    fill: rgba(81, 168, 177, 0.12);
+  }
+  .pl-rayos {
+    fill: rgba(0, 168, 236, 0.1);
+  }
+  .pl-mostrador {
+    fill: var(--ocupasalud-marino);
+  }
+  .pl-ruta {
+    fill: none;
+    stroke-width: 4;
+    stroke-linejoin: round;
+  }
+  .pl-ruta-azul {
+    stroke: var(--ocupasalud-azul);
+  }
+  .pl-ruta-verde {
+    stroke: var(--ocupasalud-verde);
+  }
+  .pl-paciente {
+    fill: var(--ocupasalud-esfera);
+    stroke: #ffffff;
+    stroke-width: 3;
+  }
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+
+.escenario.activo {
+  canvas {
+    opacity: 1;
+  }
+  .plano {
+    opacity: 0;
+  }
+}
+
+/* ---------- Señalética que sigue a la maqueta ---------- */
+
+.anclas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.ancla {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-family: var(--ocupasalud-fuente);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  opacity: 0;
+  transition: opacity 240ms var(--ease-out);
+  will-change: transform;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+/* Los letreros de las salas: placas azules con el pictograma, como en una sede de verdad. */
+.letrero {
+  padding: 5px 9px 5px 7px;
+  border-radius: 6px;
+  background: var(--ocupasalud-azul);
+  color: #ffffff;
+  box-shadow: 0 6px 14px -8px rgba(19, 59, 92, 0.7);
+}
+
+.turno {
+  padding: 4px 10px;
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 0 50%, transparent 4px, #ffffff 4.5px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent 4px, #ffffff 4.5px) right / 51% 100% no-repeat;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  filter: drop-shadow(0 4px 8px rgba(19, 59, 92, 0.3));
+}
+
+.reloj {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--ocupasalud-marino);
+  color: #ffffff;
+  font-weight: 500;
+  transform-origin: 50% 0;
+
+  b {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--ocupasalud-claro);
+  }
+}
+
+.externa {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 2px solid var(--ocupasalud-rayos);
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.evento {
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--ocupasalud-noche);
+  color: #ffffff;
+  font-weight: 500;
+
+  b {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--ocupasalud-claro);
+  }
+}
+
+.encuesta {
+  padding: 8px 12px;
+  border-radius: 14px 14px 14px 4px;
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 0.875rem;
+  box-shadow: var(--ocupasalud-sombra);
+
+  .wa {
+    width: 18px;
+    height: 18px;
+    fill: #25d366;
+    stroke: none;
+  }
+}
+
+.barra {
+  display: none;
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 14px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line-soft);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    background:
+      linear-gradient(var(--ocupasalud-azul), var(--ocupasalud-azul)) top / 100% 50% no-repeat,
+      linear-gradient(var(--ocupasalud-verde), var(--ocupasalud-verde)) bottom / 100% 50% no-repeat;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+}
+
+.girar {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 3;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ocupasalud-marino);
+  color: #ffffff;
+  font: 600 0.875rem var(--ocupasalud-fuente);
+  cursor: pointer;
+}
+
+/* ---------- Los pasos ---------- */
+
+.pasos {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paso {
+  position: relative;
+  padding: 18px 20px 18px 26px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--ocupasalud-sombra);
+  font-family: var(--ocupasalud-fuente);
+
+  /* La línea de piso: azul de OCUPA y verde de SALUD en lo que construí; gris en lo que no. */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 18px;
+    bottom: 18px;
+    width: 6px;
+    border-radius: 3px;
+    background: var(--line);
+  }
+  &.mio::before {
+    background:
+      linear-gradient(var(--ocupasalud-azul), var(--ocupasalud-azul)) left / 50% 100% no-repeat,
+      linear-gradient(var(--ocupasalud-verde), var(--ocupasalud-verde)) right / 50% 100% no-repeat;
+  }
+
+  h3 {
+    margin: 4px 0 6px;
+    font-family: var(--ocupasalud-fuente-titulo);
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+}
+
+.paso-sala {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-2);
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.paso-numero {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font: 600 0.8125rem var(--font-mono);
+}
+
+.paso.activo .paso-numero {
+  background: var(--ocupasalud-azul);
+  color: #ffffff;
+}
+
+.paso-texto {
+  color: var(--ink-2);
+  font-size: 1rem;
+  line-height: 1.55;
+  max-width: 62ch;
+}
+
+.paso-mio {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+
+  strong {
+    color: var(--signal-text);
+  }
+}
+
+.paso-sistema {
+  margin-top: 10px;
+  color: var(--ink-3);
+  font-size: 0.875rem;
+}
+
+.paso-enlace {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 8px;
+  color: var(--signal-text);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Con JavaScript: la maqueta manda ---------- */
+
+.vivo {
+  .anclas,
+  .barra {
+    display: block;
+  }
+  .escenario {
+    min-height: 320px;
+  }
+}
+
+/* Escritorio: la sección queda fija y el scroll lleva al paciente por la sede. */
+.fijado {
+  grid-template-columns: minmax(300px, 380px) 1fr;
+  grid-template-rows: 1fr;
+  height: calc(100svh - var(--cabecera));
+  padding-block: 12px;
+
+  .escenario {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    height: 100%;
+  }
+  .plano {
+    margin: auto;
+    max-height: 100%;
+  }
+  .pasos {
+    position: relative;
+    z-index: 2;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    height: 330px;
+    margin: 0 0 40px 24px;
+  }
+  .paso {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 280ms var(--ease-out),
+      transform 280ms var(--ease-out);
+
+    &.activo {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Móvil: la maqueta queda pegada arriba y los pasos pasan por encima. */
+.pasos-movil {
+  .escenario {
+    position: sticky;
+    top: calc(var(--cabecera) + 8px);
+    z-index: 0;
+    height: min(52svh, 460px);
+  }
+  .plano {
+    margin: auto;
+    max-height: 100%;
+  }
+  .pasos {
+    position: relative;
+    z-index: 1;
+    gap: 46svh;
+    padding: 4svh 0 24svh;
+  }
+}
+
+/* Movimiento reducido: un cuadro por sala y botones. El paso activo se marca con el borde. */
+.reducido {
+  .escenario {
+    aspect-ratio: 16 / 10;
+    max-height: 70svh;
+  }
+  .paso.activo {
+    border-color: var(--ocupasalud-azul);
+    box-shadow: inset 0 0 0 1px var(--ocupasalud-azul), var(--ocupasalud-sombra);
+  }
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  p {
+    flex: 1 1 220px;
+    text-align: center;
+    color: var(--ink-2);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 600px) {
+  .plano text {
+    font-size: 19px;
+  }
+  .ancla {
+    font-size: 0.6875rem;
+  }
+  .letrero {
+    padding: 3px 7px 3px 5px;
+  }
+}

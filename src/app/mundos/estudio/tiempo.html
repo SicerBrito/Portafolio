@@ -1,0 +1,145 @@
+<div class="tiempo">
+  <div class="pista" #pista>
+    <div class="escenario">
+      <div class="pantalla">
+        <app-estudio-escena [fotograma]="fotograma()" [separadas]="separadas()" />
+        <p class="solo-lectores">
+          Escena del motor en el fotograma {{ fotograma() }}: el antetítulo «Módulo 1 ·
+          Introducción», el título «Trabajo seguro en alturas» y una barra de progreso que marca
+          {{ e().valorBarra }} %.
+        </p>
+      </div>
+
+      <div class="inspector">
+        <label class="solo-lectores" for="e02-fotograma">Fotograma de la escena</label>
+        <input
+          id="e02-fotograma"
+          type="range"
+          min="0"
+          [max]="ultimo"
+          step="1"
+          [value]="fotograma()"
+          [attr.aria-valuetext]="valorTexto()"
+          (input)="mover($event)"
+        />
+        <output class="contador" for="e02-fotograma">
+          fotograma <b>{{ cifras() }}</b> / {{ ultimo }} · {{ tiempo() }} s
+        </output>
+      </div>
+
+      <div class="miniaturas" role="group" aria-label="Saltar a un fotograma de la línea de tiempo">
+        @for (f of miniaturas; track f) {
+          <button
+            type="button"
+            class="mini"
+            [attr.aria-label]="'Ir al fotograma ' + f"
+            (click)="irA(f)"
+          >
+            <app-estudio-escena [fotograma]="f" />
+          </button>
+        }
+        <span
+          class="cabezal"
+          aria-hidden="true"
+          [style.left.%]="(fotograma() / ultimo) * 100"
+        ></span>
+      </div>
+
+      <div class="lateral">
+        <dl class="formulas">
+          <div>
+            <dt>
+              <span class="nombre">opacidad del título</span
+              ><code class="expr">aparecer(frame, seg(0.6), seg(9.6))</code>
+            </dt>
+            <dd>{{ e().opacidadTitulo.toFixed(2) }}</dd>
+          </div>
+          <div>
+            <dt>
+              <span class="nombre">altura del título</span
+              ><code class="expr">interpolar(frame, [seg(0.6), seg(1.6)], [46, 0], rebote)</code>
+            </dt>
+            <dd>{{ e().yTitulo.toFixed(1) }} px</dd>
+          </div>
+          <div>
+            <dt>
+              <span class="nombre">ancho de la barra</span
+              ><code class="expr">interpolar(frame, [seg(2.4), seg(6.0)], [0, 87])</code>
+            </dt>
+            <dd>{{ e().anchoBarra.toFixed(1) }} %</dd>
+          </div>
+          <div [class.roto]="separadas()">
+            <dt>
+              <span class="nombre">número de la barra</span>
+              @if (separadas()) {
+                <code class="expr"
+                  >Math.round(interpolar(frame, [seg(2.4), seg(6.0)], [0, 87], lineal))</code
+                >
+              } @else {
+                <code class="expr">Math.round(anchoBarra)</code>
+              }
+            </dt>
+            <dd>{{ e().valorBarra }} %</dd>
+          </div>
+        </dl>
+        @if (separadas()) {
+          <p class="desfase">
+            Recreación del error: barra en {{ e().anchoBarra.toFixed(0) }} %, número en
+            {{ e().valorBarra }} %.
+          </p>
+        }
+
+        <div class="controles">
+          <button type="button" class="control" (click)="paso(-1)" aria-label="Fotograma anterior">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
+          </button>
+          <button type="button" class="control" (click)="paso(1)" aria-label="Fotograma siguiente">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
+          </button>
+          <button type="button" class="control texto" (click)="saltar()">Fotograma al azar</button>
+          <button
+            type="button"
+            class="control texto"
+            aria-label="Ver el error de la barra"
+            [attr.aria-pressed]="separadas()"
+            (click)="separadas.set(!separadas())"
+          >
+            Ver el error
+          </button>
+          @if (puedeInclinar()) {
+            <button
+              type="button"
+              class="control texto"
+              [attr.aria-pressed]="siguiendo()"
+              (click)="alternarInclinacion()"
+            >
+              {{ textoInclinar() }}
+            </button>
+          }
+        </div>
+        <p class="aviso" aria-live="polite">
+          @if (salto() !== null) {
+            Fotograma {{ salto() }}: calculado al instante, no animado hacia él.
+          } @else if (modo() === 'fijado' || modo() === 'movil') {
+            El scroll mueve el fotograma. También mandan el deslizador y las flechas.
+          } @else {
+            El deslizador y las flechas recorren los 300 fotogramas.
+          }
+        </p>
+      </div>
+    </div>
+    <div class="recorrido" aria-hidden="true"></div>
+  </div>
+
+  <div class="wrap pie">
+    <div class="toma">
+      <h3>Toma falsa: el número y la barra se separaron</h3>
+      <p>
+        En una versión de esta escena, la barra y su porcentaje tenían cada uno su curva. La barra
+        iba en 30 % y el texto decía 39 %. Ahora el número sale del mismo valor que el ancho,
+        redondeado para que no tiemble entre fotogramas. El botón «Ver el error» lo recrea: el
+        número toma una curva lineal y la barra, la suave.
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,614 @@
+:host {
+  display: block;
+  font-family: var(--backbone-fuente);
+}
+
+.entornos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+/* ---------- El escenario de la palanca ---------- */
+
+.escenario {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid var(--line-soft);
+  background:
+    radial-gradient(60% 55% at 50% 60%, rgba(79, 70, 229, 0.16), transparent 70%),
+    var(--bg);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background-color 400ms var(--ease-out);
+
+  &.arrastrando {
+    cursor: grabbing;
+  }
+}
+
+.prod .escenario {
+  background:
+    radial-gradient(60% 55% at 50% 60%, rgba(74, 222, 156, 0.1), transparent 70%),
+    var(--bg);
+}
+
+.dibujo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 500ms var(--ease-out);
+
+  path,
+  line {
+    fill: none;
+  }
+  .d-cables path {
+    stroke-width: 1.5;
+    stroke-dasharray: 600;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 700ms var(--ease-in-out);
+  }
+  .d-cable-ahdo {
+    stroke: var(--backbone-ahdo);
+  }
+  .d-cable-ocupa {
+    stroke: var(--backbone-ocupasalud);
+  }
+  .d-ahdo {
+    fill: var(--backbone-ahdo);
+  }
+  .d-ocupa {
+    fill: var(--backbone-ocupasalud);
+  }
+  .d-llave circle {
+    fill: none;
+    stroke-width: 6;
+  }
+  .d-ahdo circle {
+    stroke: var(--backbone-ahdo);
+  }
+  .d-ocupa circle {
+    stroke: var(--backbone-ocupasalud);
+  }
+  .d-skills rect {
+    fill: var(--ink-2);
+    transition: fill 500ms var(--ease-out);
+  }
+  .d-usuarios,
+  .d-admin {
+    transition: opacity 500ms var(--ease-out);
+  }
+  .d-usuarios circle,
+  .d-usuarios rect {
+    fill: var(--ink-3);
+  }
+  .d-usuarios .d-candado-debil {
+    fill: var(--backbone-aviso);
+  }
+  .d-admin {
+    opacity: 0;
+  }
+  .d-admin circle,
+  .d-admin rect {
+    fill: var(--signal);
+  }
+  .d-admin .d-candado {
+    fill: var(--ink);
+  }
+  .d-arco {
+    stroke: var(--ink);
+    stroke-width: 3;
+  }
+  .d-base {
+    fill: var(--surface-2);
+    stroke: var(--line);
+  }
+  .d-vara {
+    stroke: var(--ink-3);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transform-origin: 320px 262px;
+    transition: transform 500ms var(--ease-out);
+  }
+  .d-pomo {
+    fill: var(--backbone-aviso);
+    transform-origin: 320px 262px;
+    transition: transform 500ms var(--ease-out), fill 500ms var(--ease-out);
+  }
+}
+
+.prod .dibujo {
+  .d-cables path {
+    stroke-dashoffset: 600;
+  }
+  .d-skills rect {
+    fill: var(--line);
+  }
+  .d-usuarios {
+    opacity: 0;
+  }
+  .d-admin {
+    opacity: 1;
+  }
+  .d-vara,
+  .d-pomo {
+    transform: rotate(76deg);
+  }
+  .d-pomo {
+    fill: var(--backbone-exito);
+  }
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+
+.escenario.activo {
+  canvas {
+    opacity: 1;
+  }
+  .dibujo {
+    opacity: 0;
+  }
+  .anclas {
+    display: block;
+  }
+}
+
+.anclas {
+  position: absolute;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+
+.ancla {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(18, 24, 41, 0.9);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out), color 220ms var(--ease-out), border-color 220ms var(--ease-out);
+  will-change: transform;
+
+  &.visible {
+    opacity: 1;
+  }
+  &.lado {
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+  &.lado.encendida {
+    color: var(--ink);
+    border-color: var(--signal);
+  }
+  &.aviso {
+    border-color: var(--backbone-aviso);
+    background: var(--backbone-aviso-suave);
+    color: var(--backbone-aviso);
+  }
+  &.exito {
+    border-color: var(--backbone-exito);
+    background: var(--backbone-exito-suave);
+    color: var(--backbone-exito);
+  }
+}
+
+.punto {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+
+  &.ahdo {
+    background: var(--backbone-ahdo);
+  }
+  &.ocupa {
+    background: var(--backbone-ocupasalud);
+  }
+}
+
+.pista-arrastre {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  margin: 0;
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+  pointer-events: none;
+}
+
+/* ---------- Los mandos ---------- */
+
+.mandos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.palanca {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 52px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  font: 600 1rem var(--backbone-fuente);
+  cursor: pointer;
+  isolation: isolate;
+}
+
+.palanca-op {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding: 8px 18px;
+  color: var(--ink-3);
+  transition: color 260ms var(--ease-out);
+
+  &.on {
+    color: #ffffff;
+  }
+}
+
+.palanca-pomo {
+  position: absolute;
+  z-index: 0;
+  top: 5px;
+  bottom: 5px;
+  left: 5px;
+  width: calc(50% - 5px);
+  border-radius: 10px;
+  background: var(--backbone-aviso-suave);
+  box-shadow: inset 0 0 0 1px var(--backbone-aviso);
+  transition: transform 320ms var(--ease-out), background-color 320ms var(--ease-out), box-shadow 320ms var(--ease-out);
+}
+
+.prod .palanca-pomo {
+  transform: translateX(100%);
+  background: var(--backbone-indigo);
+  box-shadow: inset 0 0 0 1px var(--signal);
+}
+
+.giro {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+  font: 500 0.9375rem var(--backbone-fuente);
+  cursor: pointer;
+
+  &[aria-pressed='true'] {
+    border-color: var(--signal);
+    color: var(--signal-text);
+  }
+}
+
+.siembra {
+  padding: 16px 18px;
+  border-left: 3px solid var(--backbone-aviso);
+  background: var(--surface);
+  border-radius: 0 12px 12px 0;
+  transition: border-color 300ms var(--ease-out);
+
+  h4 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  ul {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ink-2);
+  }
+  b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+}
+
+.prod .siembra {
+  border-left-color: var(--backbone-exito);
+}
+
+/* ---------- El inicio de sesión de juguete ---------- */
+
+.intentos {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  max-width: 760px;
+}
+
+.login-marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: var(--backbone-degradado);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.0625rem;
+}
+
+.insignia {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.16);
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+.login-cuerpo {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+
+  h4 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+}
+
+.login-modo {
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+.campo {
+  display: grid;
+  gap: 4px;
+}
+
+.campo-nombre {
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.campo-valor {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+
+  i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ink-2);
+  }
+  &.sacude-a,
+  &.sacude-b {
+    border-color: var(--backbone-peligro);
+  }
+  &.sacude-a {
+    animation: sacudir-a 320ms var(--ease-out);
+  }
+  &.sacude-b {
+    animation: sacudir-b 320ms var(--ease-out);
+  }
+}
+
+@keyframes sacudir-a {
+  20% {
+    transform: translateX(-6px);
+  }
+  45% {
+    transform: translateX(5px);
+  }
+  70% {
+    transform: translateX(-3px);
+  }
+}
+
+@keyframes sacudir-b {
+  20% {
+    transform: translateX(-6px);
+  }
+  45% {
+    transform: translateX(5px);
+  }
+  70% {
+    transform: translateX(-3px);
+  }
+}
+
+.entrar,
+.reiniciar {
+  justify-self: start;
+  min-height: 46px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--signal);
+  color: var(--on-signal);
+  font: 600 1rem var(--backbone-fuente);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--signal-text);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.ranuras {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    height: 10px;
+    border-radius: 3px;
+    background: var(--line-soft);
+    transition: background-color 200ms var(--ease-out);
+  }
+  li.usada {
+    background: var(--backbone-peligro);
+  }
+}
+
+.contador {
+  color: var(--ink-2);
+
+  b {
+    font-family: var(--backbone-mono);
+    font-size: 1.5rem;
+    color: var(--backbone-aviso);
+    margin-right: 4px;
+  }
+}
+
+.mensaje {
+  min-height: 1.6em;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+/* Congelado: escarcha sobre el formulario y el aviso encima. */
+.hielo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 10px;
+  padding: 18px 22px;
+  background:
+    linear-gradient(135deg, rgba(232, 236, 246, 0.1), rgba(139, 147, 255, 0.14)),
+    rgba(11, 15, 26, 0.86);
+  backdrop-filter: blur(5px);
+  box-shadow: inset 0 0 0 2px rgba(163, 169, 255, 0.55);
+  color: var(--ink);
+
+  b {
+    color: var(--signal-text);
+  }
+}
+
+.hielo-nota {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.nota {
+  color: var(--ink-3);
+  font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .intentos {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+  .login-marca {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .insignia {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+
+    svg {
+      width: 26px;
+      height: 26px;
+    }
+  }
+}
+
+@media (max-width: 760px) {
+  .escenario {
+    aspect-ratio: 5 / 4;
+  }
+}
+
+@media (max-width: 480px) {
+  .escenario {
+    aspect-ratio: 4 / 3;
+  }
+  .ancla {
+    font-size: 0.6875rem;
+    padding: 2px 6px;
+  }
+  /* En la pantalla angosta no caben todas: usuarios y administrador los cuenta la lista de abajo. */
+  .ancla.aviso,
+  .ancla.exito {
+    display: none;
+  }
+  .palanca {
+    width: 100%;
+  }
+  .pista-arrastre {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campo-valor.sacude-a,
+  .campo-valor.sacude-b {
+    animation: none;
+  }
+  .dibujo * {
+    transition: none !important;
+  }
+}

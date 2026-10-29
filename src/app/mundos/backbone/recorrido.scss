@@ -1,0 +1,746 @@
+:host {
+  display: block;
+}
+
+.recorrido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  /* Vive dentro del .wrap de la bitácora: el margen lateral ya lo pone ella. */
+  font-family: var(--backbone-fuente);
+}
+
+/* ---------- El escenario: un plano de sala de servidores ---------- */
+
+.escenario {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  border-radius: 20px;
+  background:
+    radial-gradient(55% 50% at 50% 42%, rgba(79, 70, 229, 0.2), transparent 72%),
+    radial-gradient(40% 35% at 85% 85%, rgba(124, 58, 237, 0.1), transparent 70%),
+    var(--bg);
+
+  /* Retícula fina, como el papel de un plano: se apaga hacia los bordes. */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.55;
+    mask-image: radial-gradient(70% 65% at 50% 50%, #000, transparent 90%);
+    pointer-events: none;
+  }
+}
+
+.plano {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 500ms var(--ease-out);
+
+  text {
+    font-family: var(--backbone-fuente);
+    font-size: 14px;
+    font-weight: 500;
+    fill: var(--ink-2);
+    text-anchor: middle;
+  }
+  .pl-chico {
+    font-size: 13px;
+    fill: var(--ink-3);
+  }
+  .pl-fuerte {
+    font-size: 16px;
+    font-weight: 700;
+    fill: var(--ink);
+  }
+  .pl-anillo,
+  .pl-cable,
+  .pl-vuelta,
+  .pl-muro,
+  .pl-cerradura {
+    fill: none;
+  }
+  .pl-anillo {
+    stroke: var(--line-soft);
+    stroke-dasharray: 2 6;
+  }
+  .pl-cable {
+    stroke: var(--line);
+    stroke-width: 6;
+  }
+  .pl-vuelta {
+    stroke: var(--signal);
+    stroke-width: 6;
+    stroke-dasharray: 1 10;
+    stroke-linecap: round;
+  }
+  .pl-ahdo {
+    fill: var(--backbone-ahdo);
+  }
+  .pl-ocupa {
+    fill: var(--backbone-ocupasalud);
+  }
+  .pl-puerta {
+    fill: var(--surface-2);
+    stroke: var(--line);
+    stroke-width: 3;
+  }
+  .pl-cerradura {
+    stroke: var(--backbone-aviso);
+    stroke-width: 3;
+  }
+  .pl-balde {
+    fill: rgba(139, 147, 255, 0.18);
+    stroke: var(--signal);
+    stroke-width: 2;
+  }
+  .pl-estrella {
+    fill: var(--backbone-indigo);
+    stroke: var(--signal);
+    stroke-width: 2;
+  }
+  .pl-skills rect {
+    fill: var(--ink-2);
+  }
+  .pl-sistema {
+    fill: var(--surface-2);
+    stroke: var(--ink-3);
+    stroke-width: 2;
+  }
+  .pl-muro {
+    stroke: var(--backbone-peligro);
+    stroke-width: 2;
+    stroke-dasharray: 4 4;
+  }
+  .pl-recibo {
+    fill: var(--ink);
+  }
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+
+.escenario.activo {
+  canvas {
+    opacity: 1;
+  }
+  .plano {
+    opacity: 0;
+  }
+}
+
+/* ---------- Etiquetas que siguen a la escena ---------- */
+
+.anclas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.ancla {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(18, 24, 41, 0.9);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out);
+  will-change: transform;
+
+  &.visible {
+    opacity: 1;
+  }
+  &.fuerte {
+    border-color: transparent;
+    background: var(--backbone-degradado);
+    color: #ffffff;
+    font-weight: 600;
+  }
+  &.peligro {
+    border-color: var(--backbone-peligro);
+    background: var(--backbone-peligro-suave);
+    color: var(--backbone-peligro);
+  }
+  &.mono {
+    font-family: var(--backbone-mono);
+    border-color: var(--signal);
+    color: var(--signal-text);
+  }
+}
+
+.punto {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex: none;
+
+  &.ahdo {
+    background: var(--backbone-ahdo);
+  }
+  &.ocupa {
+    background: var(--backbone-ocupasalud);
+  }
+}
+
+/* ---------- La pregunta, la consola y el recibo ---------- */
+
+.burbuja {
+  position: relative;
+  margin: 0 16px 12px;
+  padding: 12px 16px;
+  border-radius: 16px 16px 16px 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out);
+
+  figcaption {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+  p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+}
+
+.consola {
+  position: relative;
+  margin: 0 16px 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #070a12;
+  border: 1px solid var(--line-soft);
+  font-family: var(--backbone-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  transition: opacity 260ms var(--ease-out);
+}
+
+.consola-titulo {
+  margin-bottom: 8px;
+  font-family: var(--backbone-fuente);
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+.eventos {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 10px;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+    transition: opacity 200ms var(--ease-out);
+  }
+  b {
+    font-weight: 500;
+    color: var(--signal-text);
+  }
+  li:last-child b {
+    color: var(--backbone-exito);
+  }
+}
+
+.tecleado {
+  display: none;
+}
+
+.recibo {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  margin: 0 16px 16px;
+  padding: 14px 16px 18px;
+  background: var(--ink);
+  color: #0b0f1a;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  transition: opacity 260ms var(--ease-out), transform 300ms var(--ease-out);
+  /* El corte de papel de las cajas registradoras. */
+  mask-image: linear-gradient(#000, #000),
+    conic-gradient(from 135deg at 50% 100%, #000 90deg, transparent 0);
+  mask-size: 100% calc(100% - 6px), 12px 6px;
+  mask-position: 0 0, 0 100%;
+  mask-repeat: no-repeat, repeat-x;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  dt {
+    color: #3d4660;
+  }
+  dd {
+    margin: 0;
+    font-family: var(--backbone-mono);
+    font-weight: 500;
+    text-align: right;
+  }
+  .recibo-costo {
+    margin-top: 4px;
+    padding-top: 6px;
+    border-top: 1px dashed #5b6478;
+
+    dd {
+      color: var(--backbone-indigo-hover);
+      font-weight: 600;
+    }
+  }
+}
+
+.barra {
+  display: none;
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 14px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--line-soft);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    background: var(--backbone-degradado);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+}
+
+.girar {
+  position: absolute;
+  left: 12px;
+  bottom: 26px;
+  z-index: 3;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 500 0.875rem var(--backbone-fuente);
+  cursor: pointer;
+}
+
+/* ---------- La traza: cada paso es un tramo de la petición ---------- */
+
+.traza {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paso {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+
+  h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  p {
+    margin-top: 8px;
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+}
+
+.paso-cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.mio-marca {
+  padding: 1px 8px;
+  border-radius: 6px;
+  background: var(--backbone-degradado);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pista {
+  display: none;
+  flex: 1 0 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line-soft);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    background: var(--signal);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+}
+
+.paso.mio .pista i {
+  background: var(--backbone-degradado);
+}
+
+/* ---------- Con JavaScript: la escena manda ---------- */
+
+.vivo {
+  .anclas,
+  .barra,
+  .pista {
+    display: block;
+  }
+  /* La respuesta completa sigue ahí para los lectores de pantalla; a la vista va la tecleada. */
+  .completo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .tecleado {
+    display: inline;
+  }
+  .burbuja,
+  .consola,
+  .recibo {
+    position: absolute;
+    z-index: 2;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+    }
+  }
+  .burbuja {
+    top: 16px;
+    right: 16px;
+    max-width: min(340px, calc(100% - 32px));
+    transform: translateY(-8px);
+
+    &.visible {
+      transform: none;
+    }
+  }
+  .consola {
+    left: 16px;
+    right: 16px;
+    bottom: 28px;
+  }
+  .eventos li {
+    opacity: 0;
+
+    &.llegado {
+      opacity: 1;
+    }
+  }
+  .recibo {
+    top: 16px;
+    right: 16px;
+    width: min(250px, calc(100% - 32px));
+    transform: translateY(10px) rotate(1.5deg);
+
+    &.visible {
+      transform: rotate(-1.5deg);
+    }
+  }
+  .escenario {
+    min-height: 320px;
+  }
+}
+
+/* Escritorio: la sección queda fija; la traza a la izquierda se llena con el scroll. */
+.fijado {
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  height: calc(100svh - var(--cabecera));
+  padding-block: 12px;
+
+  .escenario {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    height: 100%;
+  }
+  .plano {
+    margin: auto;
+    max-height: 100%;
+  }
+  .consola {
+    left: auto;
+    right: 24px;
+    bottom: 32px;
+    width: min(440px, 40%);
+  }
+  .traza {
+    position: relative;
+    z-index: 2;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    gap: 0;
+    margin: 20px 0 0 20px;
+    padding: 10px 0;
+    border-radius: 16px;
+    background: rgba(18, 24, 41, 0.86);
+    border: 1px solid var(--line-soft);
+    backdrop-filter: blur(6px);
+  }
+  .paso {
+    padding: 9px 18px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+
+    h3 {
+      font-size: 0.9375rem;
+      color: var(--ink-3);
+      transition: color 200ms var(--ease-out);
+    }
+    p {
+      display: none;
+    }
+    &.activo {
+      background: rgba(139, 147, 255, 0.08);
+      box-shadow: inset 3px 0 0 var(--signal);
+
+      h3 {
+        color: var(--ink);
+      }
+      p {
+        display: block;
+        font-size: 0.875rem;
+      }
+    }
+  }
+  .pista {
+    height: 3px;
+  }
+}
+
+/* Móvil: la escena queda pegada arriba y los pasos pasan por encima. */
+.pasos-movil {
+  .escenario {
+    position: sticky;
+    top: calc(var(--cabecera) + 8px);
+    z-index: 0;
+    height: min(52svh, 460px);
+  }
+  .plano {
+    margin: auto;
+    max-height: 100%;
+  }
+  .consola {
+    font-size: 0.6875rem;
+    padding: 8px 10px;
+  }
+  .consola-titulo {
+    display: none;
+  }
+  .eventos li {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 6px;
+  }
+  .burbuja {
+    left: 12px;
+    right: auto;
+    top: 12px;
+    max-width: calc(100% - 24px);
+    padding: 8px 12px;
+
+    p {
+      font-size: 0.875rem;
+    }
+  }
+  .recibo {
+    top: 12px;
+    right: 12px;
+    width: 190px;
+    padding: 10px 12px 14px;
+    font-size: 0.75rem;
+  }
+  .traza {
+    position: relative;
+    z-index: 1;
+    gap: 44svh;
+    padding: 4svh 0 26svh;
+  }
+  .paso {
+    box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Movimiento reducido: un cuadro por paso y botones. El paso activo se marca con el borde.
+   Los botones van pegados a la escena, antes de la lista. */
+.reducido {
+  .escenario {
+    order: 0;
+  }
+  .traza {
+    order: 2;
+  }
+  .escenario {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    max-height: 70svh;
+  }
+  .consola {
+    left: auto;
+    width: min(420px, calc(100% - 32px));
+  }
+  .paso.activo {
+    border-color: var(--signal);
+    box-shadow: inset 3px 0 0 var(--signal);
+  }
+}
+
+.controles {
+  order: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  p {
+    flex: 1 1 220px;
+    text-align: center;
+    color: var(--ink-2);
+  }
+}
+
+.control {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 0.9375rem var(--backbone-fuente);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: var(--signal);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.control-primario {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: var(--on-signal);
+
+  &:hover:not(:disabled) {
+    background: var(--signal-text);
+  }
+}
+
+/* Movimiento reducido en pantalla angosta: los mismos ajustes compactos del móvil, para que la
+   consola y el recibo no se pisen en el último paso. */
+@media (max-width: 959.98px) {
+  .reducido {
+    .escenario {
+      aspect-ratio: auto;
+      height: min(60svh, 460px);
+      min-height: 360px;
+    }
+    .consola {
+      left: 12px;
+      right: 12px;
+      width: auto;
+      font-size: 0.6875rem;
+      padding: 8px 10px;
+    }
+    .consola-titulo {
+      display: none;
+    }
+    .eventos li {
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 6px;
+    }
+    .burbuja {
+      left: 12px;
+      right: auto;
+      top: 12px;
+      max-width: calc(100% - 24px);
+      padding: 8px 12px;
+
+      p {
+        font-size: 0.875rem;
+      }
+    }
+    .recibo {
+      top: 12px;
+      right: 12px;
+      width: 190px;
+      padding: 10px 12px 14px;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+/* En el celular el plano se encoge a la mitad: sus textos suben para seguir legibles (unos 12 px). */
+@media (max-width: 600px) {
+  .plano text,
+  .plano .pl-chico,
+  .plano .pl-fuerte {
+    font-size: 24px;
+  }
+  .ancla {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+  }
+}

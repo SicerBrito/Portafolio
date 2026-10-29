@@ -1,0 +1,354 @@
+:host {
+  display: block;
+  font-family: var(--prevent-fuente);
+}
+
+.juego {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 960px) {
+  .juego {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-areas:
+      'archivo solicitud'
+      'acciones solicitud'
+      'registro registro';
+    align-items: start;
+  }
+  .archivo {
+    grid-area: archivo;
+  }
+  .acciones {
+    grid-area: acciones;
+  }
+  .solicitud {
+    grid-area: solicitud;
+  }
+  .registro {
+    grid-area: registro;
+  }
+}
+
+/* ---------- El archivo: papel claro dentro de la noche de obra ---------- */
+
+.archivo {
+  background: #fbf4e6;
+  color: #1d150d;
+  border-radius: 4px;
+  box-shadow: var(--prevent-sombra);
+  overflow: hidden;
+}
+
+.archivo-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  padding: 10px 14px;
+  background: #efe2c6;
+  border-bottom: 1px solid #dccaa2;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    flex: none;
+  }
+  .pliego {
+    fill: #fbf4e6;
+    stroke: #855623;
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .doblez,
+  .rejilla {
+    fill: none;
+    stroke: #855623;
+    stroke-width: 1.5;
+  }
+}
+
+.nombre-archivo {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.ficticio {
+  margin-left: auto;
+  padding: 2px 8px;
+  border: 1px solid #855623;
+  color: #6b4419;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tabla-caja {
+  overflow-x: auto;
+
+  &:focus-visible {
+    outline: 2px solid #855623;
+    outline-offset: -4px;
+  }
+}
+
+table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+th,
+td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #e6d7b6;
+  text-align: left;
+  white-space: nowrap;
+}
+
+thead th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5a4126;
+  background: #f6ead2;
+}
+
+tbody th {
+  width: 36px;
+  color: #6b5a40;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.75rem;
+  background: #f6ead2;
+}
+
+td {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  transition:
+    background-color 240ms var(--ease-out),
+    color 240ms var(--ease-out);
+}
+
+tr[data-estado='leyendo'] td {
+  background: rgba(233, 176, 54, 0.22);
+}
+
+/* El dato que cambió al normalizarse se marca con el oro de la marca. */
+td.cambio {
+  box-shadow: inset 0 -2px 0 #c09230;
+}
+
+tr[data-estado='normalizada'] td.cambio {
+  background: rgba(241, 223, 20, 0.35);
+}
+
+tr[data-destino='nuevo'] th,
+tr[data-destino='existente'] th {
+  background: #c09230;
+  color: #0f0b07;
+}
+
+tr[data-destino='omitida'] td {
+  color: #6b5a40;
+  text-decoration: line-through;
+}
+
+tr[data-destino='repetida'] td {
+  color: #6b4419;
+  background: repeating-linear-gradient(-45deg, rgba(241, 223, 20, 0.28) 0 8px, transparent 8px 16px);
+}
+
+/* ---------- Acciones ---------- */
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+/* ---------- La solicitud ---------- */
+
+.solicitud {
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--prevent-oro);
+  min-height: 260px;
+}
+
+.solicitud-cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+}
+
+.contador {
+  font-size: 0.875rem;
+  color: var(--ink-2);
+
+  b {
+    font: 700 1.25rem/1 var(--prevent-cifras);
+    color: var(--prevent-oro);
+  }
+}
+
+.servicios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 14px;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 3px 10px;
+    border: 1px solid var(--line);
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+}
+
+.tarjetas {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tarjeta {
+  background: var(--surface-2);
+  border-left: 3px solid var(--prevent-oro);
+
+  button {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 52px;
+    padding: 8px 12px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(192, 146, 48, 0.1);
+    }
+  }
+}
+
+.casco {
+  width: 26px;
+  height: 26px;
+  fill: var(--prevent-oro);
+
+  .cresta {
+    fill: var(--prevent-amarillo);
+  }
+}
+
+.quien {
+  display: grid;
+  min-width: 0;
+
+  b {
+    font-size: 0.9375rem;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+  small {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+}
+
+.origen {
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--on-signal);
+  background: var(--prevent-oro);
+
+  &[data-origen='existente'] {
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--ink-3);
+  }
+}
+
+.docs {
+  display: grid;
+  gap: 10px;
+  padding: 4px 12px 12px 50px;
+
+  p {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink);
+
+    span {
+      font-weight: 400;
+      color: var(--ink-3);
+    }
+  }
+  ul {
+    margin: 4px 0 0;
+    padding-left: 18px;
+    color: var(--ink-2);
+    font-size: 0.8125rem;
+  }
+}
+
+.vacio {
+  padding: 22px 12px;
+  border: 1px dashed var(--line);
+  color: var(--ink-3);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* ---------- El registro de la carga ---------- */
+
+.registro {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding-left: 12px;
+    border-left: 2px solid var(--line);
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+}
+
+@media (max-width: 600px) {
+  .docs {
+    padding-left: 12px;
+  }
+}

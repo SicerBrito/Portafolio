@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+
+.tomas {
+  display: grid;
+  gap: clamp(28px, 4vw, 48px);
+
+  @media (min-width: 1100px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.toma {
+  display: grid;
+  gap: 14px;
+  padding: clamp(16px, 2.4vw, 26px);
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  background: var(--surface);
+
+  h3 {
+    font-family: var(--estudio-fuente);
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+}
+
+/* La claqueta de cada toma: los palos a rayas del cine, en los colores del motor. */
+.claqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: start;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+
+  .palos {
+    width: 54px;
+    height: 14px;
+    border-radius: 2px;
+    background: repeating-linear-gradient(-45deg, #ffffff 0 7px, var(--estudio-inspector) 7px 14px);
+    transform: rotate(-8deg);
+    transform-origin: left bottom;
+  }
+}
+
+.problema {
+  color: var(--ink-2);
+}
+
+/* Reserva mientras llega cada recreación: evita que la página salte al cargarla. */
+.reserva-demo {
+  border-radius: 12px;
+  background: var(--estudio-inspector);
+
+  &.uno {
+    min-height: 560px;
+  }
+  &.dos {
+    min-height: 640px;
+  }
+}
+
+.solucion {
+  color: var(--ink-2);
+
+  strong {
+    color: var(--ink);
+  }
+}

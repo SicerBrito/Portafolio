@@ -1,0 +1,336 @@
+:host {
+  display: block;
+}
+
+.seccion {
+  padding-block: clamp(56px, 8vw, 112px);
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(55% 45% at 15% 30%, rgba(139, 95, 252, 0.16), transparent 70%),
+    var(--bg);
+}
+
+/* La columna se limita a minmax(0, 1fr): sin eso, la rejilla de 91 cuadros (auto-fill con
+   tope de 560 px) imponía su ancho mínimo y la constancia medía 554 px en un celular de 375. */
+.rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+
+  @media (min-width: 1000px) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 56px;
+    align-items: start;
+  }
+}
+
+/* ---------- La constancia: papel blanco con la tinta de la plataforma ---------- */
+
+.constancia {
+  /* Los tokens se redefinen sobre el papel para que el sello compartido se lea en blanco. */
+  --signal: #301f56;
+  --signal-text: #5b3fc0;
+  --on-signal: #ffffff;
+  --ink: #181c32;
+  --ink-2: #4a4766;
+  --ink-3: #5c5878;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  gap: 18px;
+  padding: clamp(24px, 4vw, 48px);
+  padding-top: calc(clamp(24px, 4vw, 48px) + 8px);
+  border-radius: 6px;
+  background: var(--ahdo-papel);
+  color: var(--ahdo-papel-tinta);
+  box-shadow: 0 40px 70px -40px rgba(0, 0, 0, 0.95);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 8px;
+    background: var(--ahdo-degradado);
+  }
+}
+
+.estampa {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: clamp(84px, 14vw, 120px);
+  height: auto;
+  transform: rotate(-12deg);
+  opacity: 0.9;
+
+  circle {
+    fill: none;
+    stroke: #5b3fc0;
+    stroke-width: 2;
+  }
+
+  text {
+    fill: #5b3fc0;
+    font-family: var(--ahdo-fuente);
+    font-size: 9.6px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .rama {
+    fill: none;
+    stroke: #5b3fc0;
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .punto {
+    fill: #5b3fc0;
+    stroke: none;
+  }
+}
+
+.cabeza {
+  display: grid;
+  gap: 6px;
+  padding-right: clamp(80px, 14vw, 120px);
+}
+
+.tipo {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #5b3fc0;
+}
+
+h2 {
+  font-weight: 700;
+  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--ahdo-morado-oscuro);
+}
+
+.papel {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  max-width: 62ch;
+}
+
+.datos {
+  display: grid;
+  margin: 0;
+  border-top: 2px solid var(--ahdo-morado-oscuro);
+
+  div {
+    display: grid;
+    gap: 2px 20px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--ahdo-papel-linea);
+
+    @media (min-width: 640px) {
+      grid-template-columns: 120px minmax(0, 1fr);
+    }
+  }
+
+  dt {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ahdo-papel-tinta-2);
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+/* 21 → 91: un cuadro por controller. */
+.controllers {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+
+  figcaption {
+    color: var(--ahdo-papel-tinta-2);
+    max-width: 60ch;
+
+    strong {
+      color: var(--ahdo-morado-oscuro);
+      font-size: 1.25rem;
+    }
+  }
+}
+
+.cuadros {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+  gap: 4px;
+  width: 100%;
+  max-width: 560px;
+
+  span {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    background: var(--ahdo-morado);
+  }
+
+  .heredado {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--ahdo-papel-tinta-2);
+  }
+}
+
+.fuente {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+/* ---------- Columna lateral ---------- */
+
+.lateral {
+  display: grid;
+  gap: 36px;
+  min-width: 0;
+}
+
+.bloque {
+  display: grid;
+  gap: 14px;
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--signal-text);
+  }
+}
+
+.cifras {
+  margin: 0;
+  display: grid;
+}
+
+/* Cifras como renglones de un libro: concepto, puntos guía y valor. */
+.cifra {
+  display: grid;
+  grid-template-columns: auto minmax(24px, 1fr) auto;
+  align-items: baseline;
+  gap: 0 10px;
+  padding-block: 10px;
+  border-bottom: 1px solid var(--ahdo-borde-1);
+
+  &::after {
+    content: '';
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    margin-bottom: 0.4em;
+    border-bottom: 2px dotted var(--ahdo-borde-3);
+  }
+
+  dt {
+    grid-column: 1;
+    grid-row: 1;
+    color: var(--ink-2);
+  }
+
+  dd {
+    margin: 0;
+    grid-column: 3;
+    grid-row: 1;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
+  .fuente {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--ink-3);
+  }
+}
+
+.falta {
+  padding: 18px;
+  border: 1.5px dashed var(--ahdo-borde-3);
+  border-radius: 14px;
+
+  p {
+    color: var(--ink);
+  }
+}
+
+.piloto {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+
+  .caja-ahdo {
+    fill: var(--ahdo-morado-oscuro);
+    stroke: var(--ahdo-lila);
+  }
+
+  .caja-otra {
+    fill: none;
+    stroke: var(--ahdo-borde-3);
+    stroke-dasharray: 5 4;
+  }
+
+  .cable {
+    stroke: var(--ahdo-lila);
+    stroke-width: 2;
+    stroke-dasharray: 6 6;
+  }
+
+  .t {
+    fill: var(--ink);
+    font-family: var(--ahdo-fuente);
+    font-size: 14px;
+    font-weight: 700;
+    text-anchor: middle;
+
+    &.chico {
+      font-size: 11px;
+      font-weight: 600;
+      fill: var(--ink-2);
+    }
+  }
+}
+
+.stack {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 6px 12px;
+    border: 1px solid var(--ahdo-borde-2);
+    border-radius: 999px;
+    color: var(--ink);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--signal-text);
+  }
+}

@@ -1,0 +1,48 @@
+<div class="interruptor">
+  <button
+    type="button"
+    role="switch"
+    [attr.aria-checked]="esperaCarga()"
+    aria-labelledby="estudio-espera-carga"
+    (click)="esperaCarga.set(!esperaCarga())"
+  >
+    <span class="perilla" aria-hidden="true"></span>
+  </button>
+  <span id="estudio-espera-carga">Esperar a que carguen letras e imágenes</span>
+</div>
+
+<ul class="contacto" aria-hidden="true">
+  @for (c of hoja(); track c.f) {
+    <li>
+      <app-estudio-escena [fotograma]="c.f" [carga]="c.carga" [quemado]="true" />
+    </li>
+  }
+</ul>
+<p class="contacto-texto" aria-live="polite">
+  @if (esperaCarga()) {
+    Hoja de contacto con la espera: los cuatro fotogramas salen completos, con su letra.
+  } @else {
+    Hoja de contacto sin la espera: el primer fotograma sale vacío y el segundo con la letra de
+    respaldo. Nada falla.
+  }
+</p>
+
+<pre
+  class="codigo"
+  [class.apagado]="!esperaCarga()"
+><code><span class="espera">await document.fonts.ready;</span>
+<span class="espera">await Promise.all(imagenes);</span>
+window.plantillaLista = true;</code></pre>
+
+<div class="humo">
+  <p class="humo-titulo">La prueba de humo pesa el MP4</p>
+  <div class="medidor" aria-hidden="true">
+    <span class="zona-falla"></span>
+    <span class="umbral"><b>20 KB</b></span>
+    <span class="aguja"><b>93 KB</b></span>
+  </div>
+  <p class="humo-texto">
+    El video de la prueba, de 10 segundos, pesa unos 93 KB y pasa. Si pesara menos de 20 KB, la
+    prueba fallaría con un mensaje claro: un video de fotogramas vacíos casi no pesa.
+  </p>
+</div>

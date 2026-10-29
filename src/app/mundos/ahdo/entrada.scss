@@ -1,0 +1,470 @@
+:host {
+  display: block;
+}
+
+.entrada {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(60% 55% at 78% 30%, rgba(139, 95, 252, 0.28), transparent 70%),
+    radial-gradient(45% 50% at 12% 92%, rgba(0, 127, 184, 0.2), transparent 70%),
+    var(--bg);
+}
+
+.rejilla {
+  display: grid;
+  gap: 24px;
+  padding-block: 20px 48px;
+  grid-template-areas:
+    'texto'
+    'escenario'
+    'marcas';
+}
+
+.texto {
+  grid-area: texto;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  min-width: 0;
+}
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: start;
+  min-height: 44px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--signal-text);
+  text-decoration: none;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+h1 {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+}
+
+.logo {
+  width: clamp(190px, 24vw, 330px);
+  height: auto;
+}
+
+.frase {
+  font-weight: 700;
+  font-size: clamp(2.5rem, 1rem + 3.4vw, 4.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  text-wrap: balance;
+
+  /* El degradado del logo, de la A a la O, como firma bajo la frase. */
+  &::after {
+    content: '';
+    display: block;
+    width: min(320px, 70%);
+    height: 6px;
+    margin-top: 18px;
+    border-radius: 3px;
+    background: var(--ahdo-degradado-luz);
+  }
+}
+
+/* Eco del lema del logo: sans geométrica fina y abierta. */
+.legal {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+}
+
+.resumen {
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--ink-2);
+  max-width: 46ch;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+}
+
+.para {
+  font-size: 0.9375rem;
+  color: var(--ink-3);
+}
+
+/* ---------- Escenario del certificado ---------- */
+
+.escenario {
+  grid-area: escenario;
+  position: relative;
+  margin: 0;
+  min-width: 0;
+  aspect-ratio: 1.2;
+  min-height: 260px;
+}
+
+.lienzo,
+.plano {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity 500ms var(--ease-out);
+
+  &.activo {
+    opacity: 1;
+  }
+}
+
+.plano {
+  inset: 12% 8%;
+  width: 84%;
+  height: auto;
+  aspect-ratio: 1.414;
+  margin: auto;
+  border-radius: 4px;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--ahdo-borde-2);
+  transition:
+    opacity 500ms var(--ease-out),
+    transform 220ms var(--ease-in-out);
+
+  &.volteando {
+    transform: perspective(900px) rotateY(90deg);
+  }
+}
+
+/* Certificado en HTML: lo que se ve antes del 3D, o si no hay JavaScript. */
+.cert {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 84%;
+  height: fit-content;
+  aspect-ratio: 1.414;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1.2%;
+  padding: 4% 6%;
+  background: var(--ahdo-papel);
+  color: var(--ahdo-papel-tinta);
+  border-top: 10px solid var(--c1);
+  border-bottom: 4px solid var(--c2);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  container-type: inline-size;
+
+  &[data-estilo='lateral'] {
+    border-top: 0;
+    border-left: 16px solid var(--c1);
+  }
+
+  &[data-estilo='marco'] {
+    border: 6px double var(--c1);
+  }
+}
+
+.cert-logo {
+  width: 32cqi;
+  height: auto;
+  max-height: 16cqi;
+  object-fit: contain;
+}
+
+.cert-titulo {
+  font-weight: 700;
+  font-size: 7cqi;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.cert-chico {
+  font-size: 2.4cqi;
+  color: var(--ahdo-papel-tinta-2);
+}
+
+.cert-nombre {
+  font-weight: 700;
+  font-size: 5cqi;
+  line-height: 1.1;
+}
+
+.cert-plantilla {
+  margin-top: 2%;
+  font-family: var(--font-mono);
+  font-size: 1.8cqi;
+  color: var(--ahdo-papel-tinta-2);
+}
+
+.cert-muestra {
+  position: absolute;
+  right: 5%;
+  bottom: 12%;
+  padding: 0.6cqi 1.6cqi;
+  border: 0.5cqi solid var(--c1);
+  border-radius: 1cqi;
+  color: var(--ahdo-papel-tinta);
+  font-weight: 800;
+  font-size: 2cqi;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: rotate(-9deg);
+}
+
+.leyenda {
+  position: absolute;
+  inset: auto 0 0;
+  font-size: 0.8125rem;
+  /* --ink-2 y no --ink-3: el halo lila de la entrada aclara el fondo y --ink-3 quedaba al filo de 4,5:1. */
+  color: var(--ink-2);
+  text-align: center;
+}
+
+/* ---------- Las marcas ---------- */
+
+.marcas {
+  grid-area: marcas;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.pista {
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.pista-scroll {
+  display: none;
+}
+
+.dock {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+
+  @media (min-width: 560px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.chip {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  min-height: 44px;
+  padding: 8px 8px 10px;
+  border: 1px solid var(--ahdo-borde-2);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 200ms var(--ease-out),
+    border-color 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--ahdo-borde-3);
+  }
+
+  &[aria-pressed='true'] {
+    color: var(--ink);
+    border-color: var(--cm);
+    box-shadow:
+      0 0 0 2px var(--cm),
+      0 14px 30px -14px var(--cm);
+  }
+}
+
+/* Los logos están hechos para fondo blanco: cada uno va en su ficha de papel. */
+.chip-logo {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 56px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--ahdo-papel);
+
+  img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 44px;
+  }
+}
+
+.avance {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+
+  span {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--ahdo-borde-1);
+    transition: background-color 300ms var(--ease-out);
+  }
+
+  .lleno {
+    background: var(--c, var(--signal));
+  }
+}
+
+.papel {
+  min-height: 3.2em;
+  color: var(--ink-2);
+
+  strong {
+    color: var(--ink);
+  }
+}
+
+/* ---------- Por qué una sola plataforma: banda bajo la entrada ---------- */
+
+.mecanismo-banda {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.mecanismo {
+  display: grid;
+  gap: 12px 48px;
+  padding-block: clamp(32px, 5vw, 56px);
+
+  @media (min-width: 1000px) {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 5fr);
+    align-items: start;
+  }
+}
+
+.mecanismo-titulo {
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+.mecanismo p {
+  color: var(--ink-2);
+  max-width: 52ch;
+}
+
+.mecanismo .solucion {
+  padding-left: 14px;
+  border-left: 2px solid var(--ahdo-lila);
+  color: var(--ink);
+}
+
+.autoria {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.giro {
+  justify-self: start;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--ahdo-borde-3);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ---------- Escritorio ---------- */
+
+@media (min-width: 1000px) {
+  .rejilla {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'texto escenario'
+      'texto marcas';
+    align-items: center;
+    column-gap: clamp(24px, 4vw, 64px);
+    row-gap: 20px;
+  }
+
+  .escenario {
+    align-self: stretch;
+    aspect-ratio: auto;
+    min-height: 420px;
+  }
+
+  .marcas {
+    align-self: end;
+  }
+}
+
+/* Con pantalla suficiente, la entrada mide casi dos pantallas y el certificado queda pegado. */
+@media (min-width: 1000px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
+  .entrada {
+    height: calc(190svh - var(--cabecera));
+  }
+
+  .pegajoso {
+    position: sticky;
+    top: var(--cabecera);
+    height: calc(100svh - var(--cabecera));
+  }
+
+  .rejilla {
+    height: 100%;
+    padding-block: 12px 24px;
+  }
+
+  .pista-toque {
+    display: none;
+  }
+
+  .pista-scroll {
+    display: inline;
+  }
+
+  .resumen {
+    font-size: clamp(1.0625rem, 0.7rem + 0.6vw, 1.25rem);
+  }
+
+  .escenario {
+    min-height: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lienzo,
+  .plano,
+  .chip,
+  .avance span {
+    transition: none;
+  }
+}

@@ -1,0 +1,154 @@
+:host {
+  display: block;
+}
+
+/* ---------- Libro de pagos ---------- */
+
+.libro {
+  display: grid;
+  gap: 12px;
+  margin-top: 6px;
+  padding: 16px;
+  border-radius: 6px;
+  background: var(--ahdo-papel);
+  color: var(--ahdo-papel-tinta);
+  box-shadow: 0 24px 44px -26px rgba(0, 0, 0, 0.9);
+}
+
+.libro-cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ahdo-morado-oscuro);
+
+  h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  span {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.abonos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.abono {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 4px 12px;
+  padding-block: 6px;
+  border-bottom: 1px dashed var(--ahdo-papel-linea);
+}
+
+.abono-fecha {
+  font-size: 0.9375rem;
+}
+
+.abono-valor {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.marca {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ahdo-morado-oscuro);
+}
+
+.abono.anulado {
+  .abono-fecha,
+  .abono-valor {
+    text-decoration: line-through;
+    text-decoration-color: var(--ahdo-morado-oscuro);
+    color: var(--ahdo-papel-tinta-2);
+  }
+}
+
+.abono-boton {
+  min-height: 44px;
+  min-width: 96px;
+  padding: 6px 12px;
+  border: 1px solid var(--ahdo-morado-oscuro);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ahdo-morado-oscuro);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--ahdo-morado-oscuro);
+    color: #ffffff;
+  }
+
+  &:focus-visible {
+    outline-color: var(--ahdo-morado-oscuro);
+  }
+}
+
+.barra {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--ahdo-papel-2);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    background: var(--ahdo-degradado);
+    transform-origin: left;
+    transition: transform 400ms var(--ease-out);
+  }
+}
+
+.resultado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin: 0;
+
+  div {
+    display: grid;
+  }
+
+  dt {
+    font-size: 0.8125rem;
+    color: var(--ahdo-papel-tinta-2);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pagada {
+    color: #006b36;
+  }
+}
+
+.pie {
+  font-size: 0.8125rem;
+  color: var(--ahdo-papel-tinta-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra span {
+    transition: none;
+  }
+}
+

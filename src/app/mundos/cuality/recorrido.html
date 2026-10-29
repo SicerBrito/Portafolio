@@ -1,0 +1,166 @@
+<div class="recorrido" #raiz>
+  <div class="escenario" [class.activo]="activo3d()">
+    <!-- Dibujo propio del sello: se ve sin JavaScript, sin WebGL y mientras carga la escena. -->
+    <svg
+      class="ilustracion"
+      viewBox="0 0 400 400"
+      role="img"
+      aria-label="El árbol de permisos visto desde arriba: al centro el sello de Cuality, alrededor el anillo de la caché y tres anillos con módulos, páginas y botones. Los nodos azules son los que el usuario de ejemplo puede ver."
+    >
+      <circle class="il-anillo" cx="200" cy="200" r="74" />
+      <circle class="il-anillo" cx="200" cy="200" r="118" />
+      <circle class="il-anillo" cx="200" cy="200" r="156" />
+      <circle class="il-borde" cx="200" cy="200" r="184" />
+      @for (n of plano; track n.id) {
+        <line class="il-rama" [class.on]="n.encendido" [attr.x1]="n.px" [attr.y1]="n.py" [attr.x2]="n.x" [attr.y2]="n.y" />
+      }
+      <circle class="il-cache" cx="200" cy="200" r="46" />
+      <circle class="il-sello" cx="200" cy="200" r="34" />
+      <text class="il-centro" x="200" y="205">Cuality</text>
+      @for (n of plano; track n.id) {
+        <circle
+          class="il-nodo"
+          [class.on]="n.encendido"
+          [attr.cx]="n.x"
+          [attr.cy]="n.y"
+          [attr.r]="n.tipo === 'modulo' ? 11 : n.tipo === 'pagina' ? 8 : 6"
+        />
+        @if (n.tipo !== 'boton') {
+          <text class="il-nombre" [attr.x]="n.x" [attr.y]="n.y - (n.tipo === 'modulo' ? 17 : 13)">{{ n.nombre }}</text>
+        }
+      }
+    </svg>
+
+    <canvas #lienzo aria-hidden="true"></canvas>
+
+    <div class="anclas" aria-hidden="true">
+      <span class="ancla fuerte" data-ancla="llavero">El llavero del usuario</span>
+      <span class="ancla fuerte" data-ancla="forja">Política creada al vuelo</span>
+      <span class="ancla fuerte" data-ancla="cache">Caché del usuario</span>
+      @for (n of plano; track n.id) {
+        @if (n.tipo !== 'boton') {
+          <span class="ancla" [attr.data-ancla]="n.id">{{ n.nombre }}</span>
+        }
+      }
+    </div>
+
+    @if (modo() === 'fijado') {
+      <div class="mando">
+        <ng-container [ngTemplateOutlet]="llavero" />
+        <ng-container [ngTemplateOutlet]="resultado" />
+      </div>
+    }
+    @if (modo() === 'pasos') {
+      <!-- En el celular el llavero va sobre la escena, para ver el árbol mientras se tocan las llaves. -->
+      <div class="tira" role="group" aria-label="Llavero del usuario de ejemplo">
+        @for (l of llavesCatalogo; track l.codigo) {
+          <button
+            type="button"
+            class="llave"
+            [class.rol]="delRol.has(l.codigo)"
+            [attr.aria-pressed]="llaves().has(l.codigo)"
+            (click)="alternar(l.codigo)"
+          >
+            <span class="codigo">{{ l.codigo }}</span>
+            <span class="solo-lectores">{{ l.nombre }}</span>
+          </button>
+        }
+      </div>
+    }
+
+    @if (orientacion.giroscopio() === 'pedir' && !reducido()) {
+      <button type="button" class="girar" (click)="activarGiroscopio()">Girar el sello con tu teléfono</button>
+    }
+    <span class="barra" aria-hidden="true"><i #barra></i></span>
+  </div>
+
+  <ol class="pasos">
+    @for (paso of pasos; track paso.titulo; let i = $index; let ultimo = $last) {
+      <li class="paso" [class.activo]="i === pasoActivo()">
+        <span class="paso-numero" aria-hidden="true">{{ i + 1 }}</span>
+        <div class="paso-cuerpo">
+          <h3>{{ paso.titulo }}</h3>
+          <p>{{ paso.texto }}</p>
+          @if (paso.codigo) {
+            <code>{{ paso.codigo }}</code>
+          }
+          @if (ultimo && modo() !== 'fijado') {
+            <div class="mando-paso">
+              @if (modo() === 'pasos') {
+                <div class="llavero-cabeza">
+                  <p class="llavero-titulo">Toca las llaves sobre la escena</p>
+                  <button type="button" class="restablecer" (click)="restablecer()">Restablecer</button>
+                </div>
+              } @else {
+                <ng-container [ngTemplateOutlet]="llavero" />
+              }
+              <ng-container [ngTemplateOutlet]="resultado" />
+            </div>
+          }
+        </div>
+      </li>
+    }
+  </ol>
+
+  @if (modo() === 'reducido') {
+    <div class="controles-pasos">
+      <button type="button" class="btn" (click)="irAPaso(pasoActivo() - 1)" [disabled]="pasoActivo() === 0">
+        Paso anterior
+      </button>
+      <p aria-live="polite">Paso {{ pasoActivo() + 1 }} de {{ pasos.length }}: {{ pasos[pasoActivo()].titulo }}</p>
+      <button
+        type="button"
+        class="btn btn-primario"
+        (click)="irAPaso(pasoActivo() + 1)"
+        [disabled]="pasoActivo() === pasos.length - 1"
+      >
+        Paso siguiente
+      </button>
+    </div>
+  }
+</div>
+
+<ng-template #llavero>
+  <div class="llavero">
+    <div class="llavero-cabeza">
+      <p class="llavero-titulo">Llavero del usuario de ejemplo</p>
+      <button type="button" class="restablecer" (click)="restablecer()">Restablecer</button>
+    </div>
+    <p class="leyenda">
+      <span class="muestra rol"></span> Del rol <span class="muestra directa"></span> Directa o agregada por ti
+    </p>
+    @for (g of grupos; track g) {
+      <div class="grupo" role="group" [attr.aria-label]="'Llaves de ' + g">
+        @for (l of llavesCatalogo; track l.codigo) {
+          @if (l.grupo === g) {
+            <button
+              type="button"
+              class="llave"
+              [class.rol]="delRol.has(l.codigo)"
+              [attr.aria-pressed]="llaves().has(l.codigo)"
+              [attr.title]="l.nombre"
+              (click)="alternar(l.codigo)"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2.2a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6ZM10.8 7h10.2v2.6h-2v2.4h-2.6V9.6h-1.6v1.8h-2.6V9.6h-1.4Z" />
+              </svg>
+              <span class="codigo">{{ l.codigo }}</span>
+              <span class="solo-lectores">{{ l.nombre }}</span>
+            </button>
+          }
+        }
+      </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #resultado>
+  <div class="resultado">
+    <app-cuality-pantalla [llaves]="llaves()" />
+    <ol class="registro" aria-live="polite">
+      @for (linea of registro(); track $index) {
+        <li>{{ linea }}</li>
+      }
+    </ol>
+  </div>
+</ng-template>

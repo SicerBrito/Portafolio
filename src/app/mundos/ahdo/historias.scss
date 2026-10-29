@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.historias {
+  padding-block: clamp(56px, 8vw, 112px);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.wrap {
+  display: grid;
+  gap: 32px;
+}
+
+.titulo {
+  font-weight: 700;
+  font-size: clamp(2.25rem, 1.2rem + 3.2vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.dos {
+  display: grid;
+  gap: 48px;
+
+  @media (min-width: 1000px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 56px;
+  }
+}
+
+.historia {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  min-width: 0;
+
+  h3 {
+    font-weight: 700;
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+}
+
+.problema {
+  color: var(--ink-2);
+}
+
+.solucion {
+  padding-left: 14px;
+  border-left: 2px solid var(--ahdo-lila);
+  color: var(--ink);
+}
+
+.pie {
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+/* Mismo marco que la ilustración, para que nada salte cuando llega. */
+.hueco {
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 440 / 238;
+  border: 1px solid var(--ahdo-borde-1);
+  border-radius: 16px;
+  background: var(--bg);
+}

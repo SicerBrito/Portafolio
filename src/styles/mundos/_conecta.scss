@@ -1,0 +1,70 @@
+/* Conecta (PrometeoConecta): el panel real es CLARO y cálido. El dorado del Grupo
+   Empresarial Prometeo es la identidad y un morado profundo es la tinta.
+
+   Cada color sale del tema del panel de Conecta, salvo donde se indica otra cosa
+   (investigacion/30_proyecto-conecta.md, «identidad_visual»).
+   - Lienzo #f6f3ec, superficies #ffffff y #fbf9f4, bordes #ddd2ba y #ece5d6.
+   - Texto #221c2b y #6e6578. --ink-2 #5b5266 es un tono derivado de #6e6578, más
+     oscuro, para que el texto secundario pase AA también sobre el fondo del chat
+     (#efe6d6). El texto tenue del panel (#8f879a) no se usa: da 3,1:1 sobre el lienzo.
+   - Dorados #dcab2f … #ab7211: la paleta del grupo, que también pinta el logo de
+     Conecta (trazos #c6901a; círculos #dcab2f, #d29d1b y #ab7211) y el de Prometeo.
+   - Texto dorado legible #8a5a0b y texto sobre dorado #2a1a05: sobre dorado el texto
+     va oscuro, el blanco no llega a 4,5:1.
+   - Tinta #241640 y #301f56 (#241640 es también el theme-color del panel) y #b9aed6.
+     #f3d98e: dorado claro sobre tinta, como en el resumen del panel.
+   - Chat de WhatsApp: fondo #efe6d6 con puntos rgba(171,114,17,.12), texto #1f1b24 y
+     enlace #1f7fb5, como la vista previa de envíos del panel. La palomita de «leído»
+     va en dorado y no en azul, como en el panel.
+   - Éxito #0f7a45. Lila reasignado #6f5e9c.
+   - Marcas de las empresas en el formulario público: Ocupasalud #007FB8 y
+     Autoaprender #A5CD39.
+   Contraste AA comprobado: #221c2b/#f6f3ec 14,9:1 · #5b5266/#f6f3ec 6,7:1 ·
+   #6e6578/#f6f3ec 5,0:1 · #8a5a0b/#f6f3ec 5,3:1 · #2a1a05/#dcab2f 7,9:1 ·
+   #dcab2f/#241640 7,8:1 · #b9aed6/#241640 8,0:1. */
+:root[data-mundo='conecta'] {
+  --bg: #f6f3ec;
+  --surface: #ffffff;
+  --surface-2: #fbf9f4;
+  --line: #ddd2ba;
+  --line-soft: #ece5d6;
+  --ink: #221c2b;
+  --ink-2: #5b5266;
+  --ink-3: #6e6578;
+  --signal: #dcab2f;
+  --on-signal: #2a1a05;
+  --signal-text: #8a5a0b;
+  --focus: #8a5a0b;
+
+  /* Dorados del Grupo Prometeo */
+  --conecta-oro-1: #dcab2f;
+  --conecta-oro-2: #d29d1b;
+  --conecta-oro-3: #c6901a;
+  --conecta-oro-4: #cd8c12;
+  --conecta-oro-5: #b77d0f;
+  --conecta-oro-6: #ab7211;
+  --conecta-oro-claro: #f3d98e;
+  --conecta-oro-tenue: rgba(220, 171, 47, 0.16);
+
+  /* La tinta */
+  --conecta-tinta: #241640;
+  --conecta-tinta-2: #301f56;
+  --conecta-tinta-suave: #b9aed6;
+  --conecta-lila: #6f5e9c;
+
+  /* El chat de WhatsApp tal como lo pinta la vista previa del panel */
+  --conecta-chat: #efe6d6;
+  --conecta-chat-punto: rgba(171, 114, 17, 0.12);
+  --conecta-burbuja-texto: #1f1b24;
+  --conecta-enlace: #1f7fb5;
+
+  --conecta-exito: #0f7a45;
+  --conecta-ocupasalud: #007fb8;
+  --conecta-autoaprender: #a5cd39;
+
+  --conecta-sombra: 0 1px 2px rgba(36, 22, 64, 0.05), 0 12px 32px -20px rgba(36, 22, 64, 0.35);
+  --conecta-titulo: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --conecta-texto: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+
+  color-scheme: light;
+}

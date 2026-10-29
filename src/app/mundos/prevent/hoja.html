@@ -1,0 +1,123 @@
+<div class="juego">
+  <div class="archivo" #tabla>
+    <div class="archivo-barra">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 2h9l5 5v15H6z" class="pliego" />
+        <path d="M15 2v5h5" class="doblez" />
+        <path d="M9 11h8M9 14h8M9 17h8M12 11v8" class="rejilla" />
+      </svg>
+      <span class="nombre-archivo">trabajadores-de-ejemplo.xlsx</span>
+      <span class="ficticio">Datos ficticios</span>
+    </div>
+    <div class="tabla-caja" tabindex="0" role="region" aria-label="Hoja de cálculo de ejemplo">
+      <table>
+        <caption class="solo-lectores">
+          Hoja de ejemplo con cinco filas de trabajadores ficticios. Al procesarla, cada fila muestra sus datos
+          normalizados y su resultado.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="solo-lectores">Fila</span></th>
+            <th scope="col">Documento</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Teléfono</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (f of filas(); track f.n) {
+            <tr
+              [attr.data-fila]="f.n"
+              [attr.data-estado]="f.estado"
+              [attr.data-destino]="f.estado === 'lista' ? f.destino : null"
+            >
+              <th scope="row">{{ f.n }}</th>
+              <!-- La fila sin documento se salta antes de normalizar: queda como vino. -->
+              @if ((f.estado === 'normalizada' || f.estado === 'lista') && f.destino !== 'omitida') {
+                <td [class.cambio]="f.documento !== f.limpio.documento">{{ f.limpio.documento || '(vacío)' }}</td>
+                <td [class.cambio]="f.nombres !== f.limpio.nombres">{{ f.limpio.nombres }}</td>
+                <td [class.cambio]="f.apellidos !== f.limpio.apellidos">{{ f.limpio.apellidos }}</td>
+                <td [class.cambio]="f.telefono !== f.limpio.telefono">{{ f.limpio.telefono }}</td>
+              } @else {
+                <td>{{ f.documento || '(vacío)' }}</td>
+                <td>{{ f.nombres }}</td>
+                <td>{{ f.apellidos }}</td>
+                <td>{{ f.telefono }}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="acciones">
+    <button type="button" class="btn btn-primario" (click)="procesar()" [disabled]="procesando() || terminado()">
+      Procesar la hoja
+    </button>
+    <button type="button" class="btn" (click)="reiniciar()" [disabled]="!terminado() && !procesando()">
+      Volver a empezar
+    </button>
+  </div>
+
+  <div class="solicitud" #panel>
+    <div class="solicitud-cabeza">
+      <h3>Solicitud de ejemplo</h3>
+      <p class="contador">
+        <b>{{ tarjetas().length }}</b> trabajadores · <b>{{ matriculas() }}</b> matrículas
+      </p>
+    </div>
+    <ul class="servicios" aria-label="Cursos de la solicitud">
+      @for (s of servicios; track s.nombre) {
+        <li>{{ s.nombre }}</li>
+      }
+    </ul>
+    <ul class="tarjetas">
+      @for (t of tarjetas(); track t.documento) {
+        <li class="tarjeta" [attr.data-documento]="t.documento">
+          <button
+            type="button"
+            (click)="alternar(t.documento)"
+            [attr.aria-expanded]="abierta() === t.documento"
+            [attr.aria-controls]="'docs-' + t.documento"
+          >
+            <svg class="casco" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 16a8 8 0 0 1 16 0v1H4z" />
+              <path d="M2 17h20v2H2z" />
+              <path d="M11 6h2v5h-2z" class="cresta" />
+            </svg>
+            <span class="quien">
+              <b>{{ t.nombre }}</b>
+              <small>C.C. {{ t.documento }}</small>
+            </span>
+            <span class="origen" [attr.data-origen]="t.origen">{{ t.origen === 'nuevo' ? 'Nuevo' : 'Ya existía' }}</span>
+          </button>
+          @if (abierta() === t.documento) {
+            <div class="docs" [id]="'docs-' + t.documento">
+              @for (s of servicios; track s.nombre) {
+                <div class="docs-curso">
+                  <p>
+                    {{ s.nombre }} <span>0 de {{ s.documentos.length }} cargados</span>
+                  </p>
+                  <ul>
+                    @for (d of s.documentos; track d) {
+                      <li>{{ d }}</li>
+                    }
+                  </ul>
+                </div>
+              }
+            </div>
+          }
+        </li>
+      } @empty {
+        <li class="vacio">Aquí caen los trabajadores inscritos.</li>
+      }
+    </ul>
+  </div>
+
+  <ol class="registro" aria-live="polite">
+    @for (linea of registro(); track $index) {
+      <li>{{ linea }}</li>
+    }
+  </ol>
+</div>

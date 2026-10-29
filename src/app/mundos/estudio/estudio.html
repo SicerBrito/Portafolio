@@ -1,0 +1,294 @@
+<article class="estudio">
+  <!-- ======================= e01 · Entrada ======================= -->
+  <header class="entrada" id="e01" tabindex="-1">
+    <div class="wrap entrada-rejilla">
+      <div class="entrada-texto">
+        <a class="volver" routerLink="/" fragment="proyectos">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
+          Volver a la planta
+        </a>
+
+        <p class="antetitulo">{{ p.nombre }} · {{ p.nombreLegal }}</p>
+        <h1>
+          <span class="solo-lectores">{{ p.nombre }}: </span>Un video que es una página.
+        </h1>
+        <p class="bajada">{{ bajada }}</p>
+
+        <div class="para">
+          <img
+            class="logo-ahdo"
+            ngSrc="/marcas/estudio/logo-ahdo-blanco.webp"
+            width="720"
+            height="128"
+            alt="AHDO"
+            priority
+          />
+          <p>Motor de video para la plataforma de cursos AHDO · {{ p.periodo }}</p>
+        </div>
+        <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+      </div>
+
+      <button
+        type="button"
+        class="claqueta"
+        [class.golpe-a]="golpe() % 2 === 1"
+        [class.golpe-b]="golpe() > 0 && golpe() % 2 === 0"
+        [attr.aria-label]="'Toca la claqueta: va en la toma ' + toma() + ', marca la siguiente'"
+        (click)="marcar()"
+      >
+        <svg viewBox="0 0 400 330" aria-hidden="true">
+          <defs>
+            <pattern
+              id="estudio-rayas"
+              width="44"
+              height="44"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(-38)"
+            >
+              <rect width="44" height="44" class="raya-oscura" />
+              <rect width="22" height="44" class="raya-clara" />
+            </pattern>
+          </defs>
+          <g class="brazo">
+            <rect x="16" y="58" width="368" height="34" rx="4" fill="url(#estudio-rayas)" />
+            <circle cx="30" cy="92" r="7" class="bisagra" />
+          </g>
+          <rect x="16" y="96" width="368" height="32" rx="3" fill="url(#estudio-rayas)" />
+          <rect x="16" y="134" width="368" height="182" rx="8" class="tablero" />
+          <g class="tiza">
+            <line x1="28" y1="180" x2="372" y2="180" />
+            <line x1="28" y1="226" x2="372" y2="226" />
+            <line x1="28" y1="272" x2="372" y2="272" />
+            <line x1="200" y1="180" x2="200" y2="316" />
+          </g>
+          <text x="32" y="153" class="campo">PRODUCCIÓN</text>
+          <text x="32" y="172" class="valor">Estudio de Video</text>
+          <text x="32" y="199" class="campo">ESCENA</text>
+          <text x="32" y="218" class="valor mono">e01</text>
+          <text x="214" y="199" class="campo">TOMA</text>
+          <text x="214" y="218" class="valor mono">{{ toma() }}</text>
+          <text x="32" y="245" class="campo">ROLLO</text>
+          <text x="32" y="264" class="valor">Prototipo</text>
+          <text x="214" y="245" class="campo">FORMATO</text>
+          <text x="214" y="264" class="valor mono">1280×720 · 30</text>
+          <text x="32" y="291" class="campo">DIRECCIÓN</text>
+          <text x="32" y="309" class="valor">Sicer Brito</text>
+          <text x="214" y="291" class="campo">FECHA</text>
+          <text x="214" y="309" class="valor">{{ p.periodo }}</text>
+        </svg>
+        <span class="claqueta-pista">Toca la claqueta</span>
+      </button>
+    </div>
+
+    <div class="wrap sinopsis">
+      <h2 class="sinopsis-titulo">Sinopsis</h2>
+      <dl>
+        @for (s of sinopsis; track s.titulo) {
+          <div>
+            <dt>{{ s.titulo }}</dt>
+            <dd>{{ s.texto }}</dd>
+          </div>
+        }
+      </dl>
+    </div>
+  </header>
+
+  <!-- ======================= e02 · Arrastra el tiempo ======================= -->
+  <section class="seccion" id="e02" tabindex="-1" aria-labelledby="e02-titulo">
+    <div class="wrap cabeza">
+      <h2 id="e02-titulo"><span class="id" aria-hidden="true">e02</span>Arrastra el tiempo</h2>
+      <p class="entradilla">
+        Esta es la escena de prueba del motor, reconstruida aquí con sus mismas medidas y sus mismas
+        curvas. No es una grabación: tú eliges el fotograma y la escena se calcula. Si subes de
+        golpe, aparece el mismo fotograma exacto, sin transición.
+      </p>
+    </div>
+    <app-estudio-tiempo />
+  </section>
+
+  <!-- ======================= e03 · La tira de película (3D) ======================= -->
+  <section class="seccion" id="e03" tabindex="-1" aria-labelledby="e03-titulo">
+    <div class="wrap cabeza">
+      <h2 id="e03-titulo"><span class="id" aria-hidden="true">e03</span>La tira de película</h2>
+      <p class="entradilla">
+        Así saldrá un video del motor, de punta a punta. Lo que ya funciona en la prueba de
+        concepto va sólido; lo diseñado y todavía sin construir va en trazo de plano, punteado.
+      </p>
+      <ul class="leyenda" aria-label="Cómo leer la escena">
+        <li><i class="solido" aria-hidden="true"></i>Funciona en la prueba de concepto</li>
+        <li><i class="punteado" aria-hidden="true"></i>Diseñado, sin construir</li>
+      </ul>
+    </div>
+    <app-estudio-tira />
+  </section>
+
+  <!-- ======================= e04 · El guion manda ======================= -->
+  <section class="seccion" id="e04" tabindex="-1" aria-labelledby="e04-titulo">
+    <div class="wrap">
+      <h2 id="e04-titulo"><span class="id" aria-hidden="true">e04</span>El guion manda</h2>
+      <div class="entradilla">
+        <p>
+          En este motor el video no es el archivo: es el guion. El MP4 se deriva de él, como un
+          programa se compila. El plan es que, para corregir una frase, se edite el guion y se
+          vuelva a renderizar solo la escena que cambió.
+        </p>
+        <p>
+          Hay dos clases de cambio. «Este video tiene un error» se arregla en el guion y toca un
+          video. «Así se ve mal siempre» se arregla en la plantilla y toca todos.
+        </p>
+        <p>
+          Esta parte es arquitectura diseñada, todavía sin construir: la caché por escena no
+          existe aún. La demostración de abajo simula el plan en el navegador, con un guion de
+          datos ficticios.
+        </p>
+      </div>
+      @defer (on viewport) {
+        <app-estudio-guion />
+      } @placeholder {
+        <p class="reserva">El guion de ejemplo, con datos ficticios, se carga al llegar aquí.</p>
+      }
+    </div>
+  </section>
+
+  <!-- ======================= e05 · Tomas falsas ======================= -->
+  <section class="seccion" id="e05" tabindex="-1" aria-labelledby="e05-titulo">
+    <div class="wrap">
+      <h2 id="e05-titulo"><span class="id" aria-hidden="true">e05</span>Tomas falsas</h2>
+      <p class="entradilla">
+        Dos fallas silenciosas de este tipo de motor: el video sale mal y ningún error lo avisa.
+        Aquí se recrean en simulación, y se cuenta cómo el motor las evita con reglas y con una
+        prueba.
+      </p>
+      <app-estudio-tomas />
+    </div>
+  </section>
+
+  <!-- ======================= e06 · Créditos ======================= -->
+  <section class="seccion creditos" id="e06" tabindex="-1" aria-labelledby="e06-titulo">
+    <div class="wrap">
+      <h2 id="e06-titulo"><span class="id" aria-hidden="true">e06</span>Créditos</h2>
+      <p class="entradilla">Quién hizo qué, como al final de una película.</p>
+
+      <div class="rodillo">
+        <p class="obra">
+          {{ p.nombre }}
+          <span>{{ p.nombreLegal }}, para AHDO</span>
+        </p>
+        <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+
+        <dl class="roles">
+          <div>
+            <dt>Idea y arquitectura</dt>
+            <dd>Sicer Brito</dd>
+          </div>
+          <div>
+            <dt>Plan técnico</dt>
+            <dd>Sicer Brito</dd>
+          </div>
+          <div>
+            <dt>Motor de render y plantilla Angular</dt>
+            <dd>Sicer Brito</dd>
+          </div>
+          <div>
+            <dt>Lectura de PDF y presentaciones</dt>
+            <dd>Sicer Brito</dd>
+          </div>
+        </dl>
+
+        <p class="git">
+          <strong>{{ p.git.resumen }}.</strong> {{ p.git.nota }}
+        </p>
+        <p class="papel">{{ p.papel }}</p>
+
+        <h3>Reparto</h3>
+        <ul class="reparto">
+          @for (r of reparto; track r.nombre) {
+            <li>
+              @if (r.icono; as icono) {
+                <span class="ficha" [style.background-color]="icono.hex" aria-hidden="true">
+                  <img [ngSrc]="icono.archivo" width="24" height="24" alt="" />
+                </span>
+              } @else {
+                <span class="ficha sin-icono" aria-hidden="true">{{ r.nombre.slice(0, 2) }}</span>
+              }
+              <span class="reparto-nombre">{{ r.nombre }}</span>
+              <span class="reparto-papel">{{ r.papel }}</span>
+            </li>
+          }
+        </ul>
+
+        <h3>Ficha técnica</h3>
+        <dl class="cifras">
+          @for (c of p.cifras; track c.etiqueta) {
+            <div>
+              <dt>{{ c.etiqueta }}</dt>
+              <dd>
+                <span class="cifra">{{ c.valor }}</span>
+                <span class="fuente">{{ c.fuente }}</span>
+              </dd>
+            </div>
+          }
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= e07 · Escenas sin rodar ======================= -->
+  <section class="seccion sin-rodar" id="e07" tabindex="-1" aria-labelledby="e07-titulo">
+    <div class="wrap">
+      <h2 id="e07-titulo"><span class="id" aria-hidden="true">e07</span>Escenas sin rodar</h2>
+      <p class="entradilla">
+        {{ p.falta }} Tampoco hay usuarios ni videos publicados: es una prueba de concepto.
+      </p>
+
+      <ol class="guion-grafico">
+        @for (s of sinRodar; track s.id) {
+          <li class="panel">
+            <div class="boceto" aria-hidden="true">
+              <img
+                [ngSrc]="'/marcas/estudio/boceto-' + s.id + '.svg'"
+                width="160"
+                height="90"
+                alt=""
+              />
+              <span class="sin-rodar-sello">Sin rodar</span>
+            </div>
+            <h3>{{ s.titulo }}</h3>
+            <p>{{ s.texto }}</p>
+          </li>
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ======================= e08 · Próximo rollo ======================= -->
+  <nav class="seccion proximo" id="e08" tabindex="-1" aria-labelledby="e08-titulo">
+    <div class="wrap">
+      <h2 id="e08-titulo" class="solo-lectores">Siguiente proyecto</h2>
+      <a class="rollo" [routerLink]="['/proyectos', siguiente.id]">
+        <span class="cuenta" aria-hidden="true">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" class="anillo" />
+            <circle cx="50" cy="50" r="34" class="anillo fino" />
+            <line x1="50" y1="2" x2="50" y2="98" />
+            <line x1="2" y1="50" x2="98" y2="50" />
+            <path class="barrido" d="M50 50 L50 6 A44 44 0 0 1 94 50 Z" />
+            <text x="50" y="62">3</text>
+          </svg>
+        </span>
+        <span class="rollo-texto">
+          <span class="rollo-etiqueta">Próximo rollo</span>
+          <span class="rollo-nombre">{{ siguiente.nombre }}</span>
+          <span class="rollo-resumen">{{ siguienteResumen }}</span>
+        </span>
+        <svg class="flecha" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+    </div>
+  </nav>
+
+  @defer (on idle) {
+    <app-estudio-inspector [escenas]="escenas" />
+  }
+</article>

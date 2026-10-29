@@ -1,0 +1,485 @@
+:host {
+  display: block;
+}
+
+.pago {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(70% 50% at 70% 60%, rgba(48, 31, 86, 0.75), transparent 75%),
+    var(--bg);
+}
+
+/* ---------- Base: celular sin animación, o antes de cargar ---------- */
+
+.pin {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding: clamp(48px, 7vw, 96px) max(16px, env(safe-area-inset-right, 0px)) clamp(48px, 7vw, 96px)
+    max(16px, env(safe-area-inset-left, 0px));
+}
+
+.cabeza {
+  display: grid;
+  gap: 12px;
+  max-width: 54ch;
+}
+
+.aviso {
+  justify-self: start;
+  padding: 4px 12px;
+  border: 1px dashed var(--ahdo-borde-3);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+}
+
+.titulo {
+  font-weight: 700;
+  font-size: clamp(2.25rem, 1.2rem + 3.2vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.intro {
+  color: var(--ink-2);
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+}
+
+/* Con aspect-ratio, un hijo de grid no se estira: el ancho salía de min-height × 1,68
+   (403 px) y en un celular de 375 se salía por la derecha. El ancho va explícito. */
+.caja {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.68;
+  min-width: 0;
+  min-height: 240px;
+  border: 1px solid var(--ahdo-borde-1);
+  border-radius: 16px;
+  background: radial-gradient(circle at 50% 45%, var(--surface-2), var(--surface) 70%);
+  overflow: hidden;
+}
+
+.lienzo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.plano {
+  position: absolute;
+  inset: 6%;
+  width: 88%;
+  height: 88%;
+
+  path {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 3;
+    vector-effect: non-scaling-stroke;
+  }
+}
+
+.con-3d .plano {
+  display: none;
+}
+
+/* ---------- Etiquetas de los módulos ---------- */
+
+.etiquetas {
+  position: absolute;
+  inset: 6%;
+  pointer-events: none;
+}
+
+.con-3d .etiquetas {
+  inset: 0;
+}
+
+.etiqueta {
+  position: absolute;
+  left: var(--px);
+  top: var(--pz);
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  max-width: 220px;
+  padding: 4px 9px 4px 7px;
+  border: 1px solid var(--ahdo-borde-2);
+  border-left: 3px solid var(--tipo, var(--ahdo-azul));
+  border-radius: 8px;
+  background: rgba(20, 13, 38, 0.86);
+  color: var(--ink-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  /* 0,8 y no menos: atenuada, la etiqueta sigue sobre 4,5:1 aunque quede encima de una nave. */
+  opacity: 0.8;
+  transition:
+    opacity 240ms var(--ease-out),
+    color 240ms var(--ease-out),
+    border-color 240ms var(--ease-out);
+
+  svg {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    fill: var(--tipo, var(--ahdo-azul-texto));
+  }
+
+  &.activa {
+    opacity: 1;
+    color: var(--ink);
+    border-color: var(--tipo);
+    box-shadow: 0 8px 22px -10px var(--tipo);
+  }
+}
+
+.con-3d .etiqueta {
+  left: 0;
+  top: 0;
+  visibility: hidden;
+}
+
+.etiqueta[data-tipo='cliente'] {
+  --tipo: var(--ahdo-lila);
+}
+
+.etiqueta[data-tipo='sistema'] {
+  --tipo: var(--ahdo-morado);
+
+  svg {
+    fill: var(--signal-text);
+  }
+}
+
+.etiqueta[data-tipo='externo'] {
+  --tipo: var(--ahdo-azul);
+
+  svg {
+    fill: var(--ahdo-azul-texto);
+  }
+}
+
+.largo {
+  display: none;
+}
+
+.nota {
+  flex-basis: 100%;
+  white-space: normal;
+  color: var(--ahdo-verde-texto);
+  font-weight: 700;
+}
+
+@media (min-width: 720px) {
+  .largo {
+    display: inline;
+  }
+
+  .corto {
+    display: none;
+  }
+}
+
+/* ---------- Los siete pasos ---------- */
+
+.recorrido {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.riel {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--ahdo-borde-1);
+  overflow: hidden;
+  display: none;
+
+  span {
+    display: block;
+    height: 100%;
+    background: var(--ahdo-degradado-luz);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+}
+
+.pasos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--ahdo-borde-2);
+}
+
+.paso {
+  border-bottom: 1px solid var(--ahdo-borde-1);
+}
+
+.paso-boton {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 0 6px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.paso-num {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--ahdo-borde-3);
+  border-radius: 50%;
+  font-size: 0.875rem;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color 240ms var(--ease-out),
+    color 240ms var(--ease-out);
+}
+
+.paso.activo .paso-num {
+  background: var(--ahdo-lila);
+  border-color: var(--ahdo-lila);
+  color: var(--on-signal);
+}
+
+.paso-cuerpo {
+  display: grid;
+  grid-template-rows: 1fr;
+
+  > div {
+    overflow: hidden;
+    padding-left: 48px;
+  }
+
+  p {
+    color: var(--ink-2);
+    max-width: 48ch;
+  }
+}
+
+.tec {
+  display: inline-block;
+  margin: 8px 0 14px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--ahdo-borde-1);
+  color: var(--signal-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.control {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--ahdo-borde-3);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+.contador {
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sin animación en pantalla ancha: dos columnas y la maqueta acompaña con CSS. */
+@media (min-width: 1000px) {
+  .pin {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas:
+      'cabeza caja'
+      'recorrido caja';
+    align-items: start;
+    column-gap: 48px;
+  }
+
+  .cabeza {
+    grid-area: cabeza;
+  }
+
+  .recorrido {
+    grid-area: recorrido;
+  }
+
+  .caja {
+    grid-area: caja;
+    position: sticky;
+    top: calc(var(--cabecera) + 24px);
+  }
+}
+
+/* ---------- Escritorio con animación: fijado, el scroll decide el paso ---------- */
+
+.con-pin {
+  .pin {
+    position: relative;
+    height: calc(100svh - var(--cabecera));
+    max-width: none;
+    padding: 0;
+    grid-template-columns: max(16px, calc((100vw - var(--wrap)) / 2 + 16px)) min(40vw, 500px) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas:
+      '. cabeza .'
+      '. recorrido .';
+    column-gap: 0;
+    align-content: center;
+  }
+
+  .caja {
+    grid-area: 1 / 1 / -1 / -1;
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  /* Velo para que el texto se lea sobre la maqueta. */
+  .pin::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: min(62vw, 980px);
+    z-index: 1;
+    background: linear-gradient(90deg, var(--bg) 48%, transparent);
+    pointer-events: none;
+  }
+
+  .cabeza,
+  .recorrido {
+    position: relative;
+    z-index: 2;
+  }
+
+  .cabeza {
+    gap: 8px;
+    padding-top: 20px;
+  }
+
+  .titulo {
+    font-size: clamp(2rem, 1rem + 2.4vw, 3.25rem);
+  }
+
+  .intro {
+    font-size: 1rem;
+  }
+
+  .recorrido {
+    align-self: start;
+    padding-top: 16px;
+  }
+
+  .riel {
+    display: block;
+  }
+
+  .paso-boton {
+    min-height: 44px;
+    padding-block: 7px;
+    font-size: 0.9375rem;
+  }
+
+  .paso:not(.activo) .paso-titulo {
+    color: var(--ink-2);
+  }
+
+  /* Los pasos inactivos muestran solo el título; el texto sigue en el documento. */
+  .paso-cuerpo {
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 360ms var(--ease-out);
+  }
+
+  .paso.activo .paso-cuerpo {
+    grid-template-rows: 1fr;
+  }
+}
+
+/* ---------- Celular con animación: la maqueta queda arriba y los pasos pasan debajo ---------- */
+
+.con-pila {
+  .pin {
+    display: block;
+    padding-bottom: 24px;
+  }
+
+  .cabeza {
+    margin-bottom: 20px;
+  }
+
+  .caja {
+    position: sticky;
+    top: var(--cabecera);
+    z-index: 2;
+    height: min(46svh, 420px);
+    aspect-ratio: auto;
+    border-radius: 0 0 16px 16px;
+    /* Llega al borde de la pantalla: cada lado cancela su propio relleno (con muesca, no son iguales). */
+    margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+    margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+    box-shadow: 0 18px 30px -18px var(--bg);
+  }
+
+  .paso {
+    min-height: 52svh;
+    display: grid;
+    align-content: center;
+    /* Atenuado, pero el texto gris sigue sobre 4,5:1 (con 0,55 bajaba a 3,6:1). */
+    opacity: 0.8;
+    transition: opacity 240ms var(--ease-out);
+  }
+
+  .paso.activo {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .etiqueta,
+  .paso-num,
+  .paso-cuerpo,
+  .paso {
+    transition: none !important;
+  }
+}

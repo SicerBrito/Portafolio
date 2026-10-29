@@ -1,0 +1,63 @@
+<figure class="mapa">
+  <div class="escenario" #escenario [class.activo]="activo()">
+    <canvas #lienzo aria-hidden="true"></canvas>
+    <span class="label modo-sala" aria-hidden="true">Modo sala de control</span>
+
+    <ul class="etiquetas" aria-label="Sistemas del ecosistema">
+      @for (p of proyectos; track p.id) {
+        <li [attr.data-id]="p.id" [class.encendida]="pasando() === p.id">
+          <a
+            [routerLink]="['/proyectos', p.id]"
+            (mouseenter)="pasar(p.id)"
+            (mouseleave)="pasar(null)"
+            (focus)="pasar(p.id)"
+            (blur)="pasar(null)"
+            (click)="elegir($event, p.id)"
+          >
+            <span class="muestra" [style.background]="p.color"></span>{{ p.nombre }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    @if (proyectoActivo(); as p) {
+      <div class="ficha" aria-hidden="true">
+        <span class="label">{{ p.para }}</span>
+        <strong>{{ p.nombre }}</strong>
+        <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+      </div>
+    }
+  </div>
+
+  <figcaption class="leyenda">
+    <div class="grupo">
+      <span class="label titulo-leyenda">Autoría</span>
+      <span class="item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="13" class="solido" /></svg>
+        Lo construí o soy su desarrollador principal
+      </span>
+      <span class="item">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="13" width="16" height="6" class="solido" />
+          <rect x="4" y="6" width="16" height="7" class="alambre" />
+        </svg>
+        Fundé la base o tomé el relevo
+      </span>
+      <span class="item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="13" class="alambre" /></svg>
+        Participé o lo llevé a producción
+      </span>
+    </div>
+    <div class="grupo">
+      <span class="label titulo-leyenda">Estado</span>
+      <span class="item"><span class="baliza"></span>En producción</span>
+      <span class="item"><span class="baliza plano"></span>Prototipo</span>
+      <span class="item"><span class="baliza apagada"></span>No productivo</span>
+      <span class="item"><span class="conducto"></span>Integración activa</span>
+      <span class="item"><span class="conducto planeado"></span>Piloto o por conectar</span>
+    </div>
+    @if (orientacion.giroscopio() === 'pedir') {
+      <button class="btn" type="button" (click)="orientacion.activar()">Inclinar con el celular</button>
+    }
+  </figcaption>
+</figure>

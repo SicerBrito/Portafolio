@@ -1,0 +1,705 @@
+:host {
+  display: block;
+  font-family: var(--ocupasalud-fuente);
+}
+
+.juego {
+  display: grid;
+  gap: 16px;
+}
+
+/* ---------- La máquina ---------- */
+
+.maquina {
+  position: relative;
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  grid-template-areas:
+    'bandeja lector'
+    'cable cable'
+    'hoja hoja';
+  gap: 14px;
+  padding: 16px;
+  border: 2px solid var(--ocupasalud-marino);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: var(--ocupasalud-sombra);
+
+  @media (min-width: 900px) {
+    grid-template-columns: 110px minmax(200px, 1fr) 110px minmax(0, 1.5fr);
+    grid-template-areas: 'bandeja lector cable hoja';
+    align-items: center;
+    padding: 22px;
+  }
+}
+
+/* La banda transportadora corre bajo la bandeja y el lector. */
+.bandeja,
+.lector {
+  position: relative;
+}
+
+.bandeja {
+  grid-area: bandeja;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 8px;
+}
+
+.pila {
+  position: relative;
+  width: 64px;
+  height: 84px;
+}
+
+.hoja-pila {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  background:
+    linear-gradient(var(--ocupasalud-rojo), var(--ocupasalud-rojo)) 0 0 / 100% 14px no-repeat,
+    #ffffff;
+  transform: translate(calc(var(--i) * 3px), calc(var(--i) * -4px)) rotate(calc(var(--i) * -2deg));
+  box-shadow: 0 2px 4px rgba(19, 59, 92, 0.12);
+}
+
+.bandeja-texto {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+
+  b {
+    font-family: var(--font-mono);
+    color: var(--ink);
+  }
+}
+
+.lector {
+  grid-area: lector;
+  display: grid;
+  gap: 8px;
+}
+
+.lector-ventana {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 8px;
+  min-height: 190px;
+  overflow: hidden;
+  border-radius: 12px;
+  background:
+    repeating-linear-gradient(90deg, rgba(19, 59, 92, 0.16) 0 10px, transparent 10px 22px) bottom / 100% 12px repeat-x,
+    var(--surface-2);
+}
+
+.leyendo:not(.reducido) .lector-ventana {
+  animation: banda 900ms linear infinite;
+}
+
+@keyframes banda {
+  to {
+    background-position:
+      22px 100%,
+      0 0;
+  }
+}
+
+.pdf {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  width: 112px;
+  height: 140px;
+  padding: 0 12px 12px;
+  border-radius: 4px;
+  background: #ffffff;
+  box-shadow: 0 6px 16px -6px rgba(19, 59, 92, 0.45);
+
+  i {
+    display: block;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--line);
+  }
+  .corta {
+    width: 60%;
+  }
+}
+
+.pdf-banda {
+  margin: 0 -12px 4px;
+  padding: 3px 8px;
+  border-radius: 4px 4px 0 0;
+  background: var(--ocupasalud-rojo);
+  color: #ffffff;
+  font: 600 0.6875rem var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+.pdf-titulo {
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* El haz de la IA: una franja azul y verde que barre la hoja. */
+.haz {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 18%;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--ocupasalud-azul) 20%, var(--ocupasalud-verde) 80%, transparent);
+  box-shadow:
+    0 0 14px 4px rgba(0, 119, 189, 0.35),
+    0 0 40px 10px rgba(81, 168, 177, 0.25);
+  opacity: 0;
+}
+
+.leyendo .haz {
+  opacity: 1;
+}
+
+.leyendo:not(.reducido) .haz {
+  animation: barrer 1.1s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes barrer {
+  from {
+    top: 16%;
+  }
+  to {
+    top: 72%;
+  }
+}
+
+.lector-estado {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.lector-vacio {
+  width: 48px;
+  height: 48px;
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.lector-marca,
+.hoja-marca,
+.tablero-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--ink-2);
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+  }
+}
+
+/* ---------- El cable ---------- */
+
+.cable {
+  grid-area: cable;
+  position: relative;
+  height: 44px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  path {
+    fill: none;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .cable-izq,
+  .cable-der,
+  .cable-union {
+    stroke: var(--ocupasalud-marino);
+    stroke-width: 5;
+    transition: transform 300ms var(--ease-out);
+  }
+  /* El empalme: con el cable entero, las dos mitades se ven unidas. */
+  .cable-union {
+    transition: opacity 200ms var(--ease-out);
+  }
+  .cable-flujo {
+    stroke: var(--ocupasalud-claro);
+    stroke-width: 2;
+    stroke-dasharray: 6 8;
+    opacity: 0;
+  }
+  .chispa {
+    fill: var(--ocupasalud-rojo);
+    stroke: none;
+    opacity: 0;
+    transform-origin: 62px 18px;
+    transition: opacity 200ms var(--ease-out);
+  }
+}
+
+.enviando:not(.cortado) .cable-flujo {
+  opacity: 1;
+}
+
+.enviando:not(.cortado):not(.reducido) .cable-flujo {
+  animation: fluir 600ms linear infinite;
+}
+
+@keyframes fluir {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.cortado .cable {
+  .cable-union {
+    opacity: 0;
+  }
+  .cable-izq {
+    transform: translate(-4px, -3px);
+    stroke: var(--ocupasalud-rojo);
+  }
+  .cable-der {
+    transform: translate(4px, 3px);
+    stroke: var(--ocupasalud-rojo);
+  }
+  .chispa {
+    opacity: 1;
+  }
+}
+
+.cortado:not(.reducido) .chispa {
+  animation: chispa 700ms steps(2) infinite;
+}
+
+@keyframes chispa {
+  50% {
+    transform: scale(0.7) rotate(20deg);
+  }
+}
+
+/* Las fichas con los campos del examen viajan por el cable. */
+.ficha {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 18px;
+  height: 12px;
+  margin-top: -6px;
+  border-radius: 3px;
+  background: var(--ocupasalud-azul);
+  opacity: 0;
+
+  &.f2 {
+    background: var(--ocupasalud-verde);
+  }
+}
+
+.enviando:not(.reducido) .ficha {
+  animation: viajar 900ms var(--ease-in-out) infinite;
+
+  &.f2 {
+    animation-delay: 150ms;
+  }
+  &.f3 {
+    animation-delay: 300ms;
+  }
+}
+
+.enviando.cortado:not(.reducido) .ficha {
+  animation-name: chocar;
+  background: var(--ocupasalud-rojo);
+}
+
+@keyframes viajar {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 18px);
+    opacity: 0;
+  }
+}
+
+@keyframes chocar {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(45% - 18px);
+    opacity: 0;
+  }
+}
+
+/* ---------- La hoja ---------- */
+
+.hoja {
+  grid-area: hoja;
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.hoja-cuenta {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.tabla-caja {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+th,
+td {
+  padding: 7px 9px;
+  border-right: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  text-align: left;
+  vertical-align: top;
+
+  &:last-child {
+    border-right: 0;
+  }
+}
+
+th {
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+td {
+  color: var(--ink);
+}
+
+td:last-child {
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:last-child:not(:only-child) td,
+tbody tr:only-child td:not(.vacia) {
+  background: rgba(81, 168, 177, 0.12);
+}
+
+.vacia {
+  color: var(--ink-3);
+  font-family: var(--ocupasalud-fuente) !important;
+  white-space: normal !important;
+}
+
+/* En el celular la hoja cabe completa: celdas más apretadas y la fecha un punto más chica. */
+@media (max-width: 480px) {
+  table {
+    font-size: 0.75rem;
+  }
+  th,
+  td {
+    padding: 6px;
+  }
+  td:last-child {
+    font-size: 0.6875rem;
+  }
+}
+
+/* ---------- El tablero de trabajos ---------- */
+
+.tablero {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--ocupasalud-noche);
+  color: #ffffff;
+}
+
+.tablero-cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.tablero-titulo {
+  color: #ffffff;
+  font-family: var(--ocupasalud-fuente-titulo);
+  font-size: 1rem;
+
+  svg {
+    fill: var(--ocupasalud-claro);
+  }
+}
+
+.reloj {
+  color: var(--ocupasalud-claro);
+  font-size: 0.875rem;
+
+  b {
+    margin-left: 6px;
+    color: #ffffff;
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+}
+
+.corte {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--ocupasalud-rojo-claro);
+  color: var(--ocupasalud-rojo-claro);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.esperas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--ocupasalud-noche-linea);
+    color: var(--ocupasalud-claro);
+    font-size: 0.8125rem;
+  }
+  b {
+    color: #ffffff;
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+}
+
+.trabajos {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trabajo {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--ocupasalud-noche-2);
+  font-size: 0.875rem;
+
+  &.vacio {
+    display: block;
+    color: var(--ocupasalud-claro);
+  }
+}
+
+.trabajo-id {
+  font-family: var(--font-mono);
+  color: var(--ocupasalud-claro);
+}
+
+.trabajo-examen {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trabajo-estado {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: right;
+  color: var(--ocupasalud-claro);
+}
+
+.estado-leyendo .trabajo-estado,
+.estado-enviando .trabajo-estado {
+  background: var(--ocupasalud-azul);
+  color: #ffffff;
+}
+
+.estado-espera .trabajo-estado,
+.estado-agotado .trabajo-estado {
+  border: 1px solid var(--ocupasalud-rojo-claro);
+  color: var(--ocupasalud-rojo-claro);
+}
+
+.estado-listo .trabajo-estado {
+  color: var(--ocupasalud-verde-claro);
+}
+
+/* En el celular el estado baja a su propia línea: en la misma, "Reintento 3 en 5 h 30 min" se
+   comía el nombre del examen. */
+@media (max-width: 480px) {
+  .trabajo {
+    grid-template-columns: 40px minmax(0, 1fr);
+    row-gap: 4px;
+  }
+  .trabajo-estado {
+    grid-column: 2;
+    justify-self: start;
+    text-align: left;
+  }
+}
+
+/* ---------- Los mandos ---------- */
+
+.mandos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 2px solid var(--ocupasalud-azul);
+  border-radius: 10px;
+  background: var(--ocupasalud-azul);
+  color: #ffffff;
+  font: 600 0.9375rem var(--ocupasalud-fuente-titulo);
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ease-out),
+    color 160ms var(--ease-out),
+    transform 120ms var(--ease-out);
+
+  &:hover {
+    background: var(--ocupasalud-titulo);
+    border-color: var(--ocupasalud-titulo);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+}
+
+/* Cortar el cable usa el rojo de los llamados del sitio de la IPS. */
+.boton-cable {
+  border-color: var(--ocupasalud-rojo);
+  background: #ffffff;
+  color: var(--ocupasalud-rojo);
+
+  &:hover,
+  &[aria-pressed='true'] {
+    background: var(--ocupasalud-rojo);
+    border-color: var(--ocupasalud-rojo);
+    color: #ffffff;
+  }
+}
+
+.boton-suave {
+  border-color: var(--line);
+  background: var(--surface-2);
+  color: var(--ink);
+
+  &:hover {
+    background: var(--line-soft);
+    border-color: var(--ocupasalud-azul);
+    color: var(--ink);
+  }
+}
+
+.boton-texto {
+  border-color: transparent;
+  background: transparent;
+  color: var(--signal-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  &:hover {
+    background: var(--surface-2);
+    border-color: transparent;
+    color: var(--ink);
+  }
+}
+
+.historico {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px dashed var(--line);
+
+  label {
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+
+    b {
+      color: var(--ink);
+    }
+  }
+  input {
+    width: 140px;
+    min-height: 44px;
+    accent-color: var(--ocupasalud-azul);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boton,
+  .cable path {
+    transition: none;
+  }
+}

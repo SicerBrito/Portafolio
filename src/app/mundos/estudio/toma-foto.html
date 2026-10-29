@@ -1,0 +1,68 @@
+<fieldset class="eleccion">
+  <legend>¿Cuándo se toma la foto?</legend>
+  <label>
+    <input
+      type="radio"
+      name="estudio-espera"
+      [checked]="espera() === 'inmediata'"
+      (change)="elegirEspera('inmediata')"
+    />
+    <span>Apenas cambia el DOM</span>
+  </label>
+  <label>
+    <input
+      type="radio"
+      name="estudio-espera"
+      [checked]="espera() === 'doble'"
+      (change)="elegirEspera('doble')"
+    />
+    <span>Después de dos cuadros</span>
+  </label>
+</fieldset>
+
+<ol
+  class="ciclo"
+  [class.corre]="corriendo()"
+  aria-label="Ciclo del navegador entre pedir y fotografiar"
+>
+  @for (paso of ciclo; track paso.id; let i = $index) {
+    <li [style.--i]="i" [class.pintar]="paso.id === 'pintar'">
+      <span class="ciclo-texto">{{ paso.texto }}</span>
+      @if (paso.id === disparoTras()) {
+        <span class="disparo">
+          <svg viewBox="0 0 20 16" aria-hidden="true">
+            <rect x="1" y="4" width="18" height="11" rx="2" />
+            <path d="M6 4 7.5 1.5h5L14 4" />
+            <circle cx="10" cy="9.5" r="3" />
+          </svg>
+          Aquí se toma la foto
+        </span>
+      }
+    </li>
+  }
+</ol>
+
+<div class="disparar">
+  <button type="button" class="btn btn-primario" [disabled]="corriendo()" (click)="fotografiar()">
+    Pedir el fotograma {{ tres(siguiente()) }}
+  </button>
+  <figure class="resultado" [class.vacia]="foto() === null" [class.mala]="desfasada()">
+    <app-estudio-escena [fotograma]="foto() ?? pedido()" [quemado]="true" />
+    <figcaption aria-live="polite">
+      @if (corriendo()) {
+        Fotografiando…
+      } @else if (foto() === null) {
+        La foto aparece aquí.
+      } @else if (desfasada()) {
+        Pediste el {{ tres(pedido()) }} y la foto salió con el {{ tres(foto() ?? 0) }}: el navegador
+        todavía no había repintado. Ningún error lo avisa.
+      } @else {
+        Pediste el {{ tres(pedido()) }} y la foto es el {{ tres(foto() ?? 0) }}.
+      }
+    </figcaption>
+  </figure>
+</div>
+<p class="simulacion">
+  Simulación del ciclo del navegador: el código de tiempo quemado en la foto dice qué fotograma
+  salió.
+</p>

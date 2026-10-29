@@ -1,0 +1,256 @@
+<article class="ocupasalud">
+  <app-ocupa-fachada />
+
+  <!-- ======================= Directorio ======================= -->
+  <section class="tramo directorio" aria-labelledby="t-directorio">
+    <div class="wrap tramo-caja">
+      <p class="senal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="pictos.recepcion" /></svg>
+        Directorio
+      </p>
+      <h2 id="t-directorio">Qué es Ocupasalud y cómo funciona</h2>
+
+      <div class="tablero-directorio">
+        <ol class="puestos">
+          @for (puesto of directorio; track puesto.id; let ultimo = $last) {
+            <li class="puesto">
+              <span class="puesto-icono" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path [attr.d]="pictos[puesto.id]" /></svg>
+              </span>
+              <div>
+                <h3>{{ puesto.nombre }}</h3>
+                <p>{{ puesto.texto }}</p>
+              </div>
+              @if (!ultimo) {
+                <svg class="puesto-flecha" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M6 14l6 6 6-6" /></svg>
+              }
+            </li>
+          }
+        </ol>
+
+        <div class="para-quien">
+          <h3>Para quién</h3>
+          <p>
+            Varias IPS de salud ocupacional del grupo y algunas aliadas atienden con él a los trabajadores que les
+            envían las empresas. Cada IPS tiene su propia base.
+          </p>
+          <p>{{ quienes }}</p>
+          <ul class="logos" aria-label="Algunas IPS que lo usan">
+            <li>
+              <img ngSrc="/marcas/ocupasalud/logo-ocupasalud-sistema.webp" width="435" height="123" alt="Ocupasalud" />
+            </li>
+            <li class="logo-bogota">
+              <img ngSrc="/marcas/ocupasalud/isotipo-ocupasalud-bogota.webp" width="83" height="83" alt="" />
+              <span>Ocupasalud Bogotá</span>
+            </li>
+          </ul>
+          <p class="nota">Existe desde 2017. Su nueva versión, Ocupasalud 2.0, está en desarrollo.</p>
+        </div>
+      </div>
+
+      <div class="equipos">
+        <h3>Con qué está hecho</h3>
+        <ul>
+          @for (e of stack; track e.icono) {
+            <li>
+              <span class="equipo-icono" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path [attr.d]="iconos[e.icono].path" [attr.fill]="iconos[e.icono].hex ?? 'currentColor'" />
+                </svg>
+              </span>
+              <span class="equipo-nombre">{{ iconos[e.icono].nombre }}</span>
+              <span class="equipo-papel">{{ e.papel }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Recorrido 3D ======================= -->
+  <section class="tramo recorrido-tramo" id="recorrido" aria-labelledby="t-recorrido">
+    <div class="wrap tramo-caja">
+      <p class="senal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="pictos.cola" /></svg>
+        Recorrido
+      </p>
+      <h2 id="t-recorrido" tabindex="-1">Sigue el turno <span class="sin-corte">{{ turno }}</span> por la sede</h2>
+      <p class="tramo-bajada">
+        Una sede de ejemplo que reúne en un solo edificio lo que pasa en las IPS del grupo. El paciente y sus datos
+        son ficticios. Los pasos marcados con la línea azul y verde son los que tocan mis integraciones.
+      </p>
+    </div>
+    <app-ocupa-recorrido />
+  </section>
+
+  <!-- ======================= Del papel al dato ======================= -->
+  <section class="tramo papel" aria-labelledby="t-papel">
+    <div class="wrap tramo-caja">
+      <p class="senal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="pictos.pdf" /></svg>
+        Exámenes externos
+      </p>
+      <h2 id="t-papel">Del papel al dato</h2>
+      <div class="historia">
+        <p><b>El problema.</b> {{ p.historias[1].problema }}</p>
+        <p><b>Lo que hice.</b> {{ p.historias[1].solucion }}</p>
+        <p class="historia-nota">
+          Fue el primer procesamiento en segundo plano del sistema. La IA es Claude Haiku y la hoja recibe los datos
+          por un script de Google. Solo corre en las bases de Ocupasalud.
+        </p>
+      </div>
+      <p class="instruccion">
+        Pruébalo en esta simulación: procesa exámenes, corta el cable y mira cómo el trabajo se recupera solo. El
+        reloj está acelerado (30 minutos por segundo) y los datos son ficticios.
+      </p>
+
+      @defer (on viewport; prefetch on idle) {
+        <app-ocupa-papel-dato />
+      } @placeholder {
+        <div class="reserva reserva-papel">
+          <p>
+            Un examen en PDF entra a la cola, la IA lo lee y sus campos llegan a la hoja. Si el envío falla, se
+            reintenta a los 30 minutos, a las 2 horas y a las 6 horas.
+          </p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ======================= Dos mundos, un bus ======================= -->
+  <section class="tramo bus" aria-labelledby="t-bus">
+    <div class="wrap tramo-caja">
+      <p class="senal senal-oscura">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="iconos.kafka.path" /></svg>
+        Versión 2.0
+      </p>
+      <h2 id="t-bus">Dos mundos, un bus</h2>
+      <p class="piloto">Piloto. No está en producción ni fusionado.</p>
+      <div class="historia historia-oscura">
+        <p><b>El problema.</b> {{ p.historias[2].problema }}</p>
+        <p>
+          <b>Lo que hice.</b> El lado de Ocupasalud 2.0: cada alta, edición o borrado se escribe en una bandeja de
+          salida dentro de la misma transacción, y un publicador la envía a Kafka. Un consumidor aplica lo que
+          llega de AHDO sin devolverlo. Un documento repetido o ya ligado a otro cliente queda en revisión, y los campos
+          que AHDO no maneja se conservan.
+        </p>
+        <p class="historia-nota">
+          La conexión va cifrada y con usuario. La función viene apagada por defecto e incluye pruebas automáticas de
+          sus reglas. Con Kafka abajo, la aplicación sigue respondiendo.
+        </p>
+      </div>
+      <p class="instruccion">
+        Pruébalo en esta simulación del piloto: edita el cliente, apaga Kafka, edítalo otra vez y vuelve a
+        encenderlo. El cliente y sus datos son ficticios.
+      </p>
+
+      @defer (on viewport; prefetch on idle) {
+        <app-ocupa-bus-kafka />
+      } @placeholder {
+        <div class="reserva reserva-bus">
+          <p>
+            AHDO usa identificadores GUID y Ocupasalud 2.0, enteros. Un mismo cliente vive en las dos y viaja por Kafka.
+            Si Kafka se cae, los cambios esperan en la bandeja de salida y salen cuando vuelve.
+          </p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ======================= Constancia ======================= -->
+  <section class="tramo constancia" aria-labelledby="t-constancia">
+    <div class="wrap tramo-caja">
+      <p class="senal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="pictos.certificados" /></svg>
+        Certificados
+      </p>
+      <h2 id="t-constancia">Constancia de participación</h2>
+
+      <div class="certificado">
+        <div class="cert-cabeza">
+          <p class="cert-titulo">Verificada con git</p>
+          <p class="cert-fecha">Corte: octubre de 2026</p>
+        </div>
+
+        <dl class="cert-datos">
+          <div class="cert-concepto">
+            <dt>Concepto</dt>
+            <dd><app-sello [autoria]="p.autoria" [estado]="p.estado" /></dd>
+          </div>
+          <div>
+            <dt>Sistema actual</dt>
+            <dd>
+              {{ p.git.resumen }}, de 708 en total (3,8 %), entre agosto de 2025 y octubre de 2026. Unas 5.018 líneas
+              añadidas y 2.276 borradas en 96 archivos, sin contar paquetes.
+            </dd>
+          </div>
+          <div>
+            <dt>Versión 2.0</dt>
+            <dd>{{ p.git.nota }} Ningún commit en su frontend.</dd>
+          </div>
+          <div>
+            <dt>Piezas que creé</dt>
+            <dd>
+              <ul class="piezas">
+                @for (a of piezas; track a) {
+                  <li>{{ a }}</li>
+                }
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>Observaciones</dt>
+            <dd>
+              El sistema existe desde 2017 y lo construyeron otros desarrolladores. Mi parte son integraciones y flujos.
+              No lo hice ni lo lideré.
+            </dd>
+          </div>
+        </dl>
+
+        <h3 class="cert-subtitulo">Evolución</h3>
+        <ol class="evolucion">
+          @for (e of evolucion; track $index) {
+            <li>
+              <span class="evo-fecha">{{ e.fecha }}</span>
+              <p>{{ e.texto }}</p>
+              <span class="evo-donde">{{ e.donde }}</span>
+            </li>
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Citas pendientes ======================= -->
+  <section class="tramo pendientes" aria-labelledby="t-pendientes">
+    <div class="wrap tramo-caja">
+      <p class="senal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="pictos.recepcion" /></svg>
+        Citas pendientes
+      </p>
+      <h2 id="t-pendientes">Lo que todavía falta</h2>
+      <ul class="citas">
+        @for (c of pendientes; track c.titulo) {
+          <li class="cita">
+            <span class="cita-estado">Pendiente</span>
+            <h3>{{ c.titulo }}</h3>
+            <p>{{ c.texto }}</p>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= Siguiente turno ======================= -->
+  <nav class="siguiente" aria-label="Siguiente proyecto" [style.--color-siguiente]="siguiente.color">
+    <a class="llamado" [routerLink]="['/proyectos', siguiente.id]">
+      <span class="llamado-pre">Siguiente turno</span>
+      <span class="llamado-numero" aria-hidden="true">{{ turnoSiguiente }}</span>
+      <span class="llamado-destino">{{ siguiente.nombre }}</span>
+      <span class="llamado-resumen">{{ siguienteResumen }}</span>
+      <svg class="llamado-flecha" viewBox="0 0 64 24" aria-hidden="true">
+        <path d="M0 12h58M48 3l10 9-10 9" fill="none" stroke="currentColor" stroke-width="3" />
+      </svg>
+    </a>
+  </nav>
+</article>

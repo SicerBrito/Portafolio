@@ -1,0 +1,151 @@
+<div
+  class="juego"
+  [class.cortado]="cortado()"
+  [class.leyendo]="fase() === 'leyendo'"
+  [class.enviando]="fase() === 'enviando'"
+  [class.reducido]="reducido()"
+>
+  <div class="maquina">
+    <!-- La bandeja: los PDF que esperan su turno. -->
+    <div class="bandeja">
+      <div class="pila" aria-hidden="true">
+        @for (i of pila(); track i) {
+          <span class="hoja-pila" [style.--i]="i"></span>
+        }
+      </div>
+      <p class="bandeja-texto"><b>{{ enCola() }}</b> en cola</p>
+    </div>
+
+    <!-- El lector: la IA lee el PDF que está en la banda. -->
+    <div class="lector">
+      <div class="lector-ventana">
+        @if (enCurso(); as t) {
+          <div class="pdf" aria-hidden="true">
+            <span class="pdf-banda">PDF</span>
+            <span class="pdf-titulo">{{ t.examen.examen }}</span>
+            <i></i><i></i><i></i><i class="corta"></i>
+          </div>
+          <span class="haz" aria-hidden="true"></span>
+          <p class="lector-estado">Examen {{ t.id }}: {{ estadoTexto[t.estado] }}</p>
+        } @else {
+          <svg class="lector-vacio" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="pdf" /></svg>
+          <p class="lector-estado">La banda está libre</p>
+        }
+      </div>
+      <p class="lector-marca">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="claude.path" [attr.fill]="claude.hex" /></svg>
+        Claude lee el examen
+      </p>
+    </div>
+
+    <!-- El cable a la hoja. Cortado, se separa en dos. -->
+    <div class="cable" aria-hidden="true">
+      <svg viewBox="0 0 120 40" preserveAspectRatio="none">
+        <path class="cable-izq" d="M0 20 C 20 20, 30 8, 54 14" />
+        <path class="cable-der" d="M66 26 C 90 32, 100 20, 120 20" />
+        <path class="cable-union" d="M54 14 L 66 26" />
+        <path class="cable-flujo" d="M0 20 C 20 20, 30 8, 54 14 L 66 26 C 90 32, 100 20, 120 20" />
+        <path class="chispa" d="M60 8 l2 6 6 -2 -4 5 5 4 -6 0 -1 6 -3 -5 -5 3 2 -6 -5 -3 6 -1 z" />
+      </svg>
+      <span class="ficha f1"></span><span class="ficha f2"></span><span class="ficha f3"></span>
+    </div>
+
+    <!-- La hoja de seguimiento, con datos ficticios. -->
+    <div class="hoja">
+      <p class="hoja-marca">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="sheets.path" [attr.fill]="sheets.hex" /></svg>
+        Hoja de seguimiento
+        <span class="hoja-cuenta">{{ totalFilas() }} {{ totalFilas() === 1 ? 'fila' : 'filas' }}</span>
+      </p>
+      <div class="tabla-caja" tabindex="0" role="region" aria-label="Hoja de seguimiento, datos ficticios">
+        <table>
+          <caption class="solo-lectores">Últimas filas que llegaron a la hoja. Datos ficticios.</caption>
+          <thead>
+            <tr>
+              @for (c of campos; track c) {
+                <th scope="col">{{ c }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (f of filas(); track $index) {
+              <tr>
+                <td>{{ f.paciente }}</td>
+                <td>{{ f.examen }}</td>
+                <td>{{ f.resultado }}</td>
+                <td>{{ f.fecha }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td class="vacia" [attr.colspan]="campos.length">Todavía no llega ninguna fila.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- El tablero de trabajos en segundo plano, al estilo del panel de Hangfire. -->
+  <div class="tablero">
+    <div class="tablero-cabeza">
+      <p class="tablero-titulo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="hangfire.path" /></svg>
+        Trabajos en segundo plano
+      </p>
+      <p class="reloj">Hora simulada <b>{{ hora() }}</b></p>
+    </div>
+    @if (corte(); as falta) {
+      <p class="corte">Cable cortado. Si nadie lo reconecta, vuelve solo en {{ falta }}.</p>
+    }
+    <ol class="esperas" aria-label="Esperas entre intentos">
+      @for (e of esperas; track e; let i = $index) {
+        <li>Reintento {{ i + 1 }}: <b>{{ e }}</b></li>
+      }
+    </ol>
+    <ul class="trabajos">
+      @for (t of panel(); track t.id) {
+        <li [class]="'trabajo estado-' + t.estado">
+          <span class="trabajo-id">#{{ t.id }}</span>
+          <span class="trabajo-examen">{{ t.examen.examen }}</span>
+          <span class="trabajo-estado">{{ textoTrabajo(t) }}</span>
+        </li>
+      } @empty {
+        <li class="trabajo vacio">Sin trabajos. Procesa un examen para empezar.</li>
+      }
+    </ul>
+  </div>
+
+  <div class="mandos">
+    <button type="button" class="boton" (click)="procesarUno()">Procesar un examen</button>
+    <button
+      type="button"
+      class="boton boton-cable"
+      [attr.aria-pressed]="cortado()"
+      (click)="alternarCable()"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 3a3 3 0 1 1 0 6a3 3 0 0 1 0-6Zm0 12a3 3 0 1 1 0 6a3 3 0 0 1 0-6ZM8.5 7.5 20 18M8.5 16.5 20 6" />
+      </svg>
+      {{ cortado() ? 'Reconectar el cable' : 'Cortar el cable' }}
+    </button>
+    <div class="historico">
+      <label for="dias-historico">Histórico por rango de fechas: <b>{{ dias() }} días</b></label>
+      <input
+        id="dias-historico"
+        type="range"
+        min="1"
+        max="12"
+        step="1"
+        [value]="dias()"
+        (input)="cambiarDias($event)"
+      />
+      <button type="button" class="boton boton-suave" (click)="encolarHistorico()">
+        Encolar {{ porEncolar() }} exámenes
+      </button>
+    </div>
+    <button type="button" class="boton boton-texto" (click)="reiniciar()">Vaciar la máquina</button>
+  </div>
+
+  <p class="solo-lectores" aria-live="polite">{{ aviso() }}</p>
+</div>

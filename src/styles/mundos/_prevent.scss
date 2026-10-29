@@ -1,0 +1,61 @@
+/* Prevent: oro de casco sobre la noche de obra. Es lo que se ve en la marca y en el sitio
+   público de Prevent Group: el logo dorado con "Group" en gris, sobre secciones negras.
+
+   De dónde sale cada color:
+   - styles.css de la plataforma (prevent-app, tema escrito por Sicer en mayo de 2025):
+     --base-color #C09230 (--prevent-oro, --signal), el marrón oscuro #855623 (--prevent-marron) y
+     el degradado dorado #F1DF14 → #FFEF42 → #E9B036 → #818329 (--prevent-degradado y sus paradas).
+     Tipografía de la plataforma: Poppins.
+   - Logo "PreventGroup" (muestreado píxel a píxel): "Prevent" ≈ #C09030 (--prevent-oro-logo) y
+     "Group" ≈ #727272 (--prevent-gris). El personaje con casco va del dorado al marrón.
+   - Sitio público de Prevent Group (tema de Wix, 2026-10-28): secciones y superposiciones en negro
+     #020202 (--prevent-negro), texto gris #5C5C5C, el logo dorado sin fondo y un verde oliva
+     #80A315 en los enlaces (--prevent-verde, que aquí marca lo "válido").
+   - Derivados, no de marca: el fondo (--bg) es el marrón #855623 llevado casi a negro, para que la
+     noche de la obra sea cálida y no gris; las superficies y líneas suben desde ahí; las tintas
+     claras (--ink, --ink-2, --ink-3) son crema tomada del brillo del dorado.
+   Contraste AA medido (texto / fondo): #FBF4E6 sobre #0F0B07 17,9:1 · #E2D3B4 13,3:1 ·
+   #B9A37A 8,0:1 (7,0:1 sobre --surface-2) · #C09230 6,9:1 (6,0:1 sobre --surface-2) ·
+   #0F0B07 sobre #C09230 6,9:1 · #0F0B07 sobre #F1DF14 14,3:1 · #80A315 6,7:1.
+   El gris del logo #727272 (4,1:1) solo va en la palabra "Group" grande o como relleno. */
+:root[data-mundo='prevent'] {
+  --bg: #0f0b07;
+  --surface: #17110a;
+  --surface-2: #231a10;
+  --line: #3a2c1b;
+  --line-soft: #1d150d;
+  --ink: #fbf4e6;
+  --ink-2: #e2d3b4;
+  --ink-3: #b9a37a;
+  --signal: #c09230;
+  --on-signal: #0f0b07;
+  --signal-text: #c09230;
+  --focus: #ffef42;
+
+  /* La marca, tal cual. */
+  --prevent-oro: #c09230;
+  --prevent-oro-logo: #c09030;
+  --prevent-marron: #855623;
+  --prevent-gris: #727272;
+  --prevent-negro: #020202;
+  --prevent-amarillo: #f1df14;
+  --prevent-amarillo-claro: #ffef42;
+  --prevent-ambar: #e9b036;
+  --prevent-oliva: #818329;
+  --prevent-verde: #80a315;
+  --prevent-degradado: linear-gradient(135deg, #f1df14 0%, #ffef42 30%, #e9b036 62%, #818329 100%);
+  /* El metal del personaje: del oro al marrón, como en el isotipo. */
+  --prevent-metal: linear-gradient(160deg, #e9b036 0%, #c09230 45%, #855623 100%);
+
+  /* El verde legible sobre las superficies oscuras más claras. */
+  --prevent-verde-claro: #9cc13a;
+
+  /* La cinta de peligro de la obra: amarillo del degradado sobre el negro del sitio. */
+  --prevent-cinta: repeating-linear-gradient(-45deg, #f1df14 0 14px, #020202 14px 28px);
+
+  --prevent-sombra: 0 1px 0 rgba(255, 239, 66, 0.06) inset, 0 24px 48px -28px rgba(0, 0, 0, 0.9);
+  --prevent-fuente: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+  --prevent-cifras: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+
+  color-scheme: dark;
+}

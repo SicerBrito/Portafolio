@@ -1,0 +1,343 @@
+:host {
+  display: block;
+}
+
+.mesa {
+  display: grid;
+  gap: 28px;
+
+  @media (min-width: 1000px) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 40px;
+    align-items: start;
+  }
+}
+
+/* ---------- Servicios y bandejas ---------- */
+
+.zona-servicios {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.cliente {
+  color: var(--ink-2);
+
+  strong {
+    color: var(--ink);
+  }
+}
+
+.ayuda {
+  font-size: 0.9375rem;
+  color: var(--ink-3);
+}
+
+.bandejas {
+  display: grid;
+  gap: 12px;
+}
+
+.bandeja {
+  display: grid;
+  gap: 10px;
+  min-height: 92px;
+  padding: 12px;
+  border: 1.5px dashed color-mix(in srgb, var(--d) 55%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--d) 6%, var(--surface));
+  transition:
+    background-color 180ms var(--ease-out),
+    border-color 180ms var(--ease-out);
+
+  /* 12 % y no más: con 16 % el texto --ink-3 de la bandeja bajaba a 4,35:1 mientras se arrastra. */
+  &.sobre {
+    border-style: solid;
+    border-color: var(--d);
+    background: color-mix(in srgb, var(--d) 12%, var(--surface));
+  }
+
+  @media (min-width: 720px) {
+    grid-template-columns: 150px minmax(0, 1fr);
+    align-items: start;
+
+    > :not(.bandeja-cabeza) {
+      grid-column: 2;
+    }
+
+    > .bandeja-cabeza {
+      grid-column: 1;
+      grid-row: 1;
+    }
+  }
+}
+
+.bandeja-cabeza {
+  display: grid;
+  gap: 2px;
+  align-content: start;
+
+  strong {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+
+    &::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--d);
+      flex: none;
+    }
+  }
+
+  span {
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+}
+
+.vacia {
+  align-self: center;
+  font-size: 0.875rem;
+  color: var(--ink-3);
+}
+
+.servicio {
+  position: relative;
+  display: grid;
+  /* El asa mide 44 px de ancho: es el blanco del dedo para arrastrar. */
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 8px;
+  padding: 10px 12px 12px 6px;
+  border: 1px solid var(--ahdo-borde-2);
+  border-radius: 12px;
+  background: var(--surface-2);
+  box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.8);
+  transition: transform 220ms var(--ease-out);
+
+  &.arrastrando {
+    z-index: 10;
+    pointer-events: none;
+    transition: none;
+    border-color: var(--ahdo-lila);
+    box-shadow: 0 24px 40px -18px rgba(0, 0, 0, 0.9);
+  }
+}
+
+.asa {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 8px;
+  color: var(--ink-3);
+  cursor: grab;
+  touch-action: none;
+
+  svg {
+    width: 12px;
+    height: 20px;
+    fill: currentColor;
+  }
+
+  &:hover {
+    color: var(--ink);
+    background: var(--ahdo-borde-1);
+  }
+}
+
+.servicio-cuerpo {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+}
+
+.inscritos {
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+.opciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.opcion {
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 1px solid color-mix(in srgb, var(--d) 60%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ink);
+    border-color: var(--d);
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--d);
+    border-color: var(--d);
+    color: #140d26;
+  }
+}
+
+/* ---------- Facturas de papel ---------- */
+
+.zona-facturas {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.zona-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--signal-text);
+}
+
+.papeles {
+  display: grid;
+  gap: 12px;
+}
+
+.papel {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  border-top: 6px solid var(--d);
+  border-radius: 4px;
+  background: var(--ahdo-papel);
+  color: var(--ahdo-papel-tinta);
+  box-shadow: 0 22px 40px -24px rgba(0, 0, 0, 0.9);
+}
+
+.papel-cabeza {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8125rem;
+  color: var(--ahdo-papel-tinta-2);
+}
+
+.papel-tipo {
+  font-weight: 700;
+  color: var(--ahdo-papel-tinta);
+}
+
+.papel-datos,
+.registro dl {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2px 12px;
+  }
+
+  dt {
+    font-size: 0.8125rem;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+}
+
+/* La tinta gris de papel solo va en la factura: el registro tiene fondo oscuro y su dt se pinta en .registro
+   (antes este selector le ganaba por especificidad y dejaba el dt a 2:1). */
+.papel-datos dt {
+  color: var(--ahdo-papel-tinta-2);
+}
+
+.lineas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px dashed var(--ahdo-papel-linea);
+}
+
+.linea {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  padding-block: 8px;
+  border-bottom: 1px dashed var(--ahdo-papel-linea);
+  font-size: 0.9375rem;
+}
+
+.linea-nombre {
+  font-weight: 600;
+}
+
+.linea-cantidad {
+  color: var(--ahdo-papel-tinta-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.linea-precio {
+  grid-column: 1 / -1;
+  font-size: 0.8125rem;
+  color: var(--ahdo-papel-tinta-2);
+}
+
+.sin-valores {
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+/* ---------- Registro de la matrícula ---------- */
+
+.registro {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--ahdo-borde-2);
+  border-radius: 12px;
+  background: var(--surface);
+
+  dt {
+    color: var(--ink-3);
+  }
+
+  dd {
+    color: var(--ink);
+  }
+
+  .destacado dd {
+    color: var(--ahdo-verde-texto);
+  }
+}
+
+.registro-ejemplo {
+  font-size: 0.875rem;
+  color: var(--ink-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bandeja,
+  .servicio {
+    transition: none;
+  }
+}

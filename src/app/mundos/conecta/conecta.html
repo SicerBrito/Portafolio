@@ -1,0 +1,355 @@
+<article class="conecta">
+  <!-- ======================= Entrada ======================= -->
+  <header class="entrada">
+    <div class="wrap entrada-rejilla">
+      <div class="entrada-texto">
+        <a class="volver" routerLink="/" fragment="proyectos">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
+          Volver a la planta
+        </a>
+
+        <p class="firma">
+          <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+            <g class="logo-trazos">
+              <line x1="28" y1="30" x2="72" y2="30" />
+              <line x1="28" y1="30" x2="50" y2="70" />
+              <line x1="72" y1="30" x2="50" y2="70" />
+            </g>
+            <circle cx="28" cy="30" r="14" class="n1" />
+            <circle cx="72" cy="30" r="14" class="n2" />
+            <circle cx="50" cy="70" r="14" class="n3" />
+          </svg>
+          <span class="firma-nombre">Conecta</span>
+          <span class="firma-legal">{{ p.nombreLegal }}</span>
+        </p>
+
+        <h1>
+          <span class="solo-lectores">Conecta: </span>
+          Un número de WhatsApp, tres empresas y la prueba de qué llegó a cada celular.
+        </h1>
+        <p class="bajada">{{ p.resumen }}</p>
+
+        <ul class="empresas" aria-label="Empresas del grupo que lo usan hoy">
+          <li><i class="azul" aria-hidden="true"></i>Ocupasalud</li>
+          <li><i class="azul" aria-hidden="true"></i>Ocupasalud Bogotá</li>
+          <li><i class="verde" aria-hidden="true"></i>Autoaprender</li>
+        </ul>
+
+        <div class="grupo">
+          <img
+            class="prometeo"
+            ngSrc="/marcas/conecta/prometeo-160.webp"
+            width="160"
+            height="136"
+            alt="Grupo Empresarial Prometeo"
+          />
+          <div class="grupo-texto">
+            <p>Para el Grupo Empresarial Prometeo · {{ p.periodo }}</p>
+            <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+          </div>
+        </div>
+      </div>
+
+      <div class="entrada-chat">
+        <svg class="trazo" viewBox="0 0 100 100" aria-hidden="true">
+          <line x1="28" y1="30" x2="72" y2="30" />
+          <line x1="28" y1="30" x2="50" y2="70" />
+          <line x1="72" y1="30" x2="50" y2="70" />
+          <circle cx="28" cy="30" r="14" />
+          <circle cx="72" cy="30" r="14" />
+          <circle cx="50" cy="70" r="14" />
+        </svg>
+        <div class="telefono" role="group" aria-label="Conversación de presentación">
+          <div class="tel-cabeza">
+            <svg class="tel-logo" viewBox="0 0 100 100" aria-hidden="true">
+              <g class="logo-trazos">
+                <line x1="28" y1="30" x2="72" y2="30" />
+                <line x1="28" y1="30" x2="50" y2="70" />
+                <line x1="72" y1="30" x2="50" y2="70" />
+              </g>
+              <circle cx="28" cy="30" r="14" class="n1" />
+              <circle cx="72" cy="30" r="14" class="n2" />
+              <circle cx="50" cy="70" r="14" class="n3" />
+            </svg>
+            <div>
+              <strong>Conecta</strong>
+              <span>Canal del grupo</span>
+            </div>
+            <svg class="tel-wa" viewBox="0 0 24 24" role="img" aria-label="WhatsApp">
+              <path [attr.d]="whatsapp" />
+            </svg>
+          </div>
+          <ol class="tel-hilo">
+            <li class="burbuja entra" style="--d: 0">
+              Hola. Soy Conecta, el canal por el que varias empresas del grupo le escriben por WhatsApp a pacientes,
+              estudiantes y trabajadores.
+            </li>
+            <li class="burbuja sale" style="--d: 1">
+              ¿Y cómo sabes que el mensaje sí llegó?
+              <svg class="leido" viewBox="0 0 18 12" aria-hidden="true">
+                <path d="M1 6.5 4.5 10 11 2" />
+                <path d="M7 9.6 7.6 10 15.5 2" />
+              </svg>
+            </li>
+            <li class="burbuja entra" style="--d: 2">
+              Porque Meta me lo cuenta, estado por estado. Baja y te muestro el viaje de un mensaje.
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================= El viaje de un mensaje (3D) ======================= -->
+  <section class="turno turno-recorrido" aria-labelledby="t-recorrido">
+    <div class="wrap">
+      <h2 class="pregunta" id="t-recorrido">
+        ¿Cómo llega un mensaje?
+        <svg class="leido" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M1 6.5 4.5 10 11 2" />
+          <path d="M7 9.6 7.6 10 15.5 2" />
+        </svg>
+      </h2>
+      <p class="respuesta">
+        Sigue el recorrido con el scroll. La escena es una maqueta: los nodos, el celular y el mensaje son de ejemplo.
+      </p>
+    </div>
+    <app-conecta-recorrido />
+  </section>
+
+  <!-- ======================= La válvula ======================= -->
+  <section class="turno" aria-labelledby="t-valvula">
+    <div class="wrap">
+      <h2 class="pregunta" id="t-valvula">
+        ¿Y si un día se manda demasiado?
+        <svg class="leido" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M1 6.5 4.5 10 11 2" />
+          <path d="M7 9.6 7.6 10 15.5 2" />
+        </svg>
+      </h2>
+      <div class="respuesta">
+        <p>
+          Pasó de verdad. Al superar cierto volumen diario, Meta acepta el mensaje sin error y nunca lo entrega. El
+          campo oficial que debía avisarlo estaba desactualizado, así que la falla era silenciosa: el panel decía
+          «enviado».
+        </p>
+        <p>
+          La salida fue un tope propio en Conecta, por debajo del límite de Meta y sumado entre todas las empresas. Prueba
+          las dos formas: sube el deslizador y cambia de modo.
+        </p>
+      </div>
+      @defer (on viewport; prefetch on idle) {
+        <app-conecta-valvula />
+      } @placeholder {
+        <div class="reserva reserva-valvula">
+          <p>
+            Aquí va el juego de la válvula: un deslizador suelta personas hacia el celular y un interruptor cambia entre
+            «sin tope» y «con tope propio».
+          </p>
+        </div>
+      }
+      <p class="nota-turno">
+        Simulación con números de juguete: cada punto es una persona distinta y unos segundos hacen de 24 horas. Los
+        escalones reales y las cifras de lo que se perdió no se muestran aquí.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======================= La pregunta tiene su momento ======================= -->
+  <section class="turno" aria-labelledby="t-momento">
+    <div class="wrap">
+      <h2 class="pregunta" id="t-momento">
+        ¿Cuándo se le pregunta a un paciente por su visita?
+        <svg class="leido" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M1 6.5 4.5 10 11 2" />
+          <path d="M7 9.6 7.6 10 15.5 2" />
+        </svg>
+      </h2>
+      <div class="respuesta">
+        <p>
+          Nunca en la sala de espera: cuando ya pasó por todos los consultorios y puede opinar de todo. Y nadie va a
+          mandar encuestas a mano un sábado a las nueve de la noche. Mueve la hora de ingreso.
+        </p>
+      </div>
+      @defer (on viewport; prefetch on idle) {
+        <app-conecta-momento />
+      } @placeholder {
+        <div class="reserva reserva-momento">
+          <p>Si entra a la 1:30 p. m., la encuesta sale a las 7:30 p. m., cuando ya terminó su visita.</p>
+        </div>
+      }
+      <ul class="reglas">
+        <li>La plataforma de la IPS avisa dos veces: cuando el paciente entra y cuando termina su visita.</li>
+        <li>
+          El formulario decide la espera y los recordatorios. El sistema que llama no tiene que saber nada de eso.
+        </li>
+        <li>Todo envío automático respeta una ventana horaria: lo que cae fuera sale cuando vuelve a abrir.</li>
+        <li>Si nadie responde, el formulario puede insistir hasta {{ recordatorios }} veces. Una sola encuesta por persona al día.</li>
+        <li>Si la empresa cambia la espera, lo que ya estaba en fila conserva su hora.</li>
+      </ul>
+      <p class="nota-turno">
+        La espera de {{ espera }} horas es la real de hoy. La ventana de envío del ejemplo, de 7 a. m. a 8 p. m., no es
+        la configuración real.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======================= El formulario es dato ======================= -->
+  <section class="turno" aria-labelledby="t-formulario">
+    <div class="wrap">
+      <h2 class="pregunta" id="t-formulario">
+        ¿Se puede cambiar una encuesta que ya tiene respuestas?
+        <svg class="leido" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M1 6.5 4.5 10 11 2" />
+          <path d="M7 9.6 7.6 10 15.5 2" />
+        </svg>
+      </h2>
+      <div class="respuesta">
+        <p>
+          Sí, sin programar y sin falsear lo que la gente contestó. Los formularios se arman en el panel con bloques. Una
+          pregunta con respuestas no se edita: se retira, conserva lo respondido y su reemplazo entra al lado. Arma uno.
+        </p>
+      </div>
+      @defer (on viewport; prefetch on idle) {
+        <app-conecta-formulario />
+      } @placeholder {
+        <div class="reserva reserva-formulario">
+          <p>
+            Aquí va un constructor de ejemplo: se agregan bloques, el formulario se recompone en un celular con la marca
+            de la empresa y una pregunta respondida se retira sin perder sus respuestas.
+          </p>
+        </div>
+      }
+      <p class="nota-turno">
+        Preguntas y respuestas de ejemplo. El color de cada formulario es el de la empresa que pregunta, como en los
+        formularios reales.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======================= La gerencia le pregunta a Claude ======================= -->
+  <section class="turno" aria-labelledby="t-gerencia">
+    <div class="wrap">
+      <h2 class="pregunta" id="t-gerencia">
+        ¿Y la gerencia tiene que entrar al panel para todo?
+        <svg class="leido" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M1 6.5 4.5 10 11 2" />
+          <path d="M7 9.6 7.6 10 15.5 2" />
+        </svg>
+      </h2>
+      <div class="respuesta">
+        <p>
+          No. El servidor MCP de Conecta está en producción y le da a Claude
+          herramientas de solo lectura sobre los resultados y el canal, y Claude escoge cuáles usar para responder en
+          español. Elige una pregunta para ver un ejemplo.
+        </p>
+      </div>
+      @defer (on viewport; prefetch on idle) {
+        <app-conecta-gerencia />
+      } @placeholder {
+        <div class="reserva reserva-gerencia">
+          <p class="reserva-pregunta">{{ ejemplo.pregunta }}</p>
+          <p>{{ ejemplo.respuesta }}</p>
+        </div>
+      }
+      <p class="nota-turno">
+        Conversación de ejemplo con datos ficticios. El servidor MCP de Conecta, escrito a mano sobre JSON-RPC 2.0, tiene
+        23 herramientas de solo lectura y está en producción.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======================= Ficha de autoría ======================= -->
+  <section class="turno" aria-labelledby="t-ficha">
+    <div class="wrap">
+      <h2 class="pregunta" id="t-ficha">
+        ¿Quién lo construyó?
+        <svg class="leido" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M1 6.5 4.5 10 11 2" />
+          <path d="M7 9.6 7.6 10 15.5 2" />
+        </svg>
+      </h2>
+
+      <div class="contacto">
+        <div class="contacto-cabeza">
+          <span class="avatar" aria-hidden="true">SB</span>
+          <div>
+            <p class="contacto-nombre">Sicer Brito</p>
+            <p class="contacto-rol">Único autor del repositorio</p>
+          </div>
+          <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+        </div>
+
+        <p class="papel">{{ p.papel }}</p>
+
+        <dl class="git">
+          <div>
+            <dt>Verificado con git</dt>
+            <dd>{{ p.git.resumen }}</dd>
+          </div>
+          <div>
+            <dt>Detalle</dt>
+            <dd>{{ p.git.nota }}</dd>
+          </div>
+        </dl>
+
+        <ul class="cifras" aria-label="Cifras">
+          @for (c of p.cifras; track c.etiqueta) {
+            <li>
+              <span class="cifra-valor">{{ c.valor }}</span>
+              <span class="cifra-etiqueta">{{ c.etiqueta }}</span>
+              <span class="cifra-fuente">{{ c.fuente }}</span>
+            </li>
+          }
+        </ul>
+
+        @defer (on viewport; prefetch on idle) {
+          <app-conecta-pila />
+        } @placeholder {
+          <ul class="stack" aria-label="Tecnologías">
+            @for (t of p.stack; track t) {
+              <li><span class="sin-icono" aria-hidden="true"></span>{{ t }}</li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Lo que falta ======================= -->
+  <section class="turno" aria-labelledby="t-falta">
+    <div class="wrap">
+      <h2 class="pregunta" id="t-falta">
+        ¿Qué falta?
+        <svg class="leido" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M1 6.5 4.5 10 11 2" />
+          <path d="M7 9.6 7.6 10 15.5 2" />
+        </svg>
+      </h2>
+      <ol class="cola">
+        @for (item of pendientes; track item) {
+          <li>
+            <p>{{ item }}</p>
+            <span class="en-cola">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" /><path d="M8 4.5V8l2.5 1.5" /></svg>
+              Pendiente
+            </span>
+          </li>
+        }
+      </ol>
+      <p class="cola-nota">Como en WhatsApp: el reloj quiere decir que todavía no sale.</p>
+    </div>
+  </section>
+
+  <!-- ======================= Siguiente nave ======================= -->
+  <nav class="siguiente" aria-label="Siguiente proyecto">
+    <div class="wrap">
+      <a class="siguiente-enlace" [routerLink]="['/proyectos', siguiente.id]" [style.--color-siguiente]="siguiente.color">
+        <span class="siguiente-rotulo">Siguiente nave</span>
+        <strong>{{ siguiente.nombre }}</strong>
+        <span class="siguiente-resumen">{{ siguiente.resumen }}</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </a>
+    </div>
+  </nav>
+</article>

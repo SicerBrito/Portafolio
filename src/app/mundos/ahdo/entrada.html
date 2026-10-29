@@ -1,0 +1,108 @@
+<section class="entrada" aria-labelledby="ahdo-titulo" #seccion [style.--c]="marca().colores.primario">
+  <div class="pegajoso">
+    <div class="wrap rejilla">
+      <div class="texto">
+        <a class="volver" routerLink="/" fragment="proyectos">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" /></svg>
+          La planta
+        </a>
+        <h1 id="ahdo-titulo">
+          <img
+            class="logo"
+            ngSrc="/marcas/ahdo/logo-ahdo-blanco.webp"
+            width="1200"
+            height="213"
+            priority
+            alt="AHDO"
+          />
+          <span class="frase">Una plataforma, varias marcas</span>
+        </h1>
+        @if (proyecto().nombreLegal; as legal) {
+          <p class="legal">{{ legal }}</p>
+        }
+        <p class="resumen">{{ proyecto().resumen }}</p>
+        <div class="meta">
+          <app-sello [autoria]="proyecto().autoria" [estado]="proyecto().estado" />
+          <span class="para">{{ proyecto().para }}. {{ proyecto().periodo }}.</span>
+        </div>
+      </div>
+
+      <figure class="escenario" #escenario>
+        <canvas #lienzo class="lienzo" [class.activo]="modo() === '3d'" aria-hidden="true"></canvas>
+        <canvas
+          #plano
+          class="plano"
+          [class.activo]="modo() === '2d'"
+          [class.volteando]="volteando()"
+          aria-hidden="true"
+        ></canvas>
+
+        @if (modo() === 'html') {
+          <div class="cert" [attr.data-estilo]="marca().estilo" [style.--c1]="marca().colores.primario" [style.--c2]="marca().colores.secundario" aria-hidden="true">
+            <img class="cert-logo" [ngSrc]="marca().logo.src" [width]="marca().logo.ancho" [height]="marca().logo.alto" alt="" />
+            <span class="cert-titulo">Certificado</span>
+            <span class="cert-chico">Se certifica que</span>
+            <span class="cert-nombre">{{ ficticio.persona }}</span>
+            <span class="cert-chico">aprobó el {{ ficticio.curso }}</span>
+            <span class="cert-plantilla">Proveedor del curso: {{ marca().nombre }} → plantilla propia de la marca</span>
+            <span class="cert-muestra">Muestra · datos ficticios</span>
+          </div>
+        }
+
+        <figcaption class="leyenda">
+          <span class="solo-lectores">Certificado de muestra de {{ marca().nombre }}, con datos ficticios. </span>
+          <span aria-hidden="true">Muestra con datos ficticios</span>
+        </figcaption>
+      </figure>
+
+      <div class="marcas">
+        <p class="pista" id="ahdo-pista">
+          <span class="pista-toque">Elige una marca.</span>
+          <span class="pista-scroll">Elige una marca o sigue bajando.</span>
+          Es la misma hoja, con otra plantilla.
+        </p>
+        <div class="dock" role="group" aria-labelledby="ahdo-pista">
+          @for (m of marcas; track m.id; let i = $index) {
+            <button
+              type="button"
+              class="chip"
+              [style.--cm]="m.colores.primario"
+              [attr.aria-pressed]="i === indice()"
+              (click)="elegir(i)"
+              (keydown)="mover($event, i)"
+            >
+              <span class="chip-logo">
+                <img [ngSrc]="m.logo.src" [width]="m.logo.ancho" [height]="m.logo.alto" alt="" />
+              </span>
+              <span class="chip-nombre">{{ m.nombre }}</span>
+            </button>
+          }
+        </div>
+        <div class="avance" aria-hidden="true">
+          @for (m of marcas; track m.id; let i = $index) {
+            <span [class.lleno]="i <= indice()"></span>
+          }
+        </div>
+        <p class="papel" aria-live="polite">
+          <strong>{{ marca().nombre }}.</strong> {{ marca().papel }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mecanismo-banda">
+  <div class="wrap mecanismo">
+    <h2 class="mecanismo-titulo">Por qué una sola plataforma</h2>
+    <p>{{ historia().problema }}</p>
+    <p class="solucion">
+      {{ historia().solucion }}
+      @if (autoriaCertificados) {
+        <span class="autoria">{{ autoriaCertificados }}</span>
+      }
+    </p>
+    @if (orientacion.giroscopio() === 'pedir' && !movimiento.reducido()) {
+      <button type="button" class="giro" (click)="orientacion.activar()">Inclinar la hoja con el celular</button>
+    }
+  </div>
+</div>

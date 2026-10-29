@@ -1,0 +1,353 @@
+:host {
+  display: block;
+}
+
+/* ---------- La pista y el escenario ---------- */
+
+.pista {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px));
+}
+
+.escenario {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+
+  > * {
+    min-width: 0;
+  }
+}
+
+.pantalla {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 34px 80px -34px rgba(8, 4, 22, 0.9);
+}
+
+/* En pantallas angostas el contador baja a su propia línea y el deslizador queda a lo ancho:
+   al lado del contador (que no se parte) le quedaban 40 px a 320 px de ancho. */
+.inspector {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 14px;
+  min-height: 52px;
+  padding: 4px 14px;
+  border-radius: 10px;
+  background: var(--estudio-inspector);
+  color: var(--ink);
+
+  input {
+    flex: 1 1 160px;
+    min-width: 0;
+    height: 44px;
+    margin: 0;
+    accent-color: var(--estudio-morado);
+    cursor: pointer;
+  }
+}
+
+.contador {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--ink-2);
+
+  b {
+    font-weight: 500;
+    color: var(--ink);
+  }
+}
+
+/* La línea de tiempo en miniatura, como la pista de video de un editor. */
+.miniaturas {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 3px;
+  padding: 4px;
+  border-radius: 8px;
+  background: var(--estudio-cinta);
+
+  @media (max-width: 599.98px) {
+    display: none;
+  }
+}
+
+.mini {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+
+  app-estudio-escena {
+    width: 100%;
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0.75;
+    transition: opacity 160ms var(--ease-out);
+  }
+
+  &:hover app-estudio-escena,
+  &:focus-visible app-estudio-escena {
+    opacity: 1;
+  }
+}
+
+.miniaturas .cabezal {
+  position: absolute;
+  top: -5px;
+  bottom: -5px;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(26, 16, 48, 0.7);
+  pointer-events: none;
+}
+
+.lateral {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.formulas {
+  margin: 0;
+  display: grid;
+
+  > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 4px 16px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  dt {
+    min-width: 0;
+  }
+
+  dd {
+    margin: 0;
+    min-width: 7ch;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
+  .roto dd {
+    color: var(--signal-text);
+    text-decoration: underline dashed;
+    text-underline-offset: 4px;
+  }
+}
+
+.nombre {
+  display: block;
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.expr {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+
+.desfase {
+  padding: 8px 12px;
+  border: 1px dashed var(--estudio-plano);
+  border-radius: 8px;
+  background: var(--estudio-plano-fondo);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--signal-text);
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--estudio-fuente);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 160ms var(--ease-out),
+    background-color 160ms var(--ease-out);
+
+  &:hover {
+    border-color: var(--signal-text);
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: var(--on-signal);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+.aviso {
+  font-size: 0.875rem;
+  color: var(--ink-3);
+}
+
+.recorrido {
+  display: none;
+}
+
+.pie {
+  margin-top: clamp(28px, 4vw, 48px);
+}
+
+.toma {
+  display: grid;
+  gap: 8px;
+  max-width: 72ch;
+  padding-left: 18px;
+  border-left: 3px solid var(--estudio-morado);
+
+  h3 {
+    font-family: var(--estudio-fuente);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  p {
+    color: var(--ink-2);
+  }
+}
+
+/* ---------- Escritorio: escena a la izquierda, fórmulas y controles a la derecha ---------- */
+
+@media (min-width: 960px) {
+  .escenario {
+    grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr);
+    grid-template-rows: auto auto auto;
+    column-gap: 28px;
+  }
+  .pantalla {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .inspector {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .miniaturas {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .lateral {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+  }
+}
+
+/* Fijado: la sección ocupa la ventana menos la cabecera y la barra de escenas de abajo.
+   La columna de la escena se angosta con la altura: pantalla 16:9 + deslizador (52) +
+   miniaturas (52) + huecos (28) + bordes tienen que caber en la ventana. Sin este tope, en un
+   portátil de 1366 × 768 la pantalla se metía bajo la cabecera y las miniaturas bajo la barra. */
+.pista.fijado {
+  .escenario {
+    height: calc(100svh - var(--cabecera) - 64px);
+    align-content: center;
+  }
+
+  .pantalla,
+  .inspector,
+  .miniaturas {
+    justify-self: center;
+    width: 100%;
+    max-width: calc((100svh - var(--cabecera) - 64px - 136px) * 16 / 9);
+  }
+}
+
+/* Móvil: la escena queda pegada arriba y el recorrido de abajo es el que se desplaza. */
+.pista.movil {
+  .escenario {
+    position: sticky;
+    top: calc(var(--cabecera) + 8px);
+    z-index: 2;
+    gap: 10px;
+    padding-bottom: 10px;
+    background: var(--bg);
+  }
+  .recorrido {
+    display: block;
+    height: 170svh;
+  }
+  /* La escena pegada tiene que caber en la pantalla: lo que repite información se esconde.
+     El desfase ya se ve en el número subrayado y lo cuenta el párrafo de abajo. */
+  .expr,
+  .aviso,
+  .miniaturas,
+  .desfase {
+    display: none;
+  }
+  .formulas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+
+    > div {
+      padding: 6px 0;
+    }
+  }
+  .nombre {
+    font-size: 0.8125rem;
+  }
+  .formulas dd {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .contador {
+    font-size: 0.8125rem;
+  }
+  .inspector {
+    column-gap: 10px;
+    padding: 2px 10px 8px;
+  }
+}

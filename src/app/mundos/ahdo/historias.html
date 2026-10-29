@@ -1,0 +1,36 @@
+<section class="historias" aria-labelledby="historias-titulo">
+  <div class="wrap">
+    <h2 id="historias-titulo" class="titulo">Dos módulos por dentro</h2>
+
+    <div class="dos">
+      <article class="historia">
+        @defer (on idle) {
+          <app-ahdo-dibujo cual="psicometria" />
+        } @placeholder {
+          <div class="hueco" aria-hidden="true"></div>
+        }
+        <h3>{{ psicometria().titulo }}</h3>
+        <p class="problema">{{ psicometria().problema }}</p>
+        <p class="solucion">{{ psicometria().solucion }}</p>
+        <p class="pie">Sin ítems reales: las pruebas tienen derechos y sus resultados son datos clínicos.</p>
+      </article>
+
+      <article class="historia">
+        @defer (on idle) {
+          <app-ahdo-dibujo cual="facturacion" />
+        } @placeholder {
+          <div class="hueco" aria-hidden="true"></div>
+        }
+        <h3>{{ facturacion().titulo }}</h3>
+        <p class="problema">{{ facturacion().problema }}</p>
+        <p class="solucion">{{ facturacion().solucion }}</p>
+
+        @defer (on idle) {
+          <app-ahdo-libro />
+        } @placeholder {
+          <p class="pie">Libro de pagos de una factura de muestra, con tres abonos ficticios.</p>
+        }
+      </article>
+    </div>
+  </div>
+</section>

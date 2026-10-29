@@ -1,0 +1,688 @@
+:host {
+  display: block;
+  font-family: var(--conecta-texto);
+  color: var(--ink);
+}
+
+.conecta {
+  overflow-x: clip;
+}
+
+/* ======================= Entrada ======================= */
+
+.entrada {
+  position: relative;
+  padding: clamp(24px, 5vw, 64px) 0 clamp(48px, 7vw, 96px);
+  background:
+    radial-gradient(55% 60% at 80% 40%, rgba(220, 171, 47, 0.18), transparent 70%),
+    radial-gradient(40% 50% at 0% 100%, rgba(111, 94, 156, 0.1), transparent 70%),
+    var(--bg);
+}
+
+.entrada-rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  text-decoration: none;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  &:hover {
+    color: var(--conecta-tinta);
+  }
+}
+
+.firma {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 14px;
+  align-items: center;
+  margin: 12px 0 20px;
+}
+
+.logo {
+  grid-row: span 2;
+  width: clamp(64px, 8vw, 92px);
+  height: auto;
+}
+
+.logo-trazos line {
+  stroke: var(--conecta-oro-3);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.n1 {
+  fill: var(--conecta-oro-1);
+}
+.n2 {
+  fill: var(--conecta-oro-2);
+}
+.n3 {
+  fill: var(--conecta-oro-6);
+}
+
+.firma-nombre {
+  font: 700 clamp(3rem, 2rem + 4.6vw, 5.75rem) / 0.9 var(--conecta-titulo);
+  letter-spacing: -0.045em;
+  color: var(--conecta-tinta);
+}
+
+.firma-legal {
+  font-size: 0.9375rem;
+  color: var(--signal-text);
+  font-weight: 500;
+}
+
+h1 {
+  max-width: 22ch;
+  font: 500 clamp(1.5rem, 1.1rem + 1.8vw, 2.375rem) / 1.15 var(--conecta-titulo);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.bajada {
+  max-width: 58ch;
+  margin-top: 16px;
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+}
+
+.empresas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    font-weight: 500;
+    font-size: 0.9375rem;
+  }
+  i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .azul {
+    background: var(--conecta-ocupasalud);
+  }
+  .verde {
+    background: var(--conecta-autoaprender);
+  }
+}
+
+.grupo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.prometeo {
+  width: 76px;
+  height: auto;
+  flex: none;
+}
+
+.grupo-texto {
+  display: grid;
+  gap: 10px;
+
+  p {
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+  }
+}
+
+/* El chat de la entrada: el único momento orquestado al cargar. */
+.entrada-chat {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.trazo {
+  position: absolute;
+  width: min(150%, 680px);
+  height: auto;
+  overflow: visible;
+  fill: none;
+  stroke: var(--conecta-oro-3);
+  stroke-width: 0.6;
+  opacity: 0.55;
+
+  line,
+  circle {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: dibujar 1.6s var(--ease-out) forwards;
+  }
+  circle {
+    animation-delay: 0.5s;
+  }
+}
+
+.telefono {
+  position: relative;
+  width: min(100%, 360px);
+  overflow: hidden;
+  border-radius: 32px;
+  border: 10px solid var(--conecta-tinta);
+  background:
+    radial-gradient(var(--conecta-chat-punto) 1px, transparent 1px) 0 0 / 14px 14px,
+    var(--conecta-chat);
+  box-shadow: 0 40px 80px -40px rgba(36, 22, 64, 0.55);
+}
+
+.tel-cabeza {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--conecta-tinta);
+  color: #ffffff;
+
+  div {
+    display: grid;
+    flex: 1;
+    line-height: 1.25;
+  }
+  strong {
+    font: 700 1rem var(--conecta-titulo);
+  }
+  span {
+    font-size: 0.8125rem;
+    color: var(--conecta-tinta-suave);
+  }
+}
+
+.tel-logo {
+  width: 36px;
+  height: 36px;
+  padding: 4px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.tel-wa {
+  width: 22px;
+  height: 22px;
+  fill: var(--conecta-tinta-suave);
+}
+
+.tel-hilo {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 18px 14px 22px;
+  list-style: none;
+}
+
+.burbuja {
+  max-width: 86%;
+  padding: 9px 12px;
+  border-radius: 14px;
+  color: var(--conecta-burbuja-texto);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  box-shadow: 0 1px 1px rgba(36, 22, 64, 0.12);
+  animation: brotar 420ms var(--ease-out) both;
+  animation-delay: calc(0.9s + var(--d, 0) * 0.7s);
+
+  &.entra {
+    justify-self: start;
+    border-top-left-radius: 4px;
+    background: #ffffff;
+  }
+  &.sale {
+    justify-self: end;
+    border-top-right-radius: 4px;
+    background: var(--conecta-tinta);
+    color: #ffffff;
+  }
+}
+
+.leido {
+  display: inline-block;
+  width: 18px;
+  height: 12px;
+  margin-left: 6px;
+  vertical-align: -1px;
+  fill: none;
+  stroke: var(--conecta-oro-1);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ======================= Turnos de la conversación ======================= */
+
+.turno {
+  padding: clamp(56px, 8vw, 112px) 0 0;
+
+  > .wrap {
+    display: grid;
+    gap: 20px;
+  }
+}
+
+/* La pregunta del visitante es una burbuja que sale, con su visto en dorado. */
+.pregunta {
+  justify-self: end;
+  max-width: min(100%, 26ch);
+  padding: 14px 20px 16px;
+  border-radius: 24px 24px 6px 24px;
+  background: var(--conecta-tinta);
+  color: #ffffff;
+  font: 700 clamp(1.375rem, 1rem + 1.8vw, 2.25rem) / 1.12 var(--conecta-titulo);
+  letter-spacing: -0.02em;
+  box-shadow: 0 18px 40px -26px rgba(36, 22, 64, 0.7);
+
+  .leido {
+    width: 22px;
+    height: 15px;
+  }
+}
+
+.respuesta {
+  display: grid;
+  gap: 12px;
+  max-width: 64ch;
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.turno-recorrido > .wrap {
+  margin-bottom: 24px;
+}
+
+/* Lo que se ve mientras llega el código de cada juego (y sin JavaScript). */
+.reserva {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px dashed var(--line);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  text-align: center;
+
+  p {
+    max-width: 56ch;
+  }
+}
+
+.reserva-valvula {
+  min-height: 520px;
+}
+.reserva-momento {
+  min-height: 300px;
+}
+.reserva-formulario {
+  min-height: 680px;
+}
+.reserva-gerencia {
+  min-height: 520px;
+}
+
+.reserva-pregunta {
+  padding: 8px 14px;
+  border-radius: 14px 14px 4px 14px;
+  background: var(--conecta-tinta);
+  color: #ffffff;
+}
+
+.reglas {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 1.2em;
+  color: var(--ink-2);
+  max-width: 70ch;
+
+  li::marker {
+    color: var(--signal-text);
+  }
+}
+
+.nota-turno {
+  max-width: 80ch;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+/* ======================= Ficha ======================= */
+
+.contacto {
+  display: grid;
+  gap: 20px;
+  padding: clamp(18px, 3vw, 32px);
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--conecta-sombra);
+}
+
+.contacto-cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+
+  > div {
+    flex: 1 1 200px;
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--signal);
+  color: var(--on-signal);
+  font: 700 1.375rem var(--conecta-titulo);
+}
+
+.contacto-nombre {
+  font: 700 1.5rem / 1.2 var(--conecta-titulo);
+  color: var(--conecta-tinta);
+}
+
+.contacto-rol {
+  color: var(--ink-2);
+}
+
+.papel {
+  max-width: 68ch;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+.git {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 28px;
+  margin: 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: var(--surface-2);
+  border: 1px dashed var(--line);
+
+  div {
+    display: contents;
+  }
+  dt {
+    color: var(--ink-2);
+    font-size: 0.875rem;
+  }
+  dd {
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    align-content: start;
+    gap: 4px;
+    padding: 16px;
+    border-radius: 18px;
+    background: var(--conecta-tinta);
+    color: #ffffff;
+  }
+}
+
+.cifra-valor {
+  font: 700 clamp(2.25rem, 1.6rem + 2.4vw, 3.25rem) / 1 var(--conecta-titulo);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  color: var(--conecta-oro-1);
+}
+
+.cifra-etiqueta {
+  font-size: 0.9375rem;
+}
+
+.cifra-fuente {
+  font-size: 0.75rem;
+  color: var(--conecta-tinta-suave);
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--line-soft);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+}
+
+.sin-icono {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--conecta-oro-3);
+}
+
+/* ======================= Lo que falta ======================= */
+
+.cola {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    justify-self: start;
+    display: grid;
+    gap: 6px;
+    max-width: min(100%, 62ch);
+    padding: 12px 16px 10px;
+    border-radius: 6px 18px 18px 18px;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    box-shadow: 0 1px 1px rgba(36, 22, 64, 0.08);
+  }
+}
+
+.en-cola {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--ink-2);
+
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+}
+
+.cola-nota {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+/* ======================= Siguiente nave ======================= */
+
+.siguiente {
+  padding: clamp(64px, 9vw, 128px) 0 clamp(48px, 6vw, 80px);
+}
+
+.siguiente-enlace {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 24px;
+  padding: clamp(20px, 4vw, 40px);
+  border-radius: 28px;
+  background: var(--conecta-tinta);
+  color: #ffffff;
+  text-decoration: none;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: auto -10% -60% auto;
+    width: 60%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--color-siguiente, var(--signal));
+    opacity: 0.22;
+    transition: transform 400ms var(--ease-out);
+  }
+  &:hover::before {
+    transform: scale(1.2);
+  }
+
+  > * {
+    position: relative;
+  }
+  strong {
+    grid-column: 1;
+    font: 700 clamp(2rem, 1.4rem + 3vw, 3.5rem) / 1 var(--conecta-titulo);
+    letter-spacing: -0.03em;
+    color: var(--conecta-oro-1);
+  }
+  svg {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: center;
+    width: 44px;
+    height: 44px;
+    fill: none;
+    stroke: var(--conecta-oro-1);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 240ms var(--ease-out);
+  }
+  &:hover svg {
+    transform: translateX(6px);
+  }
+}
+
+.siguiente-rotulo {
+  grid-column: 1;
+  color: var(--conecta-tinta-suave);
+  font-size: 0.9375rem;
+}
+
+.siguiente-resumen {
+  grid-column: 1;
+  max-width: 60ch;
+  color: var(--conecta-tinta-suave);
+}
+
+/* ======================= Animaciones y pantallas chicas ======================= */
+
+@keyframes dibujar {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes brotar {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+}
+
+@media (max-width: 900px) {
+  .entrada-rejilla {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cifras {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .git {
+    grid-template-columns: 1fr;
+    gap: 2px;
+
+    div + div dt {
+      margin-top: 10px;
+    }
+  }
+  .siguiente-enlace svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Movimiento reducido: el chat y el logo de la entrada aparecen quietos y sin esperar. */
+@media (prefers-reduced-motion: reduce) {
+  .burbuja,
+  .trazo line,
+  .trazo circle {
+    animation: none;
+  }
+  .trazo line,
+  .trazo circle {
+    stroke-dashoffset: 0;
+  }
+}

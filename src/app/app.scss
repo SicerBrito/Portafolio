@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+.saltar {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  z-index: 20;
+  padding: 10px 14px;
+  background: var(--signal);
+  color: var(--on-signal);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  text-decoration: none;
+
+  &:focus {
+    top: calc(env(safe-area-inset-top, 0px) + 12px);
+  }
+}
+
+main {
+  display: block;
+  min-height: 60vh;
+}

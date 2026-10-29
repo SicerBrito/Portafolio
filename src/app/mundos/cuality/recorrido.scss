@@ -1,0 +1,604 @@
+:host {
+  display: block;
+  font-family: var(--cuality-fuente);
+}
+
+.recorrido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px));
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+/* ---------- La bóveda: el modo oscuro de la plataforma ---------- */
+
+.escenario {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 20px;
+  background:
+    radial-gradient(50% 50% at 50% 55%, rgba(0, 96, 163, 0.28), transparent 75%),
+    var(--cuality-noche);
+  color: var(--cuality-noche-texto);
+
+  /* Guilloche: los círculos finos de un papel de seguridad, apagándose hacia los bordes. */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-radial-gradient(circle at 50% 55%, transparent 0 22px, var(--cuality-noche-linea) 22px 23px);
+    mask-image: radial-gradient(60% 60% at 50% 55%, #000, transparent 80%);
+    pointer-events: none;
+  }
+}
+
+.ilustracion {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  margin: 16px auto;
+  transition: opacity 500ms var(--ease-out);
+
+  .il-anillo,
+  .il-borde {
+    fill: none;
+    stroke: var(--cuality-gris-noche);
+    stroke-opacity: 0.35;
+    stroke-width: 1;
+  }
+  .il-borde {
+    stroke-dasharray: 2 4;
+  }
+  .il-rama {
+    stroke: var(--cuality-gris-noche);
+    stroke-opacity: 0.4;
+    stroke-width: 1.5;
+  }
+  .il-rama.on {
+    stroke: var(--cuality-azul-noche);
+    stroke-opacity: 1;
+    stroke-width: 2.5;
+  }
+  .il-cache {
+    fill: none;
+    stroke: var(--cuality-azul-logo);
+    stroke-width: 4;
+  }
+  .il-sello {
+    fill: #ffffff;
+    stroke: var(--cuality-gris);
+    stroke-width: 5;
+  }
+  .il-centro {
+    font: 600 13px var(--cuality-fuente);
+    fill: var(--cuality-azul);
+    text-anchor: middle;
+  }
+  .il-nodo {
+    fill: var(--cuality-noche-2);
+    stroke: var(--cuality-gris-noche);
+    stroke-width: 1.5;
+  }
+  .il-nodo.on {
+    fill: var(--cuality-azul-logo);
+    stroke: var(--cuality-azul-noche);
+  }
+  .il-nombre {
+    font: 500 12px var(--cuality-fuente);
+    fill: var(--cuality-noche-texto);
+    text-anchor: middle;
+  }
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+
+.escenario.activo {
+  canvas {
+    opacity: 1;
+  }
+  .ilustracion {
+    opacity: 0;
+  }
+}
+
+/* ---------- Etiquetas ---------- */
+
+.anclas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.ancla {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(31, 36, 48, 0.88);
+  border: 1px solid var(--cuality-noche-linea);
+  color: var(--cuality-noche-texto);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out);
+  will-change: transform;
+
+  &.visible {
+    opacity: 1;
+  }
+  &.fuerte {
+    background: var(--cuality-azul);
+    border-color: var(--cuality-azul);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Sobre la bóveda oscura el foco azul de marca no llega a 3:1 (2,4:1 sobre #1F2430): ahí el
+   anillo de foco va con el azul aclarado (8,4:1). */
+.girar,
+.tira {
+  --focus: var(--cuality-azul-noche);
+}
+
+/* Arriba a la derecha en escritorio. En el celular la tira de llaves ocupa el borde de arriba,
+   así que el botón baja (ver .pasos-movil). */
+.girar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cuality-azul);
+  color: #ffffff;
+  font: 600 0.875rem var(--cuality-fuente);
+  cursor: pointer;
+}
+
+.barra {
+  display: none;
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 14px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--cuality-noche-linea);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    background: var(--cuality-azul-noche);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+}
+
+/* ---------- Los pasos ---------- */
+
+.pasos {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paso {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--cuality-sombra);
+
+  h3 {
+    font-size: 1.1875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  p {
+    color: var(--ink-2);
+    font-size: 0.96875rem;
+    line-height: 1.6;
+    max-width: 60ch;
+  }
+  code {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--cuality-claro);
+    color: var(--cuality-azul);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+.paso-numero {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--cuality-gris);
+  color: var(--cuality-gris);
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.paso.activo .paso-numero {
+  border-color: var(--cuality-azul);
+  background: var(--cuality-azul);
+  color: #ffffff;
+}
+
+.paso-cuerpo {
+  min-width: 0;
+}
+
+/* ---------- El llavero y la pantalla ---------- */
+
+.mando-paso {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.llavero {
+  display: grid;
+  gap: 8px;
+}
+
+.llavero-cabeza {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.llavero-titulo {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.restablecer {
+  min-height: 44px;
+  padding: 4px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--signal-text);
+  font: 600 0.8125rem var(--cuality-fuente);
+  cursor: pointer;
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+
+.muestra {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-left: 4px;
+
+  &.rol {
+    background: var(--cuality-azul);
+  }
+  &.directa {
+    background: var(--cuality-gris);
+  }
+}
+
+.grupo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.llave {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ease-out),
+    color 160ms var(--ease-out),
+    border-color 160ms var(--ease-out);
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    flex: none;
+  }
+  .codigo {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+  &:hover {
+    border-color: var(--cuality-azul);
+  }
+  &[aria-pressed='true'] {
+    background: var(--cuality-gris);
+    border-color: var(--cuality-gris);
+    color: #ffffff;
+  }
+  &.rol[aria-pressed='true'] {
+    background: var(--cuality-azul);
+    border-color: var(--cuality-azul);
+  }
+}
+
+.resultado {
+  display: grid;
+  gap: 8px;
+}
+
+.registro {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding-left: 10px;
+    border-left: 2px solid var(--cuality-azul);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  li + li {
+    border-left-color: var(--line);
+  }
+}
+
+/* ---------- Con JavaScript ---------- */
+
+.vivo {
+  .anclas,
+  .barra {
+    display: block;
+  }
+  .escenario {
+    min-height: 340px;
+  }
+}
+
+/* Escritorio: el pasillo queda fijo; los pasos a la izquierda y el llavero a la derecha. */
+.fijado {
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr) minmax(300px, 340px);
+  grid-template-rows: 1fr;
+  height: calc(100svh - var(--cabecera));
+  padding-block: 12px;
+
+  .escenario {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    height: 100%;
+  }
+  .ilustracion {
+    margin: auto;
+    max-height: 100%;
+  }
+  .pasos {
+    position: relative;
+    z-index: 2;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    height: 320px;
+    margin: 0 0 36px 24px;
+  }
+  .paso {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 280ms var(--ease-out),
+      transform 280ms var(--ease-out);
+
+    &.activo {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .mando {
+    position: absolute;
+    z-index: 2;
+    top: 16px;
+    right: 16px;
+    bottom: 32px;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+    overflow-y: auto;
+    border-radius: 14px;
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(12px);
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 300ms var(--ease-out),
+      visibility 0s 300ms;
+  }
+  /* La pantalla de ejemplo aparece cuando el árbol se enciende. Antes iba atenuada al 35 %, y ese
+     texto no pasaba AA: ahora no se ve hasta que tiene sentido. El registro queda siempre a la vista. */
+  .resultado app-cuality-pantalla {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 300ms var(--ease-out),
+      visibility 0s 300ms;
+  }
+  &.con-llaves .mando {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 300ms var(--ease-out);
+  }
+  &.con-menu .resultado app-cuality-pantalla {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 300ms var(--ease-out);
+  }
+  /* La mitad de arriba a la derecha es del llavero: el botón del giroscopio va arriba al centro. */
+  .girar {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* La tira de llaves del celular, sobre el borde de ARRIBA de la escena. Abajo la tapaban las
+   tarjetas de los pasos, que suben por encima de la escena pegada: en el último paso (el del
+   llavero) no se podían tocar las llaves y ver la pantalla a la vez (medido a 375 × 812). */
+.tira {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  gap: 6px;
+  padding: 12px 12px 26px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  background: linear-gradient(0deg, transparent, var(--cuality-noche) 45%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 300ms var(--ease-out),
+    visibility 0s 300ms;
+
+  .llave {
+    flex: none;
+    scroll-snap-align: start;
+  }
+}
+
+.con-llaves .tira {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 300ms var(--ease-out);
+}
+
+/* Móvil: el sello queda pegado arriba y los pasos pasan por encima. */
+.pasos-movil {
+  .escenario {
+    position: sticky;
+    top: calc(var(--cabecera) + 8px);
+    z-index: 0;
+    height: min(50svh, 440px);
+  }
+  .ilustracion {
+    margin: auto;
+    max-height: 100%;
+  }
+  .pasos {
+    position: relative;
+    z-index: 1;
+    gap: 44svh;
+    padding: 4svh 0 12svh;
+  }
+  .barra {
+    display: none;
+  }
+  .girar {
+    top: auto;
+    bottom: 12px;
+  }
+}
+
+.reducido {
+  .escenario {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    max-height: 70svh;
+  }
+  .paso.activo {
+    border-color: var(--cuality-azul);
+    box-shadow: inset 0 0 0 1px var(--cuality-azul), var(--cuality-sombra);
+  }
+}
+
+.controles-pasos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  p {
+    flex: 1 1 220px;
+    text-align: center;
+    color: var(--ink-2);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 600px) {
+  .paso {
+    padding: 16px 14px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .paso-numero {
+    display: none;
+  }
+  .ancla {
+    font-size: 0.6875rem;
+  }
+}

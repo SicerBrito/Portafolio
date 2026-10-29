@@ -1,0 +1,179 @@
+<div class="entornos" [class.prod]="produccion()">
+  <div
+    class="escenario"
+    #escenario
+    [class.activo]="activo3d()"
+    [class.arrastrando]="arrastrando()"
+    (pointerdown)="alPresionar($event)"
+    (pointermove)="alMover($event)"
+    (pointerup)="alSoltar($event)"
+    (pointercancel)="alCancelar($event)"
+  >
+    <!-- Ilustración propia: sin WebGL también cambia con el interruptor. -->
+    <svg class="dibujo" viewBox="0 0 640 360" aria-hidden="true">
+      <g class="d-cables">
+        @for (y of [118, 160, 202]; track y) {
+          <path [attr.d]="'M86 120 C 250 30, 420 30, ' + 548 + ' ' + y" class="d-cable-ahdo" />
+          <path [attr.d]="'M86 196 C 250 70, 420 60, ' + 548 + ' ' + (y + 20)" class="d-cable-ocupa" />
+        }
+      </g>
+      <g class="d-llave d-ahdo" transform="translate(40 108)">
+        <circle cx="12" cy="12" r="10" />
+        <rect x="22" y="9" width="30" height="6" rx="2" />
+      </g>
+      <g class="d-llave d-ocupa" transform="translate(40 184)">
+        <circle cx="12" cy="12" r="10" />
+        <rect x="22" y="9" width="30" height="6" rx="2" />
+      </g>
+      <g class="d-skills">
+        @for (i of [0, 1, 2, 3, 4, 5]; track i) {
+          <rect [attr.x]="552 + (i % 2) * 30" [attr.y]="104 + (i - (i % 2)) * 22" width="24" height="32" rx="3" />
+        }
+      </g>
+      <g class="d-usuarios">
+        @for (x of [250, 320, 390]; track x) {
+          <circle [attr.cx]="x" cy="132" r="14" />
+          <rect [attr.x]="x - 16" y="152" width="32" height="44" rx="14" />
+          <rect class="d-candado-debil" [attr.x]="x + 16" y="170" width="14" height="11" rx="2" />
+        }
+      </g>
+      <g class="d-admin">
+        <circle cx="320" cy="122" r="18" />
+        <rect x="300" y="146" width="40" height="54" rx="18" />
+        <rect class="d-candado" x="306" y="168" width="28" height="22" rx="3" />
+        <path class="d-arco" d="M312 168 v-6 a8 8 0 0 1 16 0 v6" />
+      </g>
+      <rect class="d-base" x="200" y="262" width="240" height="44" rx="14" />
+      <line class="d-vara" x1="320" y1="262" x2="276" y2="206" />
+      <circle class="d-pomo" cx="276" cy="206" r="14" />
+    </svg>
+
+    <canvas #lienzo aria-hidden="true"></canvas>
+
+    <div class="anclas" aria-hidden="true">
+      <span class="ancla lado" data-ancla="desarrollo" [class.encendida]="!produccion()">Desarrollo</span>
+      <span class="ancla lado" data-ancla="produccion" [class.encendida]="produccion()">Producción</span>
+      <span class="ancla aviso" data-ancla="usuarios">Usuarios de prueba con claves débiles</span>
+      <span class="ancla exito" data-ancla="admin">Un administrador con clave fuerte</span>
+      <span class="ancla" data-ancla="ahdo" data-alinear="izquierda"
+        ><i class="punto ahdo"></i>AHDO: {{ produccion() ? 'sin skills' : 'todas las skills' }}</span
+      >
+      <span class="ancla" data-ancla="ocupasalud" data-alinear="izquierda"
+        ><i class="punto ocupa"></i>Ocupasalud: {{ produccion() ? 'sin skills' : 'todas las skills' }}</span
+      >
+      <span class="ancla" data-ancla="skills">Skills</span>
+    </div>
+
+    <p class="pista-arrastre" aria-hidden="true">Arrastra la palanca o toca la escena</p>
+  </div>
+
+  <div class="mandos">
+    <button
+      type="button"
+      role="switch"
+      class="palanca"
+      [attr.aria-checked]="produccion()"
+      aria-label="Sembrar como en producción"
+      (click)="alternar()"
+    >
+      <span class="palanca-op" [class.on]="!produccion()">Desarrollo</span>
+      <span class="palanca-op" [class.on]="produccion()">Producción</span>
+      <span class="palanca-pomo" aria-hidden="true"></span>
+    </button>
+
+    @if (orientacion.giroscopio() !== 'no-disponible') {
+      <button type="button" class="giro" [attr.aria-pressed]="giroActivo()" (click)="activarGiro()">
+        {{ giroActivo() ? 'Dejar de usar el giro' : 'Cambiar girando el celular' }}
+      </button>
+    }
+  </div>
+
+  <div class="siembra" aria-live="polite">
+    @if (produccion()) {
+      <h4>En producción, al arrancar, el backbone siembra:</h4>
+      <ul>
+        <li><b>Un solo administrador inicial</b>, con clave fuerte y solo si todavía no existe ninguno.</li>
+        <li>
+          <b>AHDO y Ocupasalud como plataformas</b>, sin acceso al panel y sin skills. Cada skill se le asigna a mano a
+          quien la necesita.
+        </li>
+      </ul>
+    } @else {
+      <h4>Como venía el código:</h4>
+      <ul>
+        <li>
+          <b>Usuarios de prueba con claves débiles</b>, que volvían a nacer en cada arranque si alguien los borraba o
+          les cambiaba el correo.
+        </li>
+        <li><b>Cada plataforma que se diera de alta</b> nacía con todas las skills, también las de la otra empresa.</li>
+      </ul>
+    }
+  </div>
+
+  <!-- ======================= El inicio de sesión de juguete ======================= -->
+  <section class="intentos" aria-labelledby="bb-intentos-titulo" [class.congelado]="bloqueado()">
+    <div class="login-marca" aria-hidden="true">
+      <span class="insignia">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+          <path d="M19 16l.7 1.8L21.5 18.5l-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z" />
+        </svg>
+      </span>
+      <span>Prometeo</span>
+    </div>
+
+    <div class="login-cuerpo">
+      <h4 id="bb-intentos-titulo">Intenta entrar al panel</h4>
+      <p class="login-modo">
+        @if (produccion()) {
+          En producción: diez intentos por ventana de cinco minutos.
+        } @else {
+          En desarrollo, como venía: sin límite de intentos.
+        }
+      </p>
+
+      <div class="campo" aria-hidden="true">
+        <span class="campo-nombre">Clave</span>
+        <!-- Dos animaciones iguales con distinto nombre: alternarlas reinicia la sacudida en cada intento. -->
+        <span
+          class="campo-valor"
+          [class.sacude-a]="sacudida() > 0 && sacudida() % 2 === 1"
+          [class.sacude-b]="sacudida() > 0 && sacudida() % 2 === 0"
+        >
+          @for (i of ranuras.slice(0, puntos()); track i) {
+            <i></i>
+          }
+        </span>
+      </div>
+
+      <button type="button" class="entrar" #refEntrar (click)="intentar()" [disabled]="bloqueado()">
+        Probar una clave al azar
+      </button>
+
+      @if (produccion()) {
+        <ol class="ranuras" aria-hidden="true">
+          @for (i of ranuras; track i) {
+            <li [class.usada]="i < intentos()"></li>
+          }
+        </ol>
+      } @else {
+        <p class="contador" aria-hidden="true">
+          <b>{{ intentos() }}</b> {{ intentos() === 1 ? 'intento' : 'intentos' }} y ningún freno
+        </p>
+      }
+
+      <p class="mensaje" aria-live="polite">{{ mensaje() }}</p>
+
+      @if (bloqueado()) {
+        <div class="hielo">
+          <p><b>Demasiados intentos.</b> Espera antes de volver a probar.</p>
+          <p class="hielo-nota">
+            Aquí la espera dura {{ espera() }} s más. En el panel, la ventana es de cinco minutos.
+          </p>
+          <button type="button" class="reiniciar" #refReiniciar (click)="reiniciar()">Reiniciar la demostración</button>
+        </div>
+      }
+    </div>
+  </section>
+  <p class="nota">Simulación: no hay ninguna clave real y nada sale de esta página.</p>
+</div>

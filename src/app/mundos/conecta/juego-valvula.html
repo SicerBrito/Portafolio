@@ -1,0 +1,86 @@
+<div class="juego">
+  <div class="mandos">
+    <fieldset class="interruptor">
+      <legend class="solo-lectores">Cómo salen los mensajes</legend>
+      <label [class.elegido]="modo() === 'sin-control'">
+        <input
+          type="radio"
+          name="modo-valvula"
+          value="sin-control"
+          [checked]="modo() === 'sin-control'"
+          (change)="cambiarModo('sin-control')"
+        />
+        Sin tope
+      </label>
+      <label [class.elegido]="modo() === 'conecta'">
+        <input
+          type="radio"
+          name="modo-valvula"
+          value="conecta"
+          [checked]="modo() === 'conecta'"
+          (change)="cambiarModo('conecta')"
+        />
+        Con tope propio
+      </label>
+    </fieldset>
+
+    <div class="deslizador">
+      <label for="flujo-valvula">
+        Personas por segundo
+        <output for="flujo-valvula">{{ flujo() }}</output>
+      </label>
+      <input
+        id="flujo-valvula"
+        type="range"
+        min="0"
+        max="8"
+        step="0.5"
+        [value]="flujo()"
+        (input)="cambiarFlujo($event)"
+      />
+    </div>
+
+    <div class="acciones">
+      @if (reducido()) {
+        <button type="button" class="btn btn-primario" (click)="simular()" [disabled]="!listo()">
+          Simular 20 segundos
+        </button>
+      }
+      <button type="button" class="btn" (click)="reiniciar()" [disabled]="!listo()">Empezar de nuevo</button>
+    </div>
+  </div>
+
+  <!-- Las etiquetas usan las mismas posiciones que el juego (POSICIONES en escenas/conecta/valvula.ts). -->
+  <div class="pista">
+    <canvas #lienzo aria-hidden="true"></canvas>
+    <!-- max()/min(): en 375 px el primer y el último rótulo se salían de la pista y se cortaban.
+         «de Conecta» se esconde en pantallas chicas: completo, el rótulo pisaba al de «Envíos». -->
+    <span class="rotulo" style="left: max(7%, 40px)">Envíos</span>
+    <span class="rotulo" style="left: 40%">
+      @if (modo() === 'conecta') {
+        Tope<span class="largo"> de Conecta</span> · {{ porcentajeUso() }} %
+      } @else {
+        Sin tope
+      }
+    </span>
+    <span class="rotulo abajo" style="left: 64%">Escalón de Meta</span>
+    <span class="rotulo" style="left: min(91%, calc(100% - 34px))">Celular</span>
+  </div>
+
+  <dl class="contadores">
+    <div class="contador panel">
+      <dt>El panel dice</dt>
+      <dd>{{ conteo().enviados }} <span>enviados</span></dd>
+    </div>
+    <div class="contador">
+      <dt>Llegaron al celular</dt>
+      <dd>{{ conteo().llegaron }}</dd>
+    </div>
+    <div class="contador" [class.apagado]="modo() !== 'conecta'">
+      <dt>Esperan cupo</dt>
+      <dd>{{ conteo().enFila }}</dd>
+    </div>
+  </dl>
+
+  <p class="veredicto" aria-live="polite">{{ veredicto() }}</p>
+</div>

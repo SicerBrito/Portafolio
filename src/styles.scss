@@ -1,0 +1,246 @@
+/* La casa: negro con tonos de morado (pedido de Sicer, 2026-10-27). Cada proyecto es un
+   "mundo": al entrar, <html data-mundo="…"> redefine estos mismos tokens con la paleta de
+   su marca, definida en styles/mundos/_<id>.scss. Los mundos ganan por especificidad
+   (:root[data-mundo] pesa más que :root), así que el orden de los @use no importa. */
+
+@use './styles/mundos/ahdo';
+@use './styles/mundos/conecta';
+@use './styles/mundos/estudio';
+@use './styles/mundos/ocupasalud';
+@use './styles/mundos/prevent';
+@use './styles/mundos/cuality';
+@use './styles/mundos/backbone';
+
+:root {
+  --bg: #07050d;
+  --surface: #0e0a1a;
+  --surface-2: #181229;
+  --line: #2a2046;
+  --line-soft: #110c1f;
+  --ink: #f3f0fb;
+  --ink-2: #bdb4dc;
+  --ink-3: #8c82b4;
+  --signal: #8b5ffc;
+  --on-signal: #ffffff;
+  --signal-text: #b49bff;
+  --focus: #aaaaff;
+
+  /* Escala de morados de la casa, del más profundo al más claro. */
+  --morado-1: #261945;
+  --morado-2: #3b2873;
+  --morado-3: #5b3fc0;
+  --morado-4: #8b5ffc;
+  --morado-5: #aaaaff;
+
+  /* Retrato: foto nítida en duotono (sombra → luz) y semitono en la lupa del cursor. */
+  --retrato-sombra: #0b0716;
+  --retrato-luz: #e4dfff;
+  --retrato-punto: #aaaaff;
+
+  --font-display: 'Barlow Condensed', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --font-body: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --fs-label: 0.8125rem;
+  --fs-body: 1.0625rem;
+  --fs-lead: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --fs-h3: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --fs-h2: clamp(2.25rem, 1.4rem + 3.4vw, 4.25rem);
+  --fs-h1: clamp(2.6rem, 1.1rem + 5vw, 6.25rem);
+  --fs-metric: clamp(2.5rem, 1.8rem + 3vw, 4.5rem);
+
+  --wrap: 1240px;
+  --cabecera: 64px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: calc(var(--cabecera) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 400ms var(--ease-out), color 400ms var(--ease-out);
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+::selection {
+  background: var(--signal);
+  color: var(--on-signal);
+}
+
+/* ---------- Utilidades compartidas ---------- */
+
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.titulo-seccion {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-h2);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 20px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ease-out),
+    color 160ms var(--ease-out),
+    border-color 160ms var(--ease-out);
+
+  &:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+  }
+}
+
+.btn-primario {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: var(--on-signal);
+
+  &:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+}
+
+/* Entrada de la portada: index.html pone .anima en la primera carga (si no hay movimiento
+   reducido) y lo marcado con data-intro espera a que la coreografía lo revele. Si el JS no
+   llega, a los 2,6 s aparece solo: el contenido nunca depende de la animación. */
+html.anima [data-intro] {
+  visibility: hidden;
+  animation: revelar-intro 0s 2.6s forwards;
+}
+
+@keyframes revelar-intro {
+  to {
+    visibility: visible;
+  }
+}
+
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Cambio de ventana: el mundo nuevo se abre desde el punto del clic ---------- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: abrir-mundo 680ms var(--ease-in-out) both;
+}
+
+@keyframes abrir-mundo {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 30%));
+  }
+  to {
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 30%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-new(root) {
+    animation: none;
+  }
+  body {
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

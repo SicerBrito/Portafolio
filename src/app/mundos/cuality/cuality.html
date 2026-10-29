@@ -1,0 +1,171 @@
+<article class="cuality">
+  <!-- ======================= El sello: la entrada ======================= -->
+  <header class="entrada">
+    <div class="wrap entrada-caja">
+      <div class="entrada-texto">
+        <p class="razon">Cuality GAC S.A.S. · Gestión en Acreditación y Calidad</p>
+        <h1>La llave arma el menú</h1>
+        <p class="lead">{{ p.resumen }}</p>
+        <p class="lead lead-2">
+          Yo fundé su base: los repositorios, la arquitectura y un sistema de permisos en el que cada llave decide qué
+          pantallas y qué botones existen para cada persona.
+        </p>
+        <div class="firma">
+          <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+          <span class="periodo">{{ p.periodo }}</span>
+        </div>
+      </div>
+
+      <div class="sello-grande" aria-hidden="true">
+        <svg viewBox="0 0 400 400">
+          <defs>
+            <path id="cuality-curva" d="M200 200m-158 0a158 158 0 1 1 316 0a158 158 0 1 1-316 0" />
+          </defs>
+          <g class="guilloche">
+            @for (d of rosetas; track $index) {
+              <path [attr.d]="d" />
+            }
+          </g>
+          <g class="anillo-texto">
+            <circle class="aro" cx="200" cy="200" r="182" />
+            <circle class="aro fino" cx="200" cy="200" r="138" />
+            <text class="curvo">
+              <textPath href="#cuality-curva" textLength="985" lengthAdjust="spacing">ESTUDIOS DE PUESTO DE TRABAJO · CUALITY GAC S.A.S. · BASE DE PERMISOS ·</textPath>
+            </text>
+          </g>
+        </svg>
+        <img class="logo" ngSrc="/marcas/cuality/logo-cuality.webp" width="206" height="173" alt="" priority />
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================= Qué es: un edificio de dos pisos ======================= -->
+  <section class="pisos" aria-labelledby="t-pisos">
+    <div class="wrap">
+      <h2 id="t-pisos" class="titulo">Qué es y quién hizo qué</h2>
+      <p class="intro">
+        Los evaluadores de Cuality GAC hacen estudios de puesto de trabajo a los empleados de sus empresas cliente:
+        qué exige cada cargo, en qué condiciones se trabaja y cuál es el riesgo. El sistema tiene dos pisos, y cada uno
+        tiene su autor.
+      </p>
+
+      <div class="edificio">
+        <div class="piso piso-arriba">
+          <div class="piso-cabeza">
+            <h3>Arriba: los estudios de puesto</h3>
+            <span class="autor autor-otro">Lo construyó otro desarrollador</span>
+          </div>
+          <ul>
+            @for (d of dominio; track d) {
+              <li>{{ d }}</li>
+            }
+          </ul>
+        </div>
+        <div class="losa" aria-hidden="true"></div>
+        <div class="piso piso-base">
+          <div class="piso-cabeza">
+            <h3>Abajo: la base</h3>
+            <span class="autor autor-mio">La monté yo</span>
+          </div>
+          <ul>
+            @for (b of base; track b) {
+              <li>{{ b }}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= El árbol de permisos (3D) ======================= -->
+  <section class="tramo-arbol" aria-labelledby="t-arbol">
+    <div class="wrap arbol-intro">
+      <h2 id="t-arbol" class="titulo">{{ historiaPermisos.titulo }}</h2>
+      <p>{{ historiaPermisos.problema }}</p>
+      <p>
+        Baja con el scroll: el sello del logo se inclina y se vuelve el árbol de pantallas. Al final, el llavero queda
+        en tus manos. El árbol es un ejemplo armado con los códigos de permiso reales de la base.
+      </p>
+    </div>
+    <app-cuality-recorrido />
+  </section>
+
+  <!-- ======================= El error del servidor ======================= -->
+  <section class="tramo-servidor" aria-labelledby="t-servidor">
+    <div class="wrap servidor-caja">
+      <div>
+        <h2 id="t-servidor" class="titulo">{{ historiaServidor.titulo }}</h2>
+        <p>{{ servidorProblema }}</p>
+        <p>{{ historiaServidor.solucion }}</p>
+      </div>
+      <app-cuality-carpeta />
+    </div>
+  </section>
+
+  <!-- ======================= Acta de entrega (autoría) ======================= -->
+  <section class="tramo-acta" aria-labelledby="t-acta">
+    <div class="wrap">
+      <div class="acta">
+        <div class="acta-cabeza">
+          <h2 id="t-acta" class="titulo">Acta de entrega de la base</h2>
+          <p>{{ p.git.resumen }}. {{ p.git.nota }}</p>
+        </div>
+        <dl class="acta-campos">
+          @for (c of acta; track c.campo) {
+            <div>
+              <dt>{{ c.campo }}</dt>
+              <dd>{{ c.valor }}</dd>
+            </div>
+          }
+        </dl>
+        <p class="acta-papel">{{ p.papel }}</p>
+        <div class="acta-firma">
+          <span class="firma-linea">Sicer Brito</span>
+          <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Lo que falta ======================= -->
+  <section class="tramo-falta" aria-labelledby="t-falta">
+    <div class="wrap falta-caja">
+      <div class="sin-sello" aria-hidden="true"><span>Sin producción</span></div>
+      <div>
+        <h2 id="t-falta" class="titulo">Lo que todavía falta</h2>
+        <p class="falta-grande">{{ p.falta }}</p>
+        <p>
+          La base se entregó en enero de 2026, y sobre ella siguió el trabajo de otro desarrollador hasta junio de 2026.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Herramientas ======================= -->
+  <section class="herramientas" aria-labelledby="t-stack">
+    <div class="wrap">
+      <h2 id="t-stack" class="titulo">Con qué está hecho</h2>
+      <ul class="stack">
+        @for (s of stack; track s.nombre) {
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="s.path" [attr.fill]="s.hex ?? 'currentColor'" /></svg>
+            <b>{{ s.nombre }}</b>
+            <span>{{ s.papel }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= Siguiente nave ======================= -->
+  <nav class="siguiente" aria-label="Siguiente proyecto">
+    <div class="wrap">
+      <a [routerLink]="['/proyectos', siguiente.id]">
+        <span class="siguiente-etiqueta">Siguiente expediente</span>
+        <b>{{ siguiente.nombre }}</b>
+        <span class="siguiente-resumen">{{ siguiente.resumen }}</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
+      </a>
+    </div>
+  </nav>
+</article>

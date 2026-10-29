@@ -1,0 +1,59 @@
+/* Cuality: papel de acreditación en gris frío, tinta azul de sello y el aro gris del logo.
+   No hay sitio público de Cuality GAC que consultar (búsqueda del 2026-10-28 sin resultados), así
+   que la paleta sale entera del producto y de su logo.
+
+   De dónde sale cada color:
+   - La hoja de estilos global del frontend (base creada por Sicer en enero de 2026):
+     --primary-color #0060A3 (--cuality-azul, --signal), --primary-color-light #E6F3FF
+     (--surface-2, --cuality-claro), --background-color #F7F9FA (--bg), --border-color #DEE2E6
+     (--line), --font-color #212529 (--cuality-tinta), el texto sobre claro #2A3B47 (--ink) y
+     #5A6B77 (--ink-2). Tipografía: Poppins.
+   - Logo (sello circular con la mano "OK", muestreado píxel a píxel): azul ≈ #0066A8 y #0060A2
+     (--cuality-azul-logo) y el aro gris ≈ #606060 / #5A5A5A (--cuality-gris).
+   - Modo oscuro de la plataforma: fondo #1F2430 y texto #F3F5F7 (--cuality-noche y
+     --cuality-noche-texto). Lo escribió otro desarrollador; aquí pinta la bóveda del árbol 3D.
+   - Derivados, no de marca: --ink-3 (#5F6870, el gris secundario #6C757D oscurecido para pasar AA),
+     --line-soft, --cuality-azul-noche y --cuality-gris-noche (el azul y el gris aclarados para leerse
+     sobre la bóveda).
+   Contraste AA medido (texto / fondo): #2A3B47 sobre #F7F9FA 11,0:1 · #5A6B77 5,2:1 (4,9:1 sobre
+   #E6F3FF) · #5F6870 5,4:1 (5,0:1 sobre #E6F3FF) · #0060A3 6,2:1 (5,8:1 sobre #E6F3FF) ·
+   blanco sobre #0060A3 6,6:1 · #5A5A5A 6,5:1 · sobre la bóveda #1F2430: #F3F5F7 14,2:1 ·
+   #8FC4EE 8,4:1 · #A9B4C2 7,4:1. */
+:root[data-mundo='cuality'] {
+  --bg: #f7f9fa;
+  --surface: #ffffff;
+  --surface-2: #e6f3ff;
+  --line: #dee2e6;
+  --line-soft: #edf1f4;
+  --ink: #2a3b47;
+  --ink-2: #5a6b77;
+  --ink-3: #5f6870;
+  --signal: #0060a3;
+  --on-signal: #ffffff;
+  --signal-text: #0060a3;
+  --focus: #0060a3;
+
+  /* La marca, tal cual. */
+  --cuality-azul: #0060a3;
+  --cuality-azul-logo: #0066a8;
+  --cuality-gris: #5a5a5a;
+  --cuality-gris-aro: #606060;
+  --cuality-claro: #e6f3ff;
+  --cuality-tinta: #212529;
+
+  /* La bóveda del árbol: el modo oscuro de la plataforma. */
+  --cuality-noche: #1f2430;
+  --cuality-noche-2: #283041;
+  --cuality-noche-linea: rgba(143, 196, 238, 0.2);
+  --cuality-noche-texto: #f3f5f7;
+  --cuality-azul-noche: #8fc4ee;
+  --cuality-gris-noche: #a9b4c2;
+
+  /* Guilloche del papel de seguridad: líneas del azul de marca muy tenues. */
+  --cuality-trama: rgba(0, 96, 163, 0.07);
+
+  --cuality-sombra: 0 1px 2px rgba(42, 59, 71, 0.06), 0 4px 12px rgba(42, 59, 71, 0.06);
+  --cuality-fuente: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+
+  color-scheme: light;
+}

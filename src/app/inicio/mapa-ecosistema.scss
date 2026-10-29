@@ -1,0 +1,211 @@
+:host {
+  display: block;
+}
+
+.mapa {
+  margin: 0;
+  border-block: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.escenario {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 8;
+  max-height: 640px;
+  overflow: hidden;
+
+  @media (max-width: 760px) {
+    aspect-ratio: 4 / 5;
+  }
+
+  /* Celular en horizontal: el mapa ocupa la pantalla, como una sala de control. */
+  @media (orientation: landscape) and (pointer: coarse) and (max-height: 560px) {
+    aspect-ratio: auto;
+    height: calc(100svh - var(--cabecera));
+    max-height: none;
+
+    .modo-sala {
+      display: block;
+    }
+  }
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.modo-sala {
+  display: none;
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  color: var(--signal-text);
+}
+
+/* Sin 3D, las etiquetas son una lista legible; con 3D, cada una flota sobre su nave. */
+.etiquetas {
+  list-style: none;
+  margin: 0;
+  padding: 24px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: relative;
+}
+
+.activo .etiquetas {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  pointer-events: none;
+
+  li {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform;
+  }
+}
+
+.etiquetas a {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  margin-bottom: 10px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out),
+    border-color 200ms var(--ease-out);
+
+  @media (max-width: 760px) {
+    font-size: 0.6875rem;
+    padding: 3px 6px;
+  }
+}
+
+.encendida a,
+.etiquetas a:hover,
+.etiquetas a:focus-visible {
+  background: var(--signal);
+  color: var(--on-signal);
+  border-color: var(--signal);
+}
+
+.muestra {
+  width: 10px;
+  height: 10px;
+  flex: none;
+}
+
+.ficha {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: grid;
+  gap: 6px;
+  max-width: min(320px, calc(100% - 32px));
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  pointer-events: none;
+
+  strong {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.75rem;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px 40px;
+  padding: 16px max(16px, env(safe-area-inset-left, 0px));
+  border-top: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+.grupo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  min-width: 0;
+}
+
+.titulo-leyenda {
+  width: 100%;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    flex: none;
+  }
+}
+
+.solido {
+  fill: var(--ink-2);
+}
+
+.alambre {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.5;
+}
+
+.baliza {
+  width: 10px;
+  height: 10px;
+  background: var(--signal);
+  flex: none;
+}
+
+.baliza.plano {
+  background: none;
+  border: 1.5px dashed var(--ink-2);
+}
+
+.baliza.apagada {
+  background: var(--ink-3);
+  opacity: 0.6;
+}
+
+.conducto {
+  width: 26px;
+  height: 3px;
+  background: var(--signal);
+  flex: none;
+}
+
+.conducto.planeado {
+  height: 0;
+  border-top: 2px dashed var(--ink-3);
+  background: none;
+}

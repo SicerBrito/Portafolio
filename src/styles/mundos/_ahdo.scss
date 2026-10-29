@@ -1,0 +1,60 @@
+/* AHDO: lila, morado y morado oscuro de su marca. Aprobada por Sicer el 2026-10-27.
+   Los tokens base no se tocan. Los extras --ahdo-* salen de:
+   - Los cinco colores de marca: la hoja de estilos global de la plataforma (--color-morado-claro #AAAAFF,
+     --color-morado #8B5FFC, --color-morado-oscuro #301F56, --color-azul #007FB8, --color-verde #00944A).
+   - El degradado del logo, muestreado píxel a píxel en assets/ahdo/logo-ahdo-color.webp:
+     la "A" en #8B5FFB, la "H" en #301F56, la "D" en #2A2C64, la "O" de #0379B1 a #008585.
+   - El modo oscuro de la plataforma: fondos que son
+     el morado oscuro llevado al negro y bordes lila translúcidos (.14 / .26 / .45).
+   - El papel y su tinta: --ahdo-superficie #FFFFFF y --ahdo-texto #181C32 del tema claro de la plataforma.
+   - La tipografía de la marca: Inter.
+   Contraste medido sobre --bg #140d26: --ink 16,5:1 · --ink-2 10,4:1 · --ink-3 6,4:1 ·
+   --signal-text 10,3:1 · --ahdo-azul-texto 7,9:1 · --ahdo-verde-texto 7,4:1.
+   El azul y el verde puros van solo como relleno; como texto pequeño no llegan a AA. */
+:root[data-mundo='ahdo'] {
+  --bg: #140d26;
+  --surface: #1d1436;
+  --surface-2: #2a1f4a;
+  --line: #3d3066;
+  --line-soft: #1b1332;
+  --ink: #f1eefc;
+  --ink-2: #c4bce2;
+  --ink-3: #9a90c2;
+  --signal: #aaaaff;
+  --on-signal: #140d26;
+  --signal-text: #b9b9ff;
+  --focus: #aaaaff;
+
+  /* Los cinco de la marca, tal cual. */
+  --ahdo-lila: #aaaaff;
+  --ahdo-morado: #8b5ffc;
+  --ahdo-morado-oscuro: #301f56;
+  --ahdo-azul: #007fb8;
+  --ahdo-verde: #00944a;
+  /* Último tono de la "O" del logo (muestreado). Solo vive dentro del degradado. */
+  --ahdo-verde-azulado: #008585;
+
+  /* Tintes derivados para texto sobre el fondo oscuro: el azul y el verde de marca aclarados con blanco. */
+  --ahdo-azul-texto: #4db3e0;
+  --ahdo-verde-texto: #2fb872;
+
+  /* El degradado del logo, de la "A" a la "O". */
+  --ahdo-degradado: linear-gradient(90deg, #8b5ffc 0%, #301f56 42%, #007fb8 80%, #008585 100%);
+  /* El mismo recorrido, más luminoso, para trazos sobre el fondo oscuro. */
+  --ahdo-degradado-luz: linear-gradient(90deg, #aaaaff 0%, #8b5ffc 45%, #007fb8 100%);
+
+  /* Papel: certificados, facturas y la constancia. Tinta del tema claro de la plataforma. */
+  --ahdo-papel: #ffffff;
+  --ahdo-papel-2: #f4f2fc;
+  --ahdo-papel-tinta: #181c32;
+  --ahdo-papel-tinta-2: #4a4766;
+  --ahdo-papel-linea: #e4e1f2;
+
+  /* Bordes lila translúcidos del modo oscuro de la plataforma. */
+  --ahdo-borde-1: rgba(170, 170, 255, 0.14);
+  --ahdo-borde-2: rgba(170, 170, 255, 0.26);
+  --ahdo-borde-3: rgba(170, 170, 255, 0.45);
+
+  --ahdo-fuente: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  color-scheme: dark;
+}

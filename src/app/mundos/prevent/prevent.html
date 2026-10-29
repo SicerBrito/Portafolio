@@ -1,0 +1,230 @@
+<article class="prevent">
+  <!-- ======================= El suelo: la entrada ======================= -->
+  <header class="suelo">
+    <div class="andamiaje" aria-hidden="true"></div>
+    <div class="wrap suelo-caja">
+      <div class="suelo-texto">
+        <img
+          class="wordmark"
+          ngSrc="/marcas/prevent/wordmark-prevent.webp"
+          width="720"
+          height="132"
+          alt="Prevent Group, talento humano con altura"
+          priority
+        />
+        <h1>Nadie sube sin sus papeles</h1>
+        <p class="lead">{{ p.resumen }}</p>
+        <div class="firma">
+          <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+          <p class="periodo">{{ p.periodo }} · {{ p.para }}</p>
+        </div>
+        <p class="pista-scroll">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M6 14l6 6 6-6" /></svg>
+          Más abajo, el scroll sube el andamio.
+        </p>
+      </div>
+      <div class="suelo-figura" aria-hidden="true">
+        <span class="sol"></span>
+        <img class="personaje" ngSrc="/marcas/prevent/personaje-prevent.webp" width="581" height="760" alt="" priority />
+        <span class="regla-cima">
+          @for (n of [5, 4, 3, 2, 1, 0]; track n) {
+            <i>{{ n === 5 ? 'Cima' : n === 0 ? 'Suelo' : n }}</i>
+          }
+        </span>
+      </div>
+    </div>
+    <div class="cinta" aria-hidden="true"></div>
+  </header>
+
+  <!-- ======================= Qué es ======================= -->
+  <section class="planos" aria-labelledby="t-que">
+    <div class="wrap">
+      <h2 id="t-que" class="titulo">Qué es y cómo funciona</h2>
+      <div class="planos-intro">
+        <p>
+          Prevent Group es un centro de entrenamiento en trabajo seguro en alturas y espacios confinados. Su
+          plataforma se hizo para Prevent y sus empresas cliente: las empresas piden cursos para su gente,
+          inscriben a sus trabajadores y suben los soportes que exige cada curso.
+        </p>
+        <p>
+          En alturas no se certifica a nadie sin papeles. La plataforma lleva la cuenta de qué falta, persona por
+          persona, hasta que todo está validado.
+        </p>
+      </div>
+
+      <ol class="cadena">
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V8l6-4v4l6-4v4l6-4v17zM7 17h2v-3H7zm4 0h2v-3h-2zm4 0h2v-3h-2z" /></svg>
+          <h3>La empresa</h3>
+          <p>Tiene sus propios documentos requeridos y pide los cursos.</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6zm8 1.5V8h4.5zM9 12h8v1.5H9zm0 3h8v1.5H9zm0 3h5v1.5H9z" /></svg>
+          <h3>La solicitud</h3>
+          <p>Reúne los cursos o combos pedidos y sus cupos.</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15a7 7 0 0 1 14 0v1H5zm-2 2h18v2H3zm8-11h2v4h-2z" /></svg>
+          <h3>Los trabajadores</h3>
+          <p>Se inscriben uno por uno o con un Excel. Cada uno queda con una matrícula por curso.</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" /></svg>
+          <h3>Los documentos</h3>
+          <p>Cada matrícula exige los de su curso. Se suben, se previsualizan y se validan.</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.3 7.2 16.9l.9-5.4L4.2 7.7l5.4-.8zM8 18h8v4l-4-2-4 2z" /></svg>
+          <h3>El certificado</h3>
+          <p>Con todo validado, el trabajador queda listo para certificarse.</p>
+        </li>
+      </ol>
+
+      <div class="planos-datos">
+        <div>
+          <h3>Lo que se le pide a la empresa</h3>
+          <ul class="fichas">
+            @for (d of documentosEmpresa; track d) {
+              <li>{{ d }}</li>
+            }
+          </ul>
+        </div>
+        <div>
+          <h3>El catálogo: {{ catalogo.length }} cursos y {{ combos.length }} combos</h3>
+          <ul class="fichas fichas-cursos">
+            @for (c of catalogo; track $index) {
+              <li [class.destacado]="c === curso">{{ c }}</li>
+            }
+            @for (c of combos; track $index) {
+              <li class="combo">{{ c }}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= La escalada (3D) ======================= -->
+  <section class="tramo-escalada" aria-labelledby="t-escalada">
+    <div class="wrap escalada-intro">
+      <h2 id="t-escalada" class="titulo">La escalada</h2>
+      <p>
+        Sube con el scroll. Cada travesaño del andamio es un documento que exige el curso {{ curso }}, en el orden en
+        que quedó en el catálogo. Al validarse, la línea de vida se engancha.
+      </p>
+    </div>
+    <app-prevent-escalada />
+    <div class="wrap historia">
+      <div>
+        <h3>El problema</h3>
+        <p>{{ historiaDocumentos.problema }}</p>
+      </div>
+      <div>
+        <h3>Lo que construí</h3>
+        <p>{{ historiaDocumentos.solucion }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Del Excel a los trabajadores ======================= -->
+  <section class="tramo-excel" aria-labelledby="t-excel">
+    <div class="wrap">
+      <h2 id="t-excel" class="titulo">{{ historiaExcel.titulo }}</h2>
+      <div class="historia historia-excel">
+        <p>{{ historiaExcel.problema }}</p>
+        <p>
+          {{ historiaExcel.solucion }} Prueba con esta hoja ficticia: mira qué pasa con cada fila y abre una tarjeta
+          para ver los documentos que ya le esperan.
+        </p>
+      </div>
+      @defer (on viewport; prefetch on idle) {
+        <app-prevent-hoja />
+      } @placeholder {
+        <div class="reserva" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ======================= Bitácora del relevo (autoría) ======================= -->
+  <section class="bitacora" aria-labelledby="t-bitacora">
+    <div class="wrap bitacora-caja">
+      <div class="bitacora-firma">
+        <h2 id="t-bitacora" class="titulo">Bitácora del relevo</h2>
+        <app-sello [autoria]="p.autoria" [estado]="p.estado" />
+        <p class="git"><b>{{ p.git.resumen }}</b> {{ p.git.nota }}</p>
+        <p>{{ p.papel }}</p>
+        <p class="vivas">
+          En la última versión, cerca del 42 % del código vivo del frontend y el 30 % del backend son míos, según git
+          blame.
+        </p>
+      </div>
+      <ol class="registro">
+        @for (r of bitacora; track $index) {
+          <li [class.de-otro]="r.deOtro">
+            <span class="fecha">{{ r.fecha }}</span>
+            <p>{{ r.texto }}</p>
+            @if (r.deOtro) {
+              <span class="quien">Otro desarrollador</span>
+            }
+          </li>
+        }
+      </ol>
+    </div>
+
+    <div class="wrap dorado">
+      <div class="dorado-texto">
+        <h3>Vestir la plataforma de dorado</h3>
+        <p>
+          La interfaz que recibí era genérica, con los colores por defecto de Bootstrap. Escribí el tema global con el
+          dorado de la marca, su degradado y Poppins, y rediseñé el tablero, el menú y las pantallas de solicitud y
+          matrícula. Cambia el interruptor para ver la diferencia en una maqueta con datos ficticios.
+        </p>
+      </div>
+      <app-prevent-tema />
+    </div>
+  </section>
+
+  <!-- ======================= Zona sin terminar ======================= -->
+  <section class="falta" aria-labelledby="t-falta">
+    <div class="wrap">
+      <div class="zona">
+        <h2 id="t-falta" class="titulo">Lo que todavía falta</h2>
+        <ul>
+          @for (f of pendientes; track f) {
+            <li>{{ f }}</li>
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Herramientas ======================= -->
+  <section class="herramientas" aria-labelledby="t-stack">
+    <div class="wrap">
+      <h2 id="t-stack" class="titulo">Con qué está hecho</h2>
+      <ul class="stack">
+        @for (s of stack; track s.nombre) {
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="s.path" /></svg>
+            <b>{{ s.nombre }}</b>
+            <span>{{ s.papel }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= Siguiente nave ======================= -->
+  <nav class="siguiente" aria-label="Siguiente proyecto">
+    <div class="wrap">
+      <a [routerLink]="['/proyectos', siguiente.id]">
+        <span class="siguiente-etiqueta">Siguiente obra</span>
+        <b>{{ siguiente.nombre }}</b>
+        <span class="siguiente-resumen">{{ siguiente.resumen }}</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
+      </a>
+    </div>
+  </nav>
+</article>

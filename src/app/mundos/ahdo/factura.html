@@ -1,0 +1,27 @@
+<section class="factura" aria-labelledby="factura-titulo">
+  <div class="wrap">
+    <header class="cabeza">
+      <h2 id="factura-titulo" class="titulo">¿A quién se le factura?</h2>
+      <p class="problema">{{ historia().problema }}</p>
+    </header>
+
+    @defer (on idle) {
+      <app-ahdo-mesa />
+    } @placeholder {
+      <div class="previa">
+        <p>
+          Cliente ficticio: <strong>{{ cliente }}</strong>
+        </p>
+        <ul>
+          @for (s of servicios; track s.id) {
+            <li>
+              {{ s.nombre }}, {{ s.inscritos }} inscritos. Se le factura a <strong>{{ receptor(s.inicial) }}</strong>.
+            </li>
+          }
+        </ul>
+      </div>
+    }
+
+    <p class="solucion">{{ historia().solucion }}</p>
+  </div>
+</section>

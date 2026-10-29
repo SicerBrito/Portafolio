@@ -1,0 +1,308 @@
+:host {
+  display: block;
+}
+
+.guion {
+  display: grid;
+  gap: 22px;
+}
+
+.aviso-plano {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1.5px dashed var(--estudio-plano);
+  border-radius: 10px;
+  background: var(--estudio-plano-fondo);
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+
+  i {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    margin-top: 4px;
+    border: 1.5px dashed var(--estudio-lila);
+    border-radius: 3px;
+  }
+}
+
+.rejilla {
+  display: grid;
+  gap: 24px;
+
+  @media (min-width: 960px) {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* ---------- El guion como JSON ---------- */
+
+.json {
+  padding: 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: var(--estudio-inspector);
+}
+
+.llave {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+
+  .clave {
+    color: var(--signal-text);
+  }
+  .valor {
+    color: var(--ink);
+  }
+}
+
+.escenas {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 8px 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.escena {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  transition: border-color 200ms var(--ease-out);
+
+  &.estado-cambio {
+    border: 1px dashed var(--estudio-lila);
+    background: var(--estudio-plano-fondo);
+  }
+  &.estado-renderizando {
+    border-color: var(--estudio-morado);
+  }
+  &.estado-nuevo {
+    border-color: var(--estudio-verde);
+  }
+}
+
+.escena-cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+
+.escena-id {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--signal-text);
+}
+
+.escena-tipo {
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+.hash {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-2);
+
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+
+  .estado-cambio & {
+    color: var(--signal-text);
+  }
+}
+
+.escena-texto {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  /* --ink-3 y no --line: el borde del campo necesita 3:1 contra el tablero (con --line da 2,5:1). */
+  border: 1px solid var(--ink-3);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font: 600 1rem/1.3 var(--estudio-fuente);
+
+  &:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------- Los fragmentos ---------- */
+
+.salida {
+  display: grid;
+  gap: 12px;
+
+  h3 {
+    font-family: var(--estudio-fuente);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+}
+
+.salida-texto {
+  color: var(--ink-2);
+}
+
+.cinta {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 20px 6px;
+  list-style: none;
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(90deg, rgba(170, 170, 255, 0.28) 0 10px, transparent 10px 22px) left
+      8px top 6px / calc(100% - 16px) 8px no-repeat,
+    repeating-linear-gradient(90deg, rgba(170, 170, 255, 0.28) 0 10px, transparent 10px 22px) left
+      8px bottom 6px / calc(100% - 16px) 8px no-repeat,
+    var(--estudio-cinta);
+}
+
+.fragmento {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 68px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 6px 7px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--estudio-lienzo);
+
+  &.estado-cambio {
+    border: 1px dashed var(--estudio-lila);
+    background: var(--surface-2);
+  }
+  &.estado-nuevo {
+    border-color: var(--estudio-verde);
+  }
+}
+
+.fragmento-id {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink);
+}
+
+/* Blanco y no --ink-2: mientras se renderiza, el relleno lila deja el --ink-2 en 4,4:1. */
+.fragmento-estado {
+  position: relative;
+  z-index: 1;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.relleno {
+  position: absolute;
+  inset: 0;
+  background: var(--estudio-barra);
+  opacity: 0.4;
+  transform: scaleX(0);
+  transform-origin: left center;
+
+  .estado-renderizando & {
+    animation: llenar 1.5s linear forwards;
+  }
+  .estado-nuevo & {
+    transform: scaleX(1);
+    opacity: 0.16;
+  }
+}
+
+@keyframes llenar {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* En pantallas angostas los fragmentos van en filas: un fragmento de 6 s no cabe en 40 px. */
+@media (max-width: 559.98px) {
+  .cinta {
+    flex-direction: column;
+    padding: 20px 8px;
+  }
+  .fragmento {
+    flex: none !important;
+    min-height: 44px;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.medida {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.enlace {
+  min-height: 44px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: var(--signal-text);
+  font: 600 1rem var(--estudio-fuente);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.resultado {
+  min-height: 3.2em;
+  color: var(--ink-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .estado-renderizando .relleno {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
+
+/* Los botones del sitio hablan con la letra del motor dentro de este mundo. */
+.btn {
+  font-family: var(--estudio-fuente);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}

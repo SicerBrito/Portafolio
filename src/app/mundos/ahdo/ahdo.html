@@ -1,0 +1,19 @@
+<article class="ahdo">
+  <app-ahdo-entrada [proyecto]="proyecto" />
+  <app-ahdo-pago />
+  <app-ahdo-factura [historia]="proyecto.historias[1]" />
+  <app-ahdo-mapa />
+  <app-ahdo-historias [psicometria]="proyecto.historias[2]" [facturacion]="proyecto.historias[3]" />
+  <app-ahdo-constancia [proyecto]="proyecto" />
+
+  <nav class="siguiente" aria-label="Siguiente proyecto" [style.--color-siguiente]="siguiente.color">
+    <a class="siguiente-enlace" [routerLink]="['/proyectos', siguiente.id]">
+      <span class="siguiente-pre">Siguiente nave</span>
+      <span class="siguiente-nombre">{{ siguiente.nombre }}</span>
+      <span class="siguiente-resumen">{{ siguienteResumen }}</span>
+      <svg class="siguiente-flecha" viewBox="0 0 64 24" aria-hidden="true">
+        <path d="M0 12h58M48 3l10 9-10 9" fill="none" stroke="currentColor" stroke-width="3" />
+      </svg>
+    </a>
+  </nav>
+</article>

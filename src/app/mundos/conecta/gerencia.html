@@ -1,0 +1,61 @@
+<div class="gerencia">
+  <div class="chat">
+    <div class="chat-cabeza">
+      <svg class="marca-ia" viewBox="0 0 24 24" aria-hidden="true">
+        <path [attr.d]="claude.path" [attr.fill]="claude.hex" />
+      </svg>
+      <div>
+        <strong>Claude</strong>
+        <span>con las herramientas de Conecta</span>
+      </div>
+      <svg class="marca-mcp" viewBox="0 0 24 24" role="img" aria-label="Model Context Protocol">
+        <path [attr.d]="mcp.path" />
+      </svg>
+    </div>
+
+    <div class="hilo" aria-live="polite">
+      <p class="msg sale">{{ conversacion().pregunta }}</p>
+      <ul class="herramientas" aria-label="Herramientas que usó Claude">
+        @for (h of conversacion().herramientas; track h; let i = $index) {
+          <li [style.--i]="i">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+            <code>{{ h }}</code>
+          </li>
+        }
+      </ul>
+      @if (fase() === 'panel') {
+        <p class="msg entra">{{ conversacion().respuesta }}</p>
+      } @else {
+        <p class="msg entra escribiendo"><span class="solo-lectores">Claude está consultando</span><i></i><i></i><i></i></p>
+      }
+    </div>
+
+    <div class="sugerencias" role="group" aria-label="Preguntas de ejemplo de la gerencia">
+      @for (c of conversaciones; track c.pregunta; let i = $index) {
+        <button type="button" [attr.aria-pressed]="elegida() === i" (click)="preguntar(i)">{{ c.pregunta }}</button>
+      }
+    </div>
+  </div>
+
+  <section class="tablero" aria-labelledby="titulo-tablero">
+    <h3 id="titulo-tablero">{{ conversacion().titulo }}</h3>
+    @if (fase() === 'panel') {
+      <ul class="bento">
+        @for (d of conversacion().datos; track d.etiqueta; let i = $index) {
+          <li [class.mirar]="d.tono === 'mirar'" [class.bien]="d.tono === 'bien'" [style.--i]="i">
+            <span class="valor">{{ d.valor }}</span>
+            <span class="etiqueta">{{ d.etiqueta }}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <ul class="bento esperando" aria-hidden="true">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    }
+    <p class="pie">Las mismas cifras que pinta el panel, porque usan los mismos servicios.</p>
+  </section>
+</div>

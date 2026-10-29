@@ -1,0 +1,110 @@
+<div class="mesa">
+  <div class="zona-servicios">
+    <p class="cliente">
+      Cliente ficticio: <strong>{{ cliente }}</strong>
+    </p>
+    <p class="ayuda">Arrastra cada servicio hacia quien recibe la factura, o elige con los botones.</p>
+
+    <div class="bandejas">
+      @for (g of porDestino(); track g.destino.id) {
+        <div
+          class="bandeja"
+          role="group"
+          [attr.aria-label]="'Se le factura a ' + g.destino.nombre"
+          [attr.data-destino]="g.destino.id"
+          [class.sobre]="sobre() === g.destino.id"
+          [style.--d]="g.destino.color"
+        >
+          <div class="bandeja-cabeza">
+            <strong>{{ g.destino.nombre }}</strong>
+            <span>{{ g.destino.detalle }}</span>
+          </div>
+          @for (s of g.servicios; track s.id) {
+            <article
+              class="servicio"
+              [attr.data-flip-id]="'s-' + s.id"
+              [class.arrastrando]="arrastrando() === s.id"
+            >
+              <span class="asa" aria-hidden="true" (pointerdown)="empezar($event, s)">
+                <svg viewBox="0 0 12 20"><path d="M3 3h2v2H3zM7 3h2v2H7zM3 9h2v2H3zM7 9h2v2H7zM3 15h2v2H3zM7 15h2v2H7z" /></svg>
+              </span>
+              <div class="servicio-cuerpo">
+                <h3>{{ s.nombre }}</h3>
+                <span class="inscritos">{{ s.inscritos }} inscritos</span>
+                <div class="opciones" role="group" [attr.aria-label]="'A quién se le factura: ' + s.nombre">
+                  @for (d of destinos; track d.id) {
+                    <button
+                      type="button"
+                      class="opcion"
+                      [style.--d]="d.color"
+                      [attr.aria-pressed]="d.id === g.destino.id"
+                      (click)="asignar(s, d.id)"
+                    >
+                      {{ d.nombre }}
+                    </button>
+                  }
+                </div>
+              </div>
+            </article>
+          } @empty {
+            <p class="vacia">Suelta aquí un servicio.</p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="zona-facturas">
+    <h3 class="zona-titulo">Facturas que emite AHDO</h3>
+    <div class="papeles">
+      @for (f of facturas(); track f.destino.id; let i = $index) {
+        <article class="papel" [attr.data-flip-id]="'f-' + f.destino.id" [style.--d]="f.destino.color">
+          <header class="papel-cabeza">
+            <span class="papel-tipo">Factura electrónica de muestra</span>
+            <span class="papel-n">{{ i + 1 }} de {{ facturas().length }}</span>
+          </header>
+          <dl class="papel-datos">
+            <div>
+              <dt>Emite</dt>
+              <dd>AHDO</dd>
+            </div>
+            <div>
+              <dt>Se le factura a</dt>
+              <dd>{{ receptor(f.destino.id) }}</dd>
+            </div>
+          </dl>
+          <ul class="lineas">
+            @for (s of f.servicios; track s.id) {
+              <li class="linea" [attr.data-flip-id]="'l-' + s.id">
+                <span class="linea-nombre">{{ s.nombre }}</span>
+                <span class="linea-cantidad">{{ s.inscritos }} inscritos</span>
+                <span class="linea-precio">{{ f.destino.precio }}</span>
+              </li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+    <p class="sin-valores">Sin valores: los precios del grupo son confidenciales.</p>
+
+    <div class="registro">
+      <h3 class="zona-titulo">La matrícula guarda los tres datos</h3>
+      <p class="registro-ejemplo">{{ registro().servicio.nombre }}</p>
+      <dl>
+        <div>
+          <dt>Cliente</dt>
+          <dd>{{ cliente }}</dd>
+        </div>
+        <div>
+          <dt>Tercero del cliente</dt>
+          <dd>{{ cliente }}</dd>
+        </div>
+        <div class="destacado">
+          <dt>Se le factura a</dt>
+          <dd>{{ receptor(registro().destino.id) }}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>
+<p class="solo-lectores" aria-live="polite">{{ anuncio() }}</p>
